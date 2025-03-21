@@ -12,7 +12,7 @@ export default function LoginPage() {
             <Image src="/logo.png" alt="Acuity Insights Logo" width={60} height={80} className="mb-1" />
             <h2 className="text-2xl font-bold leading-tight">See the potential that others miss</h2>
           </div>
-          {/* First Card */}
+          {/* First Card left */}
           <div className="transform rotate-6 bg-[#fcedca] rounded-xl overflow-hidden w-48 h-72">
             <div className="relative h-3/4">
               <Image
