@@ -13,7 +13,7 @@ export default function Dashboard() {
     ...user,
     name: user?.name || "User",
     email: user?.email || "",
-    avatar: "/avatar.png",
+    avatar: user?.avatar || "/avatar.png",
   };
 
   return <DashboardContent user={userWithAvatar} activeTab={activeTab} setActiveTab={setActiveTab} />;
