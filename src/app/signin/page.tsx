@@ -1,7 +1,37 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
+  const { login, isLoading } = useAuth();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+
+    if (!email || !password) {
+      setError("Please enter both email and password");
+      return;
+    }
+
+    const success = await login(email, password);
+    if (success) {
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 500);
+    } else {
+      setError("Invalid email or password");
+    }
+  };
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-[#f5f5f5] p-10">
       {/* Left Panel - Blue Background */}
@@ -66,7 +96,7 @@ export default function LoginPage() {
       </div>
 
       {/* Right Panel - White Background */}
-      <div className="w-full md:w-1/2 bg-white p-8 flex flex-col items-center justify-center  rounded-r-2xl">
+      <div className="w-full md:w-1/2 bg-white p-8 flex flex-col items-center justify-center rounded-r-2xl">
         {/* Logo */}
         <div className="w-20 h-20 bg-[#364699] border-2 border-[#D2D2FF] rounded-full flex items-center justify-center text-white mb-12">
           <div className="text-center">
@@ -76,20 +106,73 @@ export default function LoginPage() {
 
         {/* Welcome Text */}
         <h1 className="text-5xl text-[#333333] mb-2">Hello Again!</h1>
-        <p className="text-gray-500 mb-12 text-center text-sm">
+        <p className="text-gray-500 mb-8 text-center text-sm">
           Learn, Grow, Achieve - Your Path to Knowledge
         </p>
 
-        {/* Login Buttons */}
-        <div className="w-full max-w-md space-y-4 mb-12">
-          <button className="w-full border border-gray-200 rounded-full py-3 px-4 flex items-center justify-center gap-2">
-            <div className="w-6 h-6 bg-[#364699] rounded-full flex items-center justify-center">
-              <Image src="/logo.png" alt="Acuity Insights Logo" width={15} height={15} />
-            </div>
-            <span className="text-[#333333]">Continue with Acuity Account</span>
-          </button>
+        {/* Error message */}
+        {error && (
+          <div className="w-full max-w-md mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">{error}</div>
+        )}
 
-          <button className="w-full border border-gray-200 rounded-full py-3 px-4 flex items-center justify-center gap-2">
+        {/* Login Form */}
+        <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4 mb-8">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-[#364699]"
+              placeholder="Enter your email"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-[#364699]"
+              placeholder="Enter your password"
+            />
+          </div>
+
+          <div className="flex justify-end">
+            <Link href="#" className="text-sm text-[#364699]">
+              Forgot password?
+            </Link>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full bg-[#364699] text-white rounded-full py-3 px-4 flex items-center justify-center gap-2 hover:bg-[#2d3a7d] transition-colors"
+          >
+            {isLoading ? (
+              <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
+            ) : (
+              "Sign In"
+            )}
+          </button>
+        </form>
+
+        {/* Alternative Login Options */}
+        <div className="w-full max-w-md space-y-4 mb-8">
+          <div className="relative flex items-center">
+            <div className="flex-grow border-t border-gray-300"></div>
+            <span className="flex-shrink mx-4 text-gray-400 text-sm">Or continue with</span>
+            <div className="flex-grow border-t border-gray-300"></div>
+          </div>
+
+          <button className="w-full border border-gray-200 rounded-full py-3 px-4 flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors">
             <div className="w-6 h-6 flex items-center justify-center">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path

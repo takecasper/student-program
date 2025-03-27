@@ -82,12 +82,15 @@ export default function LoginPage() {
 
         {/* Login Buttons */}
         <div className="w-full max-w-md space-y-4 mb-12">
-          <button className="w-full border border-gray-200 rounded-full py-3 px-4 flex items-center justify-center gap-2">
+          <Link
+            href="/dashboard"
+            className="w-full border border-gray-200 rounded-full py-3 px-4 flex items-center justify-center gap-2"
+          >
             <div className="w-6 h-6 bg-[#364699] rounded-full flex items-center justify-center">
               <Image src="/logo.png" alt="Acuity Insights Logo" width={15} height={15} />
             </div>
             <span className="text-[#333333]">Continue with Acuity Account</span>
-          </button>
+          </Link>
 
           <button className="w-full border border-gray-200 rounded-full py-3 px-4 flex items-center justify-center gap-2">
             <div className="w-6 h-6 flex items-center justify-center">
