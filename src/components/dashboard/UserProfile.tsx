@@ -21,7 +21,7 @@ export default function UserProfile({ user, activeTab, setActiveTab }: UserProfi
   if (!user) return null;
 
   return (
-    <main className="">
+    <main className="p-10">
       <div className="flex items-center gap-4">
         <Avatar className="w-32 h-32 mb-4 ">
           <AvatarImage src={user.avatar} alt={user.name} />

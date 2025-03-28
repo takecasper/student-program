@@ -4,6 +4,7 @@ import { LayoutGrid } from "lucide-react";
 import { SidebarNavItem } from "./SidebarNavItem";
 import { HelpCenterCard } from "./HelpCenterCard";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type DashboardSidebarProps = {
   user: {
@@ -27,7 +28,10 @@ export default function DashboardSidebar({ user, logout, children }: DashboardSi
   return (
     <>
       <div className="w-[264px] border-r border-[#f5f5f5] flex flex-col">
-        <div className="p-4 border-b border-[#f5f5f5] flex items-center gap-3">
+        <Link
+          href="/dashboard/user-profile"
+          className="p-4 border-b border-[#f5f5f5] flex items-center gap-3"
+        >
           <Avatar className="w-10 h-10">
             <AvatarImage src={user.avatar} alt={user.name} />
             <AvatarFallback>
@@ -41,7 +45,7 @@ export default function DashboardSidebar({ user, logout, children }: DashboardSi
             <p className="text-sm font-medium text-[#333333]">{user.name}</p>
             <p className="text-xs text-[#6c6c6c]">Toronto, Canada</p>
           </div>
-        </div>
+        </Link>
 
         <nav className="flex-1 py-4">
           <div className="space-y-1 px-3">
