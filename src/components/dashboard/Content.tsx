@@ -8,7 +8,6 @@ import CourseCard from "./CourseCard";
 import CategoryCard from "./CategoryCard";
 import SuggestedCourseCard from "./SuggestedCourseCard";
 
-// Main component
 export default function DashboardContent() {
   const { user } = useAuth();
   if (!user) return null;
@@ -17,14 +16,12 @@ export default function DashboardContent() {
     <div className="p-6">
       <div className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-6">
         <div className="space-y-6">
-          {/* Dashboard Summary */}
           <h2 className="text-lg font-medium text-[#333333]">DASHBOARD</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <SummaryCard iconSrc="/golf_course.svg" title="Ongoing Course" value="1" />
             <SummaryCard iconSrc="hotel_class.svg" title="Upcoming Sessions" value="3" />
           </div>
 
-          {/* My Course */}
           <div className="space-y-4">
             <h2 className="text-lg font-medium text-[#333333]">MY COURSE</h2>
 
@@ -65,7 +62,6 @@ export default function DashboardContent() {
             </div>
           </div>
 
-          {/* Suggested Courses & Tests */}
           <div className="space-y-4">
             <h2 className="text-lg font-medium text-[#333333]">SUGGESTED COURSES & TESTS</h2>
 
@@ -89,7 +85,6 @@ export default function DashboardContent() {
           </div>
         </div>
 
-        {/* To-Do List */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-medium text-[#333333]">TO-DO LIST</h2>
