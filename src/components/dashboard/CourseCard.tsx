@@ -9,11 +9,11 @@ export interface CourseCardProps {
 export default function CourseCard({ number, title, dateRange, progress, isCompleted }: CourseCardProps) {
   return (
     <div
-      className={`bg-[#6a6eec] p-6 relative overflow-hidden rounded-[20px] border-4 border-[#D9D9D9] ${
+      className={`bg-[#6a6eec] p-6 relative overflow-hidden rounded-[24px] border-4 border-[#D9D9D9] ${
         isCompleted ? "opacity-60" : ""
       }`}
     >
-      <div className="absolute top-4 right-4 bg-[#70C0B8] text-[#333333DE] border-2 border-white text-xs font-medium py-2 px-4 rounded-full">
+      <div className="absolute top-4 right-4 bg-[#70C0B8] text-[#333333DE] border border-white text-xs font-medium py-2 px-4 rounded-full">
         {isCompleted ? "COMPLETED" : "IN PROGRESS"}
       </div>
       <h3 className="text-2xl font-bold text-white mb-1">{number}</h3>

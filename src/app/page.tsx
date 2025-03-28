@@ -8,7 +8,7 @@ export default function LoginPage() {
       <div className="w-full md:w-1/2 bg-[#364699] relative p-8 flex flex-col rounded-2xl">
         {/* Profile Cards */}
         <div className="flex flex-col md:flex-row gap-6 mt-auto mb-16 relative  items-center justify-center">
-          <div className="border-2 -rotate-6 border-white rounded-xl p-4 w-64 text-white mb-8">
+          <div className="border -rotate-6 border-white rounded-xl p-4 w-64 text-white mb-8">
             <Image src="/logo.png" alt="Acuity Insights Logo" width={60} height={80} className="mb-1" />
             <h2 className="text-2xl font-bold leading-tight">See the potential that others miss</h2>
           </div>
@@ -68,7 +68,7 @@ export default function LoginPage() {
       {/* Right Panel - White Background */}
       <div className="w-full md:w-1/2 bg-white p-8 flex flex-col items-center justify-center  rounded-r-2xl">
         {/* Logo */}
-        <div className="w-20 h-20 bg-[#364699] border-2 border-[#D2D2FF] rounded-full flex items-center justify-center text-white mb-12">
+        <div className="w-20 h-20 bg-[#364699] border border-[#D2D2FF] rounded-full flex items-center justify-center text-white mb-12">
           <div className="text-center">
             <Image src="/logo.png" alt="Acuity Insights Logo" width={60} height={80} />
           </div>

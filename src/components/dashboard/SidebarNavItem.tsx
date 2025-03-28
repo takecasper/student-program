@@ -24,9 +24,9 @@ export function SidebarNavItem({
       <Link href={href} className="block">
         <Button
           variant="ghost"
-          className={`w-full justify-start gap-3 cursor-pointer ${
+          className={`w-full justify-start py-6 gap-3 cursor-pointer hover:bg-gray-200 ${
             active
-              ? "bg-[#f5f5f5] text-[#364699] font-medium"
+              ? "bg-[#D9D9D94D] text-[#364699] font-medium"
               : isFooterItem
               ? "py-3 px-4 text-[#333333]"
               : "text-[#333333]"
@@ -43,7 +43,7 @@ export function SidebarNavItem({
   return (
     <Button
       variant="ghost"
-      className={`w-full justify-start gap-3 cursor-pointer ${
+      className={`w-full justify-start gap-3 cursor-pointer hover:bg-gray-200 ${
         active
           ? "bg-[#f5f5f5] text-[#364699] font-medium"
           : isFooterItem

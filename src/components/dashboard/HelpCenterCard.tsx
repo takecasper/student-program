@@ -6,7 +6,7 @@ export function HelpCenterCard() {
     <div className="py-6 px-4 bg-gradient-to-b from-[#6A6EEC] to-[#606AAA] text-white rounded-3xl m-3 overflow-hidden">
       {/* Send icon in a circle */}
       <div className="absolute bottom-34 left-28">
-        <div className="bg-white border-2 border-[#6A6EEC] items-center justify-center flex rounded-full w-12 h-12">
+        <div className="bg-white border border-[#6A6EEC] items-center justify-center flex rounded-full w-12 h-12">
           <Image src="/send.svg" alt="Help Center Icon" width={20} height={20} />
         </div>
       </div>

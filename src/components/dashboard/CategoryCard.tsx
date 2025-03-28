@@ -9,7 +9,7 @@ export interface CategoryCardProps {
 
 export default function CategoryCard({ imageSrc, category, title, description }: CategoryCardProps) {
   return (
-    <Card className="border-2 border-[#D9D9D9] shadow-none overflow-hidden rounded-[20px]">
+    <Card className="border border-[#D9D9D9] shadow-none overflow-hidden rounded-[24px]">
       <div className="h-20 bg-white relative">
         <div className="absolute inset-0 flex items-center justify-center">
           <img src={imageSrc} alt={title} className="w-full h-[104px] object-cover rounded-[20px]" />

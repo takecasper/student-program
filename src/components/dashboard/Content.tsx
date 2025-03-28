@@ -7,6 +7,7 @@ import SummaryCard from "./SummaryCard";
 import CourseCard from "./CourseCard";
 import CategoryCard from "./CategoryCard";
 import SuggestedCourseCard from "./SuggestedCourseCard";
+import Image from "next/image";
 
 export default function DashboardContent() {
   const { user } = useAuth();
@@ -17,12 +18,12 @@ export default function DashboardContent() {
       <div className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-6">
         <div className="space-y-6">
           <h2 className="text-lg font-medium text-[#333333]">DASHBOARD</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex gap-4">
             <SummaryCard iconSrc="/golf_course.svg" title="Ongoing Course" value="1" />
             <SummaryCard iconSrc="hotel_class.svg" title="Upcoming Sessions" value="3" />
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col w-[700px] ">
             <h2 className="text-lg font-medium text-[#333333]">MY COURSE</h2>
 
             <Tabs defaultValue="s2">
@@ -44,7 +45,7 @@ export default function DashboardContent() {
               </TabsList>
             </Tabs>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className=" grid grid-cols-1 sm:grid-cols-2 gap-4">
               <CourseCard
                 number="01"
                 title="Clinical Anatomy"
@@ -85,30 +86,29 @@ export default function DashboardContent() {
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 pr-10">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-medium text-[#333333]">TO-DO LIST</h2>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M3 9H21M3 15H21M9 3V21M15 3V21"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+            <Button variant="ghost" size="icon" className="h-8 w-8 border">
+              <Image src="/sort.svg" alt="filter" width={18} height={18} />
             </Button>
           </div>
 
-          <ScrollArea className="h-[600px]">
+          <ScrollArea className="h-screen">
             <div className="space-y-3">
               {[
                 { day: "Wed", date: "28", time: "09:00 - 11:00", isTest: true },
                 { day: "Thu", date: "29", time: "09:00 - 11:00", isForm: true },
                 { day: "Fri", date: "30", time: "09:00 - 11:00", isSession: true },
                 { day: "Sat", date: "31", time: "09:00 - 11:00", isSession: true },
-                { day: "Mon", date: "2", time: "09:00 - 11:00", isSession: true },
+                { day: "Mon", date: "02", time: "09:00 - 11:00", isSession: true },
+                { day: "Tue", date: "03", time: "09:00 - 11:00", isSession: true },
+                { day: "Wed", date: "04", time: "09:00 - 11:00", isSession: true },
+                { day: "Thu", date: "05", time: "09:00 - 11:00", isSession: true },
+                { day: "Fri", date: "06", time: "09:00 - 11:00", isSession: true },
+                { day: "Sat", date: "07", time: "09:00 - 11:00", isSession: true },
+                { day: "Sun", date: "08", time: "09:00 - 11:00", isSession: true },
+                { day: "Mon", date: "09", time: "09:00 - 11:00", isSession: true },
               ].map((item, index) => (
                 <TodoListItem
                   key={index}

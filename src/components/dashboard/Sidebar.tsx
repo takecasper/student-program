@@ -27,7 +27,7 @@ export default function DashboardSidebar({ user, logout, children }: DashboardSi
 
   return (
     <>
-      <div className="w-[264px] border-r border-[#f5f5f5] flex flex-col">
+      <div className="w-[264px] bg-gray-100 border-r border-[#f5f5f5] flex flex-col">
         <Link
           href="/dashboard/user-profile"
           className="p-4 border-b border-[#f5f5f5] flex items-center gap-3"

@@ -4,7 +4,7 @@ import SuggestedCourseItem from "./SuggestedCourseItem";
 
 export default function SuggestedCourseCard() {
   return (
-    <Card className="border-2 border-[#D9D9D9] shadow-none rounded-[20px]">
+    <Card className="border border-[#D9D9D9] shadow-none rounded-[24px]">
       <CardContent className="p-4">
         <h3 className="text-3xl font-bold text-[#6c6c6c] mb-3">SUGGESTED COURSE</h3>
 

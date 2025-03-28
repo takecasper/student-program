@@ -32,7 +32,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     <div className="flex h-screen bg-[#ffffff]">
       <DashboardSidebar user={userWithAvatar} logout={logout}>
         <div className="flex-1 overflow-hidden">
-          <div className="flex bg-gray-100 justify-center p-6 h-full">
+          <div className="flex bg-gray-100 justify-center p-4 h-full">
             <main className="w-full h-full bg-white rounded-xl shadow-sm flex flex-col">
               <div className="p-4 border-b">
                 <DashboardHeader />
