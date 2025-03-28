@@ -22,13 +22,16 @@ export default function LoginPage() {
       return;
     }
 
-    const success = await login(email, password);
-    if (success) {
-      setTimeout(() => {
+    try {
+      const success = await login(email, password);
+      if (success) {
         router.push("/dashboard");
-      }, 500);
-    } else {
-      setError("Invalid email or password");
+      } else {
+        setError("Invalid email or password");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("An error occurred during login. Please try again.");
     }
   };
 

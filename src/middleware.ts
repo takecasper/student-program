@@ -3,23 +3,28 @@ import type { NextRequest } from "next/server";
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
-  // Check for the session cookie
-  const mockSession = request.cookies.get("mockSession")?.value;
-
-  // For debugging
-  console.log("Middleware checking session:", mockSession);
+  console.log("Middleware checking session:", !!request.cookies.get("session"));
   console.log("Current path:", request.nextUrl.pathname);
 
-  // Check if the user is trying to access a protected route
-  if (request.nextUrl.pathname.startsWith("/dashboard")) {
-    // If no session exists, redirect to the signin page
-    if (!mockSession) {
-      return NextResponse.redirect(new URL("/signin", request.url));
-    }
+  // Get the session cookie
+  const session = request.cookies.get("session");
+  const isAuthenticated = !!session;
+
+  // Protected routes that require authentication
+  const isProtectedRoute = request.nextUrl.pathname.startsWith("/dashboard");
+
+  // Auth routes (login/signup pages)
+  const isAuthRoute = request.nextUrl.pathname === "/signin";
+
+  // If trying to access protected route without authentication
+  if (isProtectedRoute && !isAuthenticated) {
+    const url = new URL("/signin", request.url);
+    url.searchParams.set("from", request.nextUrl.pathname);
+    return NextResponse.redirect(url);
   }
 
-  // If the user is already logged in and trying to access signin page
-  if (request.nextUrl.pathname === "/signin" && mockSession) {
+  // If already authenticated and trying to access auth routes
+  if (isAuthRoute && isAuthenticated) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

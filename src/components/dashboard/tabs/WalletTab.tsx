@@ -1,8 +1,34 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 export function WalletTab() {
+  const [isEditing, setIsEditing] = useState(false);
+  const [cardInfo, setCardInfo] = useState({
+    cardholderName: "Isabella Ding",
+    cardNumber: "**** - **** - ****",
+    cvv: "***",
+    expiryDate: "****",
+    billingAddress: "12 Agnes, Mississauga",
+  });
+
+  const handleInputChange = (field: keyof typeof cardInfo, value: string) => {
+    setCardInfo((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const toggleEdit = () => {
+    if (isEditing) {
+      // Save functionality would go here in a real app
+      // For now, just toggle the edit state
+    }
+    setIsEditing(!isEditing);
+  };
+
   return (
     <div className="w-full pt-6">
       <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6">
@@ -13,30 +39,71 @@ export function WalletTab() {
             <Button
               variant="ghost"
               className="h-8 text-[#364699] hover:text-[#364699] hover:bg-[#e5e7f4] px-3"
+              onClick={toggleEdit}
             >
-              Edit
+              {isEditing ? "Save" : "Edit"}
             </Button>
           </CardHeader>
           <CardContent className="grid gap-4 pt-4">
             <div className="grid grid-cols-2 items-center">
               <p className="text-sm text-[#6c6c6c]">Cardholder Name:</p>
-              <p className="text-sm">Isabella Ding</p>
+              {isEditing ? (
+                <Input
+                  className="h-8 text-sm bg-white"
+                  value={cardInfo.cardholderName}
+                  onChange={(e) => handleInputChange("cardholderName", e.target.value)}
+                />
+              ) : (
+                <p className="text-sm">{cardInfo.cardholderName}</p>
+              )}
             </div>
             <div className="grid grid-cols-2 items-center">
               <p className="text-sm text-[#6c6c6c]">Credit Card Number:</p>
-              <p className="text-sm">**** - **** - ****</p>
+              {isEditing ? (
+                <Input
+                  className="h-8 text-sm bg-white"
+                  value={cardInfo.cardNumber}
+                  onChange={(e) => handleInputChange("cardNumber", e.target.value)}
+                />
+              ) : (
+                <p className="text-sm">{cardInfo.cardNumber}</p>
+              )}
             </div>
             <div className="grid grid-cols-2 items-center">
               <p className="text-sm text-[#6c6c6c]">CVV Code:</p>
-              <p className="text-sm">***</p>
+              {isEditing ? (
+                <Input
+                  className="h-8 text-sm bg-white "
+                  value={cardInfo.cvv}
+                  onChange={(e) => handleInputChange("cvv", e.target.value)}
+                />
+              ) : (
+                <p className="text-sm">{cardInfo.cvv}</p>
+              )}
             </div>
             <div className="grid grid-cols-2 items-center">
               <p className="text-sm text-[#6c6c6c]">Expiry Date:</p>
-              <p className="text-sm">****</p>
+              {isEditing ? (
+                <Input
+                  className="h-8 text-sm bg-white"
+                  value={cardInfo.expiryDate}
+                  onChange={(e) => handleInputChange("expiryDate", e.target.value)}
+                />
+              ) : (
+                <p className="text-sm">{cardInfo.expiryDate}</p>
+              )}
             </div>
             <div className="grid grid-cols-2 items-center">
               <p className="text-sm text-[#6c6c6c]">Billing Address:</p>
-              <p className="text-sm">12 Agnes, Mississauga</p>
+              {isEditing ? (
+                <Input
+                  className="h-8 text-sm bg-white"
+                  value={cardInfo.billingAddress}
+                  onChange={(e) => handleInputChange("billingAddress", e.target.value)}
+                />
+              ) : (
+                <p className="text-sm">{cardInfo.billingAddress}</p>
+              )}
             </div>
           </CardContent>
         </Card>

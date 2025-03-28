@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LayoutGrid } from "lucide-react";
 import { SidebarNavItem } from "./SidebarNavItem";
 import { HelpCenterCard } from "./HelpCenterCard";
+import { useRouter } from "next/navigation";
 
 type DashboardSidebarProps = {
   user: {
@@ -14,7 +15,14 @@ type DashboardSidebarProps = {
 };
 
 export default function DashboardSidebar({ user, logout, children }: DashboardSidebarProps) {
+  const router = useRouter();
+
   if (!user) return null;
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/"); // Redirect to homepage after logout
+  };
 
   return (
     <>
@@ -179,7 +187,7 @@ export default function DashboardSidebar({ user, logout, children }: DashboardSi
             }
             label="Logout"
             isFooterItem={true}
-            onClick={logout}
+            onClick={handleLogout}
           />
         </div>
 

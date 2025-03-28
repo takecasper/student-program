@@ -5,7 +5,7 @@ export const mockUser = {
   email: "john.doe@example.com",
   password: "password123",
   role: "Student",
-  avatar: "/avatar-placeholder.png",
+  avatar: "/avatar.png",
 };
 
 // Mock dashboard data

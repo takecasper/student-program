@@ -40,8 +40,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    setIsLoading(true);
     try {
+      setIsLoading(true);
       // Simulate API delay
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -54,14 +54,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           localStorage.setItem("mockSession", "true");
 
           // Also set a cookie for the middleware
-          document.cookie = "mockSession=true; path=/; max-age=86400";
+          document.cookie = `session=true; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 days
         }
 
         return true;
       }
       return false;
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error("Login error:", error);
       return false;
     } finally {
       setIsLoading(false);
@@ -69,13 +69,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
-    // In a real app, clear token from localStorage or cookies
-    // localStorage.removeItem('token');
+    // Clear the session cookie
+    document.cookie = "session=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 
     // For demo purposes
     localStorage.removeItem("mockSession");
     setUser(null);
     router.push("/signin");
+
+    // Redirect to homepage
+    window.location.href = "/";
   };
 
   return <AuthContext.Provider value={{ user, login, logout, isLoading }}>{children}</AuthContext.Provider>;

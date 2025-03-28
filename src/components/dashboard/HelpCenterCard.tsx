@@ -1,34 +1,31 @@
 import { Button } from "@/components/ui/button";
-import { Send } from "lucide-react";
+import Image from "next/image";
 
 export function HelpCenterCard() {
   return (
-    <div className="p-4 bg-[#6a6eec] text-white rounded-lg m-3 relative overflow-hidden">
-      <div className="absolute top-0 right-0 opacity-10">
-        <svg
-          width="80"
-          height="80"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" />
-        </svg>
-      </div>
-      <div className="relative z-10">
-        <div className="flex items-center justify-center w-8 h-8 bg-white bg-opacity-20 rounded-full mb-2">
-          <Send className="h-4 w-4 text-white" />
+    <div className="py-6 px-4 bg-gradient-to-b from-[#6A6EEC] to-[#606AAA] text-white rounded-3xl m-3 overflow-hidden">
+      {/* Send icon in a circle */}
+      <div className="absolute bottom-34 left-28">
+        <div className="bg-white border-2 border-[#6A6EEC] items-center justify-center flex rounded-full w-12 h-12">
+          <Image src="/send.svg" alt="Help Center Icon" width={20} height={20} />
         </div>
-        <h3 className="font-bold text-sm mb-1">Help Center</h3>
-        <p className="text-xs text-white/80 mb-3">
-          Have a problem?
-          <br />
-          Send us a message!
-        </p>
-        <Button size="sm" className="w-full bg-white text-[#6a6eec] hover:bg-white/90 text-xs font-medium">
-          Go to Help Center
-        </Button>
       </div>
+      <div className="flex items-center justify-center">
+        <div className="flex flex-col items-center justify-center text-center">
+          <h3 className="font-bold text-sm mb-1">Help Center</h3>
+          <p className="text-xs text-white/80 mb-3">
+            Have a problem?
+            <br />
+            Send us a message!
+          </p>
+        </div>
+        {/* <div className="flex justify-end mb-2">
+          <Image src="/logo_sheltr.png" alt="Shelter Link Logo" width={80} height={50} />
+        </div> */}
+      </div>
+      <Button size="sm" className="w-full bg-white text-[#6a6eec] hover:bg-white/90 text-xs font-medium">
+        Go to Help Center
+      </Button>
     </div>
   );
 }
