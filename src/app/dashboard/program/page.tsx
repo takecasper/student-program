@@ -10,8 +10,20 @@ export default function ProgramContentWithImages() {
   const [selectedView, setSelectedView] = useState<string | null>(null);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
+  // Handle going back to the main view
+  const handleBack = () => {
+    setSelectedView(null);
+  };
+
+  console.log("Current selectedView in main page:", selectedView);
+
+  const handleViewSelection = (view: string) => {
+    console.log("Setting selectedView to:", view);
+    setSelectedView(view);
+  };
+
   if (selectedView) {
-    return <ProgramDetail />;
+    return <ProgramDetail selectedView={selectedView} onBack={handleBack} />;
   }
 
   // Card data to make the code more maintainable
@@ -25,7 +37,7 @@ export default function ProgramContentWithImages() {
             variant="outline"
             size="sm"
             className="rounded-[10px] text-xs h-7 px-2 border-[#d9d9d9] text-black font-bold"
-            onClick={() => setSelectedView("year1-s1")}
+            onClick={() => handleViewSelection("year1-s1")}
           >
             S1
           </Button>
@@ -33,7 +45,7 @@ export default function ProgramContentWithImages() {
             variant="outline"
             size="sm"
             className="rounded-[10px] text-xs h-7 px-2 border-[#d9d9d9] text-black font-bold"
-            onClick={() => setSelectedView("year1-s2")}
+            onClick={() => handleViewSelection("year1-s2")}
           >
             S2
           </Button>
@@ -41,7 +53,7 @@ export default function ProgramContentWithImages() {
             variant="outline"
             size="sm"
             className="rounded-[10px] text-xs h-7 px-2 border-[#d9d9d9] text-black font-bold"
-            onClick={() => setSelectedView("year1-s3")}
+            onClick={() => handleViewSelection("year1-s3")}
           >
             S3
           </Button>
@@ -49,7 +61,7 @@ export default function ProgramContentWithImages() {
             variant="outline"
             size="sm"
             className="rounded-[10px] text-xs h-7 px-2 border-[#d9d9d9] text-black font-bold"
-            onClick={() => setSelectedView("year1-s4")}
+            onClick={() => handleViewSelection("year1-s4")}
           >
             S4
           </Button>
@@ -65,7 +77,7 @@ export default function ProgramContentWithImages() {
             variant="outline"
             size="sm"
             className="rounded-[10px] text-xs h-7 px-2 border-[#d9d9d9] text-black font-bold"
-            onClick={() => setSelectedView("year2-s1")}
+            onClick={() => handleViewSelection("year2-s1")}
           >
             S1
           </Button>
@@ -73,7 +85,7 @@ export default function ProgramContentWithImages() {
             variant="outline"
             size="sm"
             className="rounded-[10px] text-xs h-7 px-2 border-[#d9d9d9] text-black font-bold"
-            onClick={() => setSelectedView("year2-s2")}
+            onClick={() => handleViewSelection("year2-s2")}
           >
             S2
           </Button>
@@ -81,7 +93,7 @@ export default function ProgramContentWithImages() {
             variant="outline"
             size="sm"
             className="rounded-[10px] text-xs h-7 px-2 border-[#d9d9d9] text-black font-bold"
-            onClick={() => setSelectedView("year2-s3")}
+            onClick={() => handleViewSelection("year2-s3")}
           >
             S3
           </Button>
@@ -89,7 +101,7 @@ export default function ProgramContentWithImages() {
             variant="outline"
             size="sm"
             className="rounded-[10px] text-xs h-7 px-2 border-[#d9d9d9] text-black font-bold"
-            onClick={() => setSelectedView("year2-s4")}
+            onClick={() => handleViewSelection("year2-s4")}
           >
             S4
           </Button>
@@ -105,7 +117,7 @@ export default function ProgramContentWithImages() {
           <Button
             variant="link"
             className="text-sm p-0 h-auto text-[#333333DE]"
-            onClick={() => setSelectedView("year3-s3")}
+            onClick={() => handleViewSelection("year3-s3")}
           >
             CLINICAL PHASE
           </Button>{" "}
@@ -121,7 +133,7 @@ export default function ProgramContentWithImages() {
           <Button
             variant="link"
             className="text-sm p-0 h-auto text-[#333333DE]"
-            onClick={() => setSelectedView("year4-clinical")}
+            onClick={() => handleViewSelection("year4-clinical")}
           >
             CLINICAL PHASE
           </Button>{" "}
@@ -143,7 +155,7 @@ export default function ProgramContentWithImages() {
             }`}
             onMouseEnter={() => setHoveredCard(index)}
             onMouseLeave={() => setHoveredCard(null)}
-            onClick={() => setSelectedView(`year${index + 1}`)}
+            onClick={() => handleViewSelection(`year${index + 1}`)}
           >
             <Card
               className={`border-2 ${

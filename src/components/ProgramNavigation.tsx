@@ -11,9 +11,13 @@ export default function ProgramNavigation() {
   const backgroundImageUrl =
     "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='160' viewBox='0 0 300 160'%3E%3Crect width='300' height='160' fill='%23f8c4d9'/%3E%3Cpath d='M0 0 L300 160' stroke='%236a6eec' strokeWidth='8'/%3E%3Ccircle cx='150' cy='120' r='15' fill='%2370c0b8'/%3E%3C/svg%3E";
 
+  const handleBack = () => {
+    setSelectedView(null);
+  };
+
   // If a year/semester is selected, show the detail view
   if (selectedView) {
-    return <ProgramDetail />;
+    return <ProgramDetail selectedView={selectedView} onBack={handleBack} />;
   }
 
   // Otherwise show the program overview
