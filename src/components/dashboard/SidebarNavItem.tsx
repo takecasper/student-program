@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 type SidebarNavItemProps = {
   icon: ReactNode;
@@ -19,13 +20,27 @@ export function SidebarNavItem({
   onClick = () => alert(`Clicked on ${label}`),
   href,
 }: SidebarNavItemProps) {
+  const pathname = usePathname();
+
+  // More precise path matching logic
+  const isActive = href
+    ? pathname === href ||
+      (pathname.startsWith(href) && href !== "/dashboard") ||
+      (href === "/dashboard" && pathname === "/dashboard")
+    : active;
+
+  // For debugging - you can remove this after fixing
+  useEffect(() => {
+    console.log(`NavItem: ${label}, href: ${href}, pathname: ${pathname}, isActive: ${isActive}`);
+  }, [label, href, pathname, isActive]);
+
   if (href) {
     return (
       <Link href={href} className="block">
         <Button
           variant="ghost"
           className={`w-full justify-start py-6 gap-3 cursor-pointer hover:bg-gray-200 ${
-            active
+            isActive
               ? "bg-[#D9D9D94D] text-[#364699] font-medium"
               : isFooterItem
               ? "py-3 px-4 text-[#333333]"
@@ -44,7 +59,7 @@ export function SidebarNavItem({
     <Button
       variant="ghost"
       className={`w-full justify-start gap-3 cursor-pointer hover:bg-gray-200 ${
-        active
+        isActive
           ? "bg-[#f5f5f5] text-[#364699] font-medium"
           : isFooterItem
           ? "py-3 px-4 text-[#333333]"

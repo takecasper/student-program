@@ -52,7 +52,6 @@ export default function DashboardSidebar({ user, logout, children }: DashboardSi
             <SidebarNavItem
               icon={<LayoutGrid className="h-4 w-4" />}
               label="My Dashboard"
-              active={true}
               href="/dashboard"
             />
             <SidebarNavItem
