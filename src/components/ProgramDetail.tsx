@@ -169,7 +169,7 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="h-6 px-2 text-xs rounded-full bg-gray-100 hover:bg-gray-200"
+                              className=" text-xs text-[#364699] "
                               onClick={(e) => {
                                 e.stopPropagation();
                                 toggleSessions();
