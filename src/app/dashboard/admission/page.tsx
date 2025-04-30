@@ -328,7 +328,7 @@ export default function AdmissionContent() {
 
                         <div className="space-y-3">
                           <div className="border border-[#d9d9d9] rounded-md p-3">
-                            <RadioGroup defaultValue="" onValueChange={(value) => handleSchoolSelect("all")}>
+                            <RadioGroup defaultValue="" onValueChange={() => handleSchoolSelect("all")}>
                               <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="all" id="all-schools" className="text-[#00a59b]" />
                                 <Label htmlFor="all-schools">Select All Schools</Label>
@@ -339,7 +339,7 @@ export default function AdmissionContent() {
                           <div className="border border-[#d9d9d9] rounded-md p-3">
                             <RadioGroup
                               defaultValue=""
-                              onValueChange={(value) => handleSchoolSelect("sam-houston")}
+                              onValueChange={() => handleSchoolSelect("sam-houston")}
                             >
                               <div className="flex items-center space-x-2">
                                 <RadioGroupItem
@@ -353,10 +353,7 @@ export default function AdmissionContent() {
                           </div>
 
                           <div className="border border-[#d9d9d9] rounded-md p-3">
-                            <RadioGroup
-                              defaultValue=""
-                              onValueChange={(value) => handleSchoolSelect("san-juan")}
-                            >
+                            <RadioGroup defaultValue="" onValueChange={() => handleSchoolSelect("san-juan")}>
                               <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="san-juan" id="san-juan" className="text-[#00a59b]" />
                                 <Label htmlFor="san-juan">San Juan Bautista School of Medicine</Label>
