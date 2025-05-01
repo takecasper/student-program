@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import SuggestedCourseItem from "./SuggestedCourseItem";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import SuggestedCourseItem from './SuggestedCourseItem';
 
 export default function SuggestedCourseCard() {
   return (

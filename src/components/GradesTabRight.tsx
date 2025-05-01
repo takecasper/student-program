@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
-import { Clock, X } from "lucide-react";
+import { useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
+import { Clock, X } from 'lucide-react';
 
 export default function GradesTabContent() {
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
@@ -29,7 +29,7 @@ export default function GradesTabContent() {
 
       <div
         className={`grid grid-cols-1 ${
-          selectedCourse ? "md:grid-cols-[1fr_350px]" : "md:grid-cols-[1fr_300px]"
+          selectedCourse ? 'md:grid-cols-[1fr_350px]' : 'md:grid-cols-[1fr_300px]'
         } gap-6`}
       >
         {/* Grades Table with ScrollArea */}
@@ -53,7 +53,7 @@ export default function GradesTabContent() {
                     <div
                       key={index}
                       className={`grid grid-cols-5 border-b border-[#f5f5f5] py-4 cursor-pointer hover:bg-[#f5f5f5] transition-colors ${
-                        index === 0 && selectedCourse === "Women's Health" ? "bg-[#f5f5f5]" : ""
+                        index === 0 && selectedCourse === "Women's Health" ? 'bg-[#f5f5f5]' : ''
                       }`}
                       onClick={() => (index === 0 ? handleRowClick("Women's Health") : null)}
                     >
@@ -304,7 +304,10 @@ export default function GradesTabContent() {
               </div>
 
               <div className="flex border-b border-[#f5f5f5]">
-                <Button variant="ghost" className="flex-1 py-3 rounded-none border-b-2 border-[#364699]">
+                <Button
+                  variant="ghost"
+                  className="flex-1 py-3 rounded-none border-b-2 border-[#364699]"
+                >
                   INFO & OBJECTIVE
                 </Button>
                 <Button variant="ghost" className="flex-1 py-3 rounded-none">
@@ -335,7 +338,9 @@ export default function GradesTabContent() {
                   </div>
                 </div>
 
-                <h3 className="text-sm font-medium text-[#333333] mt-6 mb-4">COURSE OBJECTIVE (5)</h3>
+                <h3 className="text-sm font-medium text-[#333333] mt-6 mb-4">
+                  COURSE OBJECTIVE (5)
+                </h3>
 
                 <div className="flex items-start gap-2 text-sm">
                   <div className="min-w-5 h-5 rounded-full bg-[#00a59b] flex items-center justify-center mt-0.5">
@@ -356,8 +361,8 @@ export default function GradesTabContent() {
                     </svg>
                   </div>
                   <p>
-                    To perform a comprehensive history and physical examination with special emphasis on
-                    mental status, mobility, medications and functional status.
+                    To perform a comprehensive history and physical examination with special
+                    emphasis on mental status, mobility, medications and functional status.
                   </p>
                 </div>
               </div>
@@ -375,7 +380,7 @@ export default function GradesTabContent() {
                     <span className="text-sm text-[#333333]">Leadership</span>
                   </div>
                   <div className="h-2 w-full bg-[#f5f5f5] rounded-full overflow-hidden">
-                    <div className="h-full bg-[#ffd87c] rounded-full" style={{ width: "70%" }}>
+                    <div className="h-full bg-[#ffd87c] rounded-full" style={{ width: '70%' }}>
                       <span className="sr-only">70%</span>
                     </div>
                   </div>
@@ -387,7 +392,7 @@ export default function GradesTabContent() {
                     <span className="text-sm text-[#333333]">Self-Awareness</span>
                   </div>
                   <div className="h-2 w-full bg-[#f5f5f5] rounded-full overflow-hidden">
-                    <div className="h-full bg-[#00a59b] rounded-full" style={{ width: "90%" }}>
+                    <div className="h-full bg-[#00a59b] rounded-full" style={{ width: '90%' }}>
                       <span className="sr-only">90%</span>
                     </div>
                   </div>
@@ -399,7 +404,7 @@ export default function GradesTabContent() {
                     <span className="text-sm text-[#333333]">Collaboration</span>
                   </div>
                   <div className="h-2 w-full bg-[#f5f5f5] rounded-full overflow-hidden">
-                    <div className="h-full bg-[#fa8d8f] rounded-full" style={{ width: "40%" }}>
+                    <div className="h-full bg-[#fa8d8f] rounded-full" style={{ width: '40%' }}>
                       <span className="sr-only">40%</span>
                     </div>
                   </div>
@@ -411,7 +416,7 @@ export default function GradesTabContent() {
                     <span className="text-sm text-[#333333]">Communication</span>
                   </div>
                   <div className="h-2 w-full bg-[#f5f5f5] rounded-full overflow-hidden">
-                    <div className="h-full bg-[#00a59b] rounded-full" style={{ width: "90%" }}>
+                    <div className="h-full bg-[#00a59b] rounded-full" style={{ width: '90%' }}>
                       <span className="sr-only">90%</span>
                     </div>
                   </div>

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import CalendarEvent from "@/components/CalendarEvent";
-import AddCalendarEventModal from "@/components/AddEvent";
-import { format, startOfWeek, addDays, isToday, isSameDay, parseISO } from "date-fns";
+import React, { useState } from 'react';
+import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import CalendarEvent from '@/components/CalendarEvent';
+import AddCalendarEventModal from '@/components/AddEvent';
+import { format, startOfWeek, addDays, isToday, isSameDay, parseISO } from 'date-fns';
 
 // Define the event type interface
 interface CalendarEventType {
@@ -27,58 +27,58 @@ interface CalendarEventType {
 
 export default function CalendarViewWithRealDates() {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [viewMode, setViewMode] = useState("week");
+  const [viewMode, setViewMode] = useState('week');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [events, setEvents] = useState<CalendarEventType[]>([
     {
-      id: "1",
-      title: "Surgery - Hospital A",
+      id: '1',
+      title: 'Surgery - Hospital A',
       startDate: new Date(2023, 3, 15), // Using current month for visibility
       endDate: new Date(2023, 3, 15),
-      color: "#70c0b8",
+      color: '#70c0b8',
       isAllDay: true,
     },
     {
-      id: "2",
-      title: "Vacation Leave",
+      id: '2',
+      title: 'Vacation Leave',
       startDate: new Date(2023, 3, 17), // Using current month for visibility
       endDate: new Date(2023, 3, 17),
-      color: "#70c0b8",
+      color: '#70c0b8',
       isAllDay: true,
       status: {
-        text: "Approved",
-        color: "#8eeee4",
-        dotColor: "#00a59b",
+        text: 'Approved',
+        color: '#8eeee4',
+        dotColor: '#00a59b',
       },
     },
     {
-      id: "3",
-      title: "Send EPA FORM - Deadline",
+      id: '3',
+      title: 'Send EPA FORM - Deadline',
       startDate: new Date(2023, 3, 19), // Using current month for visibility
       endDate: new Date(2023, 3, 19),
-      color: "#ff0000",
+      color: '#ff0000',
       isAllDay: true,
     },
     {
-      id: "4",
-      title: "Evaluation Form",
+      id: '4',
+      title: 'Evaluation Form',
       startDate: new Date(2023, 3, 16), // Using current month for visibility
       endDate: new Date(2023, 3, 16),
-      startTime: "8 AM",
-      endTime: "9:30 AM",
-      location: "H & S 403",
-      color: "#f5ca66",
+      startTime: '8 AM',
+      endTime: '9:30 AM',
+      location: 'H & S 403',
+      color: '#f5ca66',
       isAllDay: false,
     },
     {
-      id: "5",
-      title: "Academic Session",
+      id: '5',
+      title: 'Academic Session',
       startDate: new Date(2023, 3, 18), // Using current month for visibility
       endDate: new Date(2023, 3, 18),
-      startTime: "8 AM",
-      endTime: "9:30 AM",
-      location: "H & S 403",
-      color: "#70c0b8",
+      startTime: '8 AM',
+      endTime: '9:30 AM',
+      location: 'H & S 403',
+      color: '#70c0b8',
       isAllDay: false,
     },
   ]);
@@ -110,14 +110,15 @@ export default function CalendarViewWithRealDates() {
   const handleAddEvent = (eventData: any) => {
     // Parse dates from strings if needed
     const startDate =
-      typeof eventData.startDate === "string" ? parseISO(eventData.startDate) : eventData.startDate;
+      typeof eventData.startDate === 'string' ? parseISO(eventData.startDate) : eventData.startDate;
 
-    const endDate = typeof eventData.endDate === "string" ? parseISO(eventData.endDate) : eventData.endDate;
+    const endDate =
+      typeof eventData.endDate === 'string' ? parseISO(eventData.endDate) : eventData.endDate;
 
     // Determine color based on event type
-    let color = "#70c0b8";
-    if (eventData.type === "event") color = "#dd99f6";
-    if (eventData.type === "duty") color = "#f5ca66";
+    let color = '#70c0b8';
+    if (eventData.type === 'event') color = '#dd99f6';
+    if (eventData.type === 'duty') color = '#f5ca66';
 
     // Create the new event
     const newEvent: CalendarEventType = {
@@ -151,21 +152,21 @@ export default function CalendarViewWithRealDates() {
 
   // Get events for a specific day
   const getEventsForDay = (day: Date, allDay = false) => {
-    return events.filter((event) => {
+    return events.filter(event => {
       return isSameDay(event.startDate, day) && event.isAllDay === allDay;
     });
   };
 
   // Get events for a specific time slot
   const getEventsForTimeSlot = (day: Date, hour: number) => {
-    return events.filter((event) => {
+    return events.filter(event => {
       if (event.isAllDay) return false;
       if (!isSameDay(event.startDate, day)) return false;
 
       // Check if the event starts at this hour
       if (event.startTime) {
-        const eventHour = Number.parseInt(event.startTime.split(" ")[0]);
-        const isPM = event.startTime.includes("PM");
+        const eventHour = Number.parseInt(event.startTime.split(' ')[0]);
+        const isPM = event.startTime.includes('PM');
         const hour24 = isPM && eventHour !== 12 ? eventHour + 12 : eventHour;
         return hour === hour24;
       }
@@ -205,7 +206,7 @@ export default function CalendarViewWithRealDates() {
       {/* Calendar Header */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-4">
-          <h1 className="text-xl font-medium text-[#333333]">{format(currentDate, "MMMM yyyy")}</h1>
+          <h1 className="text-xl font-medium text-[#333333]">{format(currentDate, 'MMMM yyyy')}</h1>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" onClick={navigatePrevious} className="h-8 px-2">
               &lt;
@@ -230,22 +231,22 @@ export default function CalendarViewWithRealDates() {
           <div className="flex border border-[#d9d9d9] rounded-md overflow-hidden">
             <Button
               variant="ghost"
-              className={`rounded-none h-9 px-4 ${viewMode === "day" ? "bg-[#f5f5f5]" : "bg-transparent"}`}
-              onClick={() => setViewMode("day")}
+              className={`rounded-none h-9 px-4 ${viewMode === 'day' ? 'bg-[#f5f5f5]' : 'bg-transparent'}`}
+              onClick={() => setViewMode('day')}
             >
               Day
             </Button>
             <Button
               variant="ghost"
-              className={`rounded-none h-9 px-4 ${viewMode === "week" ? "bg-[#f5f5f5]" : "bg-transparent"}`}
-              onClick={() => setViewMode("week")}
+              className={`rounded-none h-9 px-4 ${viewMode === 'week' ? 'bg-[#f5f5f5]' : 'bg-transparent'}`}
+              onClick={() => setViewMode('week')}
             >
               Week
             </Button>
             <Button
               variant="ghost"
-              className={`rounded-none h-9 px-4 ${viewMode === "month" ? "bg-[#f5f5f5]" : "bg-transparent"}`}
-              onClick={() => setViewMode("month")}
+              className={`rounded-none h-9 px-4 ${viewMode === 'month' ? 'bg-[#f5f5f5]' : 'bg-transparent'}`}
+              onClick={() => setViewMode('month')}
             >
               Month
             </Button>
@@ -261,11 +262,13 @@ export default function CalendarViewWithRealDates() {
           {daysOfWeek.map((day, index) => (
             <div
               key={index}
-              className={`p-3 text-center border-l border-[#f5f5f5] ${isToday(day) ? "bg-[#f5f5f5]" : ""}`}
+              className={`p-3 text-center border-l border-[#f5f5f5] ${isToday(day) ? 'bg-[#f5f5f5]' : ''}`}
             >
-              <div className="text-[#6c6c6c] text-sm font-medium">{format(day, "EEE").toUpperCase()}</div>
-              <div className={`${isToday(day) ? "text-[#364699]" : "text-[#333333]"} font-bold`}>
-                {format(day, "d")}
+              <div className="text-[#6c6c6c] text-sm font-medium">
+                {format(day, 'EEE').toUpperCase()}
+              </div>
+              <div className={`${isToday(day) ? 'text-[#364699]' : 'text-[#333333]'} font-bold`}>
+                {format(day, 'd')}
               </div>
             </div>
           ))}
@@ -277,12 +280,12 @@ export default function CalendarViewWithRealDates() {
 
           {daysOfWeek.map((day, index) => (
             <div key={index} className="p-2 border-l border-[#f5f5f5]">
-              {getEventsForDay(day, true).map((event) => (
+              {getEventsForDay(day, true).map(event => (
                 <div key={event.id} className="mb-2">
                   <CalendarEvent
                     title={event.title}
-                    startTime={event.startTime || ""}
-                    endTime={event.endTime || ""}
+                    startTime={event.startTime || ''}
+                    endTime={event.endTime || ''}
                     location={event.location}
                     color={event.color}
                     status={event.status}
@@ -296,7 +299,7 @@ export default function CalendarViewWithRealDates() {
 
         {/* Time Slots */}
         <div className="grid grid-cols-[100px_repeat(7,1fr)]">
-          {timeSlots.map((hour) => {
+          {timeSlots.map(hour => {
             const displayHour = hour > 12 ? hour - 12 : hour;
             const isPM = hour >= 12;
 
@@ -304,18 +307,18 @@ export default function CalendarViewWithRealDates() {
               <React.Fragment key={hour}>
                 <div className="border-b border-[#f5f5f5] p-2 text-right pr-3 h-20">
                   <span className="text-[#6c6c6c] text-sm">
-                    {displayHour} <span className="text-xs">{isPM ? "PM" : "AM"}</span>
+                    {displayHour} <span className="text-xs">{isPM ? 'PM' : 'AM'}</span>
                   </span>
                 </div>
 
                 {daysOfWeek.map((day, dayIndex) => (
                   <div key={dayIndex} className="border-l border-b border-[#f5f5f5] relative h-20">
-                    {getEventsForTimeSlot(day, hour).map((event) => (
+                    {getEventsForTimeSlot(day, hour).map(event => (
                       <div key={event.id} className="absolute top-1 left-2 right-2 z-10">
                         <CalendarEvent
                           title={event.title}
-                          startTime={event.startTime || ""}
-                          endTime={event.endTime || ""}
+                          startTime={event.startTime || ''}
+                          endTime={event.endTime || ''}
                           location={event.location}
                           color={event.color}
                           status={event.status}
@@ -335,7 +338,7 @@ export default function CalendarViewWithRealDates() {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onSave={handleAddEvent}
-        defaultDate={format(currentDate, "yyyy-MM-dd")}
+        defaultDate={format(currentDate, 'yyyy-MM-dd')}
       />
     </div>
   );

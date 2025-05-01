@@ -6,15 +6,21 @@ export interface CourseCardProps {
   isCompleted: boolean;
 }
 
-export default function CourseCard({ number, title, dateRange, progress, isCompleted }: CourseCardProps) {
+export default function CourseCard({
+  number,
+  title,
+  dateRange,
+  progress,
+  isCompleted,
+}: CourseCardProps) {
   return (
     <div
       className={`bg-[#6a6eec] p-6 relative overflow-hidden rounded-[24px] border-4 border-[#D9D9D9] ${
-        isCompleted ? "opacity-60" : ""
+        isCompleted ? 'opacity-60' : ''
       }`}
     >
       <div className="absolute top-4 right-4 bg-[#70C0B8] text-[#333333DE] border border-white text-xs font-medium py-2 px-4 rounded-full">
-        {isCompleted ? "COMPLETED" : "IN PROGRESS"}
+        {isCompleted ? 'COMPLETED' : 'IN PROGRESS'}
       </div>
       <h3 className="text-2xl font-bold text-white mb-1">{number}</h3>
       <h4 className="text-2xl font-semibold text-white mb-2">{title}</h4>

@@ -1,4 +1,4 @@
-import { SessionItem } from "@/types/course";
+import { SessionItem } from '@/types/course';
 
 interface SessionTabProps {
   sessions: SessionItem[];

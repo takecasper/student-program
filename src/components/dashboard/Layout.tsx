@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
-import DashboardSidebar from "./Sidebar";
-import DashboardHeader from "./Header";
-import { useAuth } from "@/context/AuthContext";
+import { ReactNode } from 'react';
+import DashboardSidebar from './Sidebar';
+import DashboardHeader from './Header';
+import { useAuth } from '@/context/AuthContext';
 
 type DashboardLayoutProps = {
   children: ReactNode;
@@ -14,7 +14,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const userWithAvatar = user
     ? {
         ...user,
-        avatar: "/avatar.png",
+        avatar: '/avatar.png',
       }
     : null;
 

@@ -1,37 +1,50 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
+import Link from 'next/link';
+import Image from 'next/image';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
+
+import { useUserStore } from '@/store/user';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const router = useRouter();
   const { login, isLoading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
     if (!email || !password) {
-      setError("Please enter both email and password");
+      setError('Please enter both email and password');
       return;
     }
 
     try {
       const success = await login(email, password);
       if (success) {
-        router.push("/dashboard");
+        const randomType = Math.random() > 0.5 ? 'student' : 'program_experience';
+
+        useUserStore.getState().setUser({
+          email,
+          type: randomType,
+          name: 'Mock User',
+          avatar: '/avatar.png',
+          id: crypto.randomUUID(),
+          address: 'Toronto, Canada',
+        });
+
+        router.push('/dashboard');
       } else {
-        setError("Invalid email or password");
+        setError('Invalid email or password');
       }
     } catch (err) {
-      console.error("Login error:", err);
-      setError("An error occurred during login. Please try again.");
+      console.error('Login error:', err);
+      setError('An error occurred during login. Please try again.');
     }
   };
 
@@ -42,7 +55,13 @@ export default function LoginPage() {
         {/* Profile Cards */}
         <div className="flex flex-col md:flex-row gap-6 mt-auto mb-16 relative  items-center justify-center">
           <div className="border -rotate-6 border-white rounded-xl p-4 w-64 text-white mb-8">
-            <Image src="/logo.png" alt="Acuity Insights Logo" width={60} height={80} className="mb-1" />
+            <Image
+              src="/logo.png"
+              alt="Acuity Insights Logo"
+              width={60}
+              height={80}
+              className="mb-1"
+            />
             <h2 className="text-2xl font-bold leading-tight">See the potential that others miss</h2>
           </div>
           {/* First Card left */}
@@ -115,7 +134,9 @@ export default function LoginPage() {
 
         {/* Error message */}
         {error && (
-          <div className="w-full max-w-md mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">{error}</div>
+          <div className="w-full max-w-md mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+            {error}
+          </div>
         )}
 
         {/* Login Form */}
@@ -128,7 +149,7 @@ export default function LoginPage() {
               id="email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               className="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-[#364699]"
               placeholder="Enter your email"
             />
@@ -142,7 +163,7 @@ export default function LoginPage() {
               id="password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               className="w-full border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-[#364699]"
               placeholder="Enter your password"
             />
@@ -162,7 +183,7 @@ export default function LoginPage() {
             {isLoading ? (
               <div className="animate-spin h-5 w-5 border border-white border-t-transparent rounded-full"></div>
             ) : (
-              "Sign In"
+              'Sign In'
             )}
           </button>
         </form>
@@ -177,7 +198,13 @@ export default function LoginPage() {
 
           <button className="w-full border border-gray-200 rounded-full py-3 px-4 flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors">
             <div className="w-6 h-6 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <path
                   d="M17.64 9.20455C17.64 8.56636 17.5827 7.95273 17.4764 7.36364H9V10.845H13.8436C13.635 11.97 13.0009 12.9232 12.0477 13.5614V15.8195H14.9564C16.6582 14.2527 17.64 11.9455 17.64 9.20455Z"
                   fill="#4285F4"
@@ -202,7 +229,7 @@ export default function LoginPage() {
 
         {/* Sign Up Link */}
         <div className="text-sm text-[#333333]">
-          Don&apos;t have an account yet?{" "}
+          Don&apos;t have an account yet?{' '}
           <Link href="#" className="text-[#364699] font-medium">
             Sign Up
           </Link>

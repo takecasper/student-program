@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { Clock, CornerDownRight, Download, MapPin, Paperclip, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
-import { useState } from "react";
+import { Clock, CornerDownRight, Download, MapPin, Paperclip, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import Image from 'next/image';
+import { useState } from 'react';
 
-import { CourseDetailSidebarProps } from "@/types/course";
-import { sessionData } from "@/data/sessionData";
-import { handoutsData } from "@/data/handoutsData";
-import { gradesData } from "@/data/gradesData";
+import { CourseDetailSidebarProps } from '@/types/course';
+import { sessionData } from '@/data/sessionData';
+import { handoutsData } from '@/data/handoutsData';
+import { gradesData } from '@/data/gradesData';
 
 export default function CourseDetailSidebar({
   courseName,
@@ -22,7 +22,7 @@ export default function CourseDetailSidebar({
   onExpand,
 }: CourseDetailSidebarProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [activeTab, setActiveTab] = useState("SESSION");
+  const [activeTab, setActiveTab] = useState('SESSION');
 
   const toggleExpand = () => {
     const newExpandedState = !isExpanded;
@@ -33,22 +33,25 @@ export default function CourseDetailSidebar({
   // Render tab content based on active tab
   const renderTabContent = () => {
     switch (activeTab) {
-      case "SESSION":
+      case 'SESSION':
         return (
           <div className="space-y-3">
             {sessionData.map((session, index) => (
-              <div key={index} className="border border-[#d9d9d9] rounded-[20px] pr-2  flex items-center">
+              <div
+                key={index}
+                className="border border-[#d9d9d9] rounded-[20px] pr-2  flex items-center"
+              >
                 <div className="flex flex-col items-center justify-center w-20 h-20 rounded-lg mr-4">
                   <span
                     className={`text-${
-                      session.isHighlighted ? "[#ba1e50]" : "[#333333]"
+                      session.isHighlighted ? '[#ba1e50]' : '[#333333]'
                     } text-sm font-medium`}
                   >
                     {session.day}
                   </span>
                   <span
                     className={`text-${
-                      session.isHighlighted ? "[#ba1e50]" : "[#333333]"
+                      session.isHighlighted ? '[#ba1e50]' : '[#333333]'
                     } text-4xl font-semibold`}
                   >
                     {session.date}
@@ -81,16 +84,20 @@ export default function CourseDetailSidebar({
             ))}
           </div>
         );
-      case "GRADES":
+      case 'GRADES':
         return (
           <div className="space-y-6">
             {/* Header with overall grade */}
             <div className="flex justify-between items-start">
               <div>
-                <h2 className="text-xl font-semibold text-[#333333]">Isabella Ding&apos;s Course Grade</h2>
+                <h2 className="text-xl font-semibold text-[#333333]">
+                  Isabella Ding&apos;s Course Grade
+                </h2>
                 <div className="flex items-center mt-1">
                   <span className="text-[#333333]">Overal Grade:</span>
-                  <span className="ml-2 text-[#00a59b] font-semibold">{gradesData.overall.score}</span>
+                  <span className="ml-2 text-[#00a59b] font-semibold">
+                    {gradesData.overall.score}
+                  </span>
                   <span className="ml-6 text-[#333333] text-sm">{gradesData.overall.period}</span>
                 </div>
               </div>
@@ -126,7 +133,7 @@ export default function CourseDetailSidebar({
             ))}
           </div>
         );
-      case "HANDOUTS":
+      case 'HANDOUTS':
         return (
           <div className="space-y-6 border border-[#d9d9d9] rounded-[20px] p-4">
             <div className="flex items-center mb-4 gap-2">
@@ -167,7 +174,7 @@ export default function CourseDetailSidebar({
             </div>
           </div>
         );
-      case "EVAL":
+      case 'EVAL':
         return <p className="text-sm text-gray-500">Evaluation content will display here</p>;
       default:
         return <p className="text-sm text-gray-500">Select a tab to view content</p>;
@@ -177,7 +184,7 @@ export default function CourseDetailSidebar({
   return (
     <Card
       className={`border border-[#f5f5f5] shadow-none rounded-none transition-all duration-300 ${
-        isExpanded ? "w-full" : "w-full max-w-[600px]"
+        isExpanded ? 'w-full' : 'w-full max-w-[600px]'
       }`}
     >
       <CardContent className="p-0 flex flex-col h-full">
@@ -194,8 +201,8 @@ export default function CourseDetailSidebar({
           <div className="flex gap-2">
             <Button variant="ghost" size="icon" className="border" onClick={toggleExpand}>
               <Image
-                src={isExpanded ? "/collapse.svg" : "/expand.svg"}
-                alt={isExpanded ? "collapse" : "expand"}
+                src={isExpanded ? '/collapse.svg' : '/expand.svg'}
+                alt={isExpanded ? 'collapse' : 'expand'}
                 width={12}
                 height={12}
               />
@@ -260,43 +267,45 @@ export default function CourseDetailSidebar({
                 <Button
                   variant="ghost"
                   className={`py-3 rounded-full border border-[#D9D9D9] ${
-                    activeTab === "SESSION" ? "bg-[#364699] text-white" : ""
+                    activeTab === 'SESSION' ? 'bg-[#364699] text-white' : ''
                   }`}
-                  onClick={() => setActiveTab("SESSION")}
+                  onClick={() => setActiveTab('SESSION')}
                 >
                   SESSION
                 </Button>
                 <Button
                   variant="ghost"
                   className={`py-3 rounded-full border border-[#D9D9D9] ${
-                    activeTab === "GRADES" ? "bg-[#364699] text-white" : ""
+                    activeTab === 'GRADES' ? 'bg-[#364699] text-white' : ''
                   }`}
-                  onClick={() => setActiveTab("GRADES")}
+                  onClick={() => setActiveTab('GRADES')}
                 >
                   GRADES
                 </Button>
                 <Button
                   variant="ghost"
                   className={`py-3 rounded-full border border-[#D9D9D9] ${
-                    activeTab === "HANDOUTS" ? "bg-[#364699] text-white" : ""
+                    activeTab === 'HANDOUTS' ? 'bg-[#364699] text-white' : ''
                   }`}
-                  onClick={() => setActiveTab("HANDOUTS")}
+                  onClick={() => setActiveTab('HANDOUTS')}
                 >
                   HANDOUTS
                 </Button>
                 <Button
                   variant="ghost"
                   className={`py-3 rounded-full border border-[#D9D9D9] ${
-                    activeTab === "EVAL" ? "bg-[#364699] text-white" : ""
+                    activeTab === 'EVAL' ? 'bg-[#364699] text-white' : ''
                   }`}
-                  onClick={() => setActiveTab("EVAL")}
+                  onClick={() => setActiveTab('EVAL')}
                 >
                   EVAL
                 </Button>
               </div>
 
               {/* Tab content */}
-              <div className="border-l border-[#D9D9D9] p-4 flex-1 overflow-y-auto">{renderTabContent()}</div>
+              <div className="border-l border-[#D9D9D9] p-4 flex-1 overflow-y-auto">
+                {renderTabContent()}
+              </div>
             </div>
           </div>
         ) : (

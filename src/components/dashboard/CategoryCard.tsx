@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from '@/components/ui/card';
 
 export interface CategoryCardProps {
   imageSrc: string;
@@ -7,12 +7,21 @@ export interface CategoryCardProps {
   description: string;
 }
 
-export default function CategoryCard({ imageSrc, category, title, description }: CategoryCardProps) {
+export default function CategoryCard({
+  imageSrc,
+  category,
+  title,
+  description,
+}: CategoryCardProps) {
   return (
     <Card className="border border-[#D9D9D9] shadow-none overflow-hidden rounded-[24px]">
       <div className="h-20 bg-white relative">
         <div className="absolute inset-0 flex items-center justify-center">
-          <img src={imageSrc} alt={title} className="w-full h-[104px] object-cover rounded-[20px]" />
+          <img
+            src={imageSrc}
+            alt={title}
+            className="w-full h-[104px] object-cover rounded-[20px]"
+          />
         </div>
       </div>
       <CardContent className="p-3">

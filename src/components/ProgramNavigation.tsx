@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Home } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import ProgramDetail from "./ProgramDetail";
+import { useState } from 'react';
+import { Home } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import ProgramDetail from './ProgramDetail';
 
 export default function ProgramNavigation() {
   const [selectedView, setSelectedView] = useState<string | null>(null);
@@ -36,8 +36,8 @@ export default function ProgramNavigation() {
               className="absolute inset-0"
               style={{
                 backgroundImage: `url("${backgroundImageUrl}")`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
               }}
             />
           </div>
@@ -48,7 +48,7 @@ export default function ProgramNavigation() {
                 variant="outline"
                 size="sm"
                 className="rounded-full text-xs h-8 px-4 border-[#d9d9d9] text-[#333333]"
-                onClick={() => setSelectedView("year1-s1")}
+                onClick={() => setSelectedView('year1-s1')}
               >
                 S1
               </Button>
@@ -56,7 +56,7 @@ export default function ProgramNavigation() {
                 variant="outline"
                 size="sm"
                 className="rounded-full text-xs h-8 px-4 border-[#d9d9d9] text-[#333333]"
-                onClick={() => setSelectedView("year1-s2")}
+                onClick={() => setSelectedView('year1-s2')}
               >
                 S2
               </Button>
@@ -64,7 +64,7 @@ export default function ProgramNavigation() {
                 variant="outline"
                 size="sm"
                 className="rounded-full text-xs h-8 px-4 border-[#d9d9d9] text-[#333333]"
-                onClick={() => setSelectedView("year1-s3")}
+                onClick={() => setSelectedView('year1-s3')}
               >
                 S3
               </Button>
@@ -72,7 +72,7 @@ export default function ProgramNavigation() {
                 variant="outline"
                 size="sm"
                 className="rounded-full text-xs h-8 px-4 border-[#d9d9d9] text-[#333333]"
-                onClick={() => setSelectedView("year1-s4")}
+                onClick={() => setSelectedView('year1-s4')}
               >
                 S4
               </Button>
@@ -90,8 +90,8 @@ export default function ProgramNavigation() {
               className="absolute inset-0"
               style={{
                 backgroundImage: `url("${backgroundImageUrl}")`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
               }}
             />
           </div>
@@ -102,7 +102,7 @@ export default function ProgramNavigation() {
                 variant="outline"
                 size="sm"
                 className="rounded-full text-xs h-8 px-4 border-[#d9d9d9] text-[#333333]"
-                onClick={() => setSelectedView("year2-s1")}
+                onClick={() => setSelectedView('year2-s1')}
               >
                 S1
               </Button>
@@ -110,7 +110,7 @@ export default function ProgramNavigation() {
                 variant="outline"
                 size="sm"
                 className="rounded-full text-xs h-8 px-4 border-[#d9d9d9] text-[#333333]"
-                onClick={() => setSelectedView("year2-s2")}
+                onClick={() => setSelectedView('year2-s2')}
               >
                 S2
               </Button>
@@ -118,7 +118,7 @@ export default function ProgramNavigation() {
                 variant="outline"
                 size="sm"
                 className="rounded-full text-xs h-8 px-4 border-[#d9d9d9] text-[#333333]"
-                onClick={() => setSelectedView("year2-s3")}
+                onClick={() => setSelectedView('year2-s3')}
               >
                 S3
               </Button>
@@ -126,7 +126,7 @@ export default function ProgramNavigation() {
                 variant="outline"
                 size="sm"
                 className="rounded-full text-xs h-8 px-4 border-[#d9d9d9] text-[#333333]"
-                onClick={() => setSelectedView("year2-s4")}
+                onClick={() => setSelectedView('year2-s4')}
               >
                 S4
               </Button>
@@ -144,8 +144,8 @@ export default function ProgramNavigation() {
               className="absolute inset-0"
               style={{
                 backgroundImage: `url("${backgroundImageUrl}")`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
               }}
             />
           </div>
@@ -156,7 +156,7 @@ export default function ProgramNavigation() {
               <Button
                 variant="link"
                 className="text-sm p-0 h-auto text-[#364699]"
-                onClick={() => setSelectedView("year3-s3")}
+                onClick={() => setSelectedView('year3-s3')}
               >
                 CLINICAL PHASE
               </Button>
@@ -171,8 +171,8 @@ export default function ProgramNavigation() {
               className="absolute inset-0"
               style={{
                 backgroundImage: `url("${backgroundImageUrl}")`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
               }}
             />
           </div>
@@ -183,7 +183,7 @@ export default function ProgramNavigation() {
               <Button
                 variant="link"
                 className="text-sm p-0 h-auto text-[#364699]"
-                onClick={() => setSelectedView("year4-clinical")}
+                onClick={() => setSelectedView('year4-clinical')}
               >
                 CLINICAL PHASE
               </Button>

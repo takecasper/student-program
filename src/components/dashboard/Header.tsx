@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Bell, Search } from "lucide-react";
+import { Button } from '@/components/ui/button';
+import { Bell, Search } from 'lucide-react';
 
 export default function DashboardHeader() {
   return (

@@ -1,7 +1,7 @@
-"use client";
-import { Clock, MapPin } from "lucide-react";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+'use client';
+import { Clock, MapPin } from 'lucide-react';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 interface TodoListItemProps {
   day: string;
@@ -28,7 +28,7 @@ export default function TodoListItem({
 
   useEffect(() => {
     // For demonstration purposes, treat "Wed 28" as the current day
-    setIsCurrentDay(day === "Wed" && date === "28");
+    setIsCurrentDay(day === 'Wed' && date === '28');
 
     // Comment out the actual current day detection logic
     // const today = new Date();
@@ -40,10 +40,14 @@ export default function TodoListItem({
   return (
     <div className="flex items-center p-4 rounded-[24px] border border-[#D9D9D9] bg-white">
       <div className="flex flex-col items-center mr-6 pr-6 border-r border-[#D9D9D9]">
-        <span className={`${isCurrentDay ? "text-[#ba1e50]" : "text-[#333333]"} text-sm font-medium`}>
+        <span
+          className={`${isCurrentDay ? 'text-[#ba1e50]' : 'text-[#333333]'} text-sm font-medium`}
+        >
           {day}
         </span>
-        <span className={`${isCurrentDay ? "text-[#ba1e50]" : "text-[#333333]"} text-4xl font-bold`}>
+        <span
+          className={`${isCurrentDay ? 'text-[#ba1e50]' : 'text-[#333333]'} text-4xl font-bold`}
+        >
           {date}
         </span>
       </div>
@@ -56,7 +60,9 @@ export default function TodoListItem({
                 <Image src="/labs.svg" alt="session" width={20} height={20} />
               </div>
               <div className="bg-[#b0b1d7] px-5 py-1 rounded-[14px] border border-[#D9D9D9]">
-                <span className="text-xs font-bold  text-white items-center justify-center">TEST</span>
+                <span className="text-xs font-bold  text-white items-center justify-center">
+                  TEST
+                </span>
               </div>
             </div>
           )}
@@ -66,7 +72,9 @@ export default function TodoListItem({
                 <Image src="/edit.svg" alt="session" width={20} height={20} />
               </div>
               <div className="bg-[#fa8d8f] px-4 py-1 rounded-[14px] border border-[#D9D9D9]">
-                <span className="text-xs font-bold text-white items-center justify-center">FORM</span>
+                <span className="text-xs font-bold text-white items-center justify-center">
+                  FORM
+                </span>
               </div>
             </div>
           )}
@@ -76,7 +84,9 @@ export default function TodoListItem({
                 <Image src="/hotel_class.svg" alt="session" width={24} height={24} />
               </div>
               <div className="bg-[#DD99F6] px-2 py-1 rounded-[14px] border border-[#D9D9D9]">
-                <span className="text-xs font-bold text-white items-center justify-center">SESSION</span>
+                <span className="text-xs font-bold text-white items-center justify-center">
+                  SESSION
+                </span>
               </div>
             </div>
           )}
