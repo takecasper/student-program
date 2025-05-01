@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import DashboardContent from "@/components/dashboard/Content";
+import DashboardContent from '@/components/dashboard/Content';
 
 export default function Dashboard() {
   return <DashboardContent />;

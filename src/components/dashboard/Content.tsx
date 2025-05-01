@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useAuth } from "@/context/AuthContext";
-import TodoListItem from "../ToDoListItem";
-import SummaryCard from "./SummaryCard";
-import CourseCard from "./CourseCard";
-import CategoryCard from "./CategoryCard";
-import SuggestedCourseCard from "./SuggestedCourseCard";
-import Image from "next/image";
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useAuth } from '@/context/AuthContext';
+import TodoListItem from '../ToDoListItem';
+import SummaryCard from './SummaryCard';
+import CourseCard from './CourseCard';
+import CategoryCard from './CategoryCard';
+import SuggestedCourseCard from './SuggestedCourseCard';
+import Image from 'next/image';
 
 export default function DashboardContent() {
   const { user } = useAuth();
@@ -29,11 +29,11 @@ export default function DashboardContent() {
             <Tabs defaultValue="s2">
               <TabsList className="bg-transparent border-b border-[#f5f5f5] justify-start p-0 h-auto border-none">
                 {[
-                  { value: "s1", label: "S1" },
-                  { value: "s2", label: "S2 - current" },
-                  { value: "s3", label: "S3" },
-                  { value: "s4", label: "S4" },
-                ].map((tab) => (
+                  { value: 's1', label: 'S1' },
+                  { value: 's2', label: 'S2 - current' },
+                  { value: 's3', label: 'S3' },
+                  { value: 's4', label: 'S4' },
+                ].map(tab => (
                   <TabsTrigger
                     key={tab.value}
                     value={tab.value}
@@ -97,18 +97,18 @@ export default function DashboardContent() {
           <ScrollArea className="h-screen">
             <div className="space-y-3">
               {[
-                { day: "Wed", date: "28", time: "09:00 - 11:00", isTest: true },
-                { day: "Thu", date: "29", time: "09:00 - 11:00", isForm: true },
-                { day: "Fri", date: "30", time: "09:00 - 11:00", isSession: true },
-                { day: "Sat", date: "31", time: "09:00 - 11:00", isSession: true },
-                { day: "Mon", date: "02", time: "09:00 - 11:00", isSession: true },
-                { day: "Tue", date: "03", time: "09:00 - 11:00", isSession: true },
-                { day: "Wed", date: "04", time: "09:00 - 11:00", isSession: true },
-                { day: "Thu", date: "05", time: "09:00 - 11:00", isSession: true },
-                { day: "Fri", date: "06", time: "09:00 - 11:00", isSession: true },
-                { day: "Sat", date: "07", time: "09:00 - 11:00", isSession: true },
-                { day: "Sun", date: "08", time: "09:00 - 11:00", isSession: true },
-                { day: "Mon", date: "09", time: "09:00 - 11:00", isSession: true },
+                { day: 'Wed', date: '28', time: '09:00 - 11:00', isTest: true },
+                { day: 'Thu', date: '29', time: '09:00 - 11:00', isForm: true },
+                { day: 'Fri', date: '30', time: '09:00 - 11:00', isSession: true },
+                { day: 'Sat', date: '31', time: '09:00 - 11:00', isSession: true },
+                { day: 'Mon', date: '02', time: '09:00 - 11:00', isSession: true },
+                { day: 'Tue', date: '03', time: '09:00 - 11:00', isSession: true },
+                { day: 'Wed', date: '04', time: '09:00 - 11:00', isSession: true },
+                { day: 'Thu', date: '05', time: '09:00 - 11:00', isSession: true },
+                { day: 'Fri', date: '06', time: '09:00 - 11:00', isSession: true },
+                { day: 'Sat', date: '07', time: '09:00 - 11:00', isSession: true },
+                { day: 'Sun', date: '08', time: '09:00 - 11:00', isSession: true },
+                { day: 'Mon', date: '09', time: '09:00 - 11:00', isSession: true },
               ].map((item, index) => (
                 <TodoListItem
                   key={index}

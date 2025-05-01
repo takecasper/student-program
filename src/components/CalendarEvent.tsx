@@ -1,4 +1,4 @@
-import { Clock, MapPin } from "lucide-react";
+import { Clock, MapPin } from 'lucide-react';
 
 interface CalendarEventProps {
   title: string;
@@ -27,7 +27,7 @@ export default function CalendarEvent({
     <div className="flex">
       <div
         className={`bg-white rounded-[20px] border border-[#D9D9D9] p-2 flex-1 shadow-lg ${
-          isAllDay ? "w-full" : ""
+          isAllDay ? 'w-full' : ''
         }`}
       >
         <div className="flex gap-2 items-center">

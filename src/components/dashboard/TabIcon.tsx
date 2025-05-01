@@ -1,10 +1,10 @@
 type TabIconProps = {
-  icon: "user" | "calendar" | "wallet" | "vacation" | "settings";
+  icon: 'user' | 'calendar' | 'wallet' | 'vacation' | 'settings';
 };
 
 export function TabIcon({ icon }: TabIconProps) {
   switch (icon) {
-    case "user":
+    case 'user':
       return (
         <svg
           width="16"
@@ -27,7 +27,7 @@ export function TabIcon({ icon }: TabIconProps) {
           />
         </svg>
       );
-    case "calendar":
+    case 'calendar':
       return (
         <svg
           width="16"
@@ -46,7 +46,7 @@ export function TabIcon({ icon }: TabIconProps) {
           />
         </svg>
       );
-    case "wallet":
+    case 'wallet':
       return (
         <svg
           width="16"
@@ -70,7 +70,7 @@ export function TabIcon({ icon }: TabIconProps) {
           />
         </svg>
       );
-    case "vacation":
+    case 'vacation':
       return (
         <svg
           width="16"
@@ -96,7 +96,7 @@ export function TabIcon({ icon }: TabIconProps) {
           />
         </svg>
       );
-    case "settings":
+    case 'settings':
       return (
         <svg
           width="16"

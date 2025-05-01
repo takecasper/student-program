@@ -1,11 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface AddCalendarEventModalProps {
   isOpen: boolean;
@@ -19,16 +25,16 @@ export default function AddCalendarEventModal({
   isOpen,
   onClose,
   onSave,
-  defaultDate = new Date().toISOString().split("T")[0],
+  defaultDate = new Date().toISOString().split('T')[0],
 }: AddCalendarEventModalProps) {
-  const [eventType, setEventType] = useState<"vacation" | "duty" | "event">("vacation");
+  const [eventType, setEventType] = useState<'vacation' | 'duty' | 'event'>('vacation');
   const [startDate, setStartDate] = useState(defaultDate);
   const [endDate, setEndDate] = useState(defaultDate);
-  const [startTime, setStartTime] = useState("09:00");
-  const [endTime, setEndTime] = useState("10:00");
+  const [startTime, setStartTime] = useState('09:00');
+  const [endTime, setEndTime] = useState('10:00');
   const [isAllDay, setIsAllDay] = useState(true);
-  const [description, setDescription] = useState("");
-  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState('');
+  const [location, setLocation] = useState('');
 
   const handleSave = () => {
     // Format times for display
@@ -52,21 +58,21 @@ export default function AddCalendarEventModal({
   };
 
   const resetForm = () => {
-    setEventType("vacation");
+    setEventType('vacation');
     setStartDate(defaultDate);
     setEndDate(defaultDate);
-    setStartTime("09:00");
-    setEndTime("10:00");
+    setStartTime('09:00');
+    setEndTime('10:00');
     setIsAllDay(true);
-    setDescription("");
-    setLocation("");
+    setDescription('');
+    setLocation('');
   };
 
   const formatTimeForDisplay = (time: string) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [hours, minutes] = time.split(":");
+    const [hours, minutes] = time.split(':');
     const hour = Number.parseInt(hours);
-    const ampm = hour >= 12 ? "PM" : "AM";
+    const ampm = hour >= 12 ? 'PM' : 'AM';
     const displayHour = hour % 12 || 12;
     return `${displayHour} ${ampm}`;
   };
@@ -74,7 +80,7 @@ export default function AddCalendarEventModal({
   return (
     <Dialog
       open={isOpen}
-      onOpenChange={(open) => {
+      onOpenChange={open => {
         if (!open) {
           onClose();
           resetForm();
@@ -91,25 +97,25 @@ export default function AddCalendarEventModal({
             <div className="flex gap-2">
               <Button
                 type="button"
-                variant={eventType === "vacation" ? "default" : "outline"}
-                className={`rounded-full ${eventType === "vacation" ? "bg-[#364699]" : ""}`}
-                onClick={() => setEventType("vacation")}
+                variant={eventType === 'vacation' ? 'default' : 'outline'}
+                className={`rounded-full ${eventType === 'vacation' ? 'bg-[#364699]' : ''}`}
+                onClick={() => setEventType('vacation')}
               >
                 Vacation
               </Button>
               <Button
                 type="button"
-                variant={eventType === "duty" ? "default" : "outline"}
-                className={`rounded-full ${eventType === "duty" ? "bg-[#364699]" : ""}`}
-                onClick={() => setEventType("duty")}
+                variant={eventType === 'duty' ? 'default' : 'outline'}
+                className={`rounded-full ${eventType === 'duty' ? 'bg-[#364699]' : ''}`}
+                onClick={() => setEventType('duty')}
               >
                 Duty Hour
               </Button>
               <Button
                 type="button"
-                variant={eventType === "event" ? "default" : "outline"}
-                className={`rounded-full ${eventType === "event" ? "bg-[#364699]" : ""}`}
-                onClick={() => setEventType("event")}
+                variant={eventType === 'event' ? 'default' : 'outline'}
+                className={`rounded-full ${eventType === 'event' ? 'bg-[#364699]' : ''}`}
+                onClick={() => setEventType('event')}
               >
                 Event
               </Button>
@@ -123,7 +129,7 @@ export default function AddCalendarEventModal({
                   type="checkbox"
                   id="all-day"
                   checked={isAllDay}
-                  onChange={(e) => setIsAllDay(e.target.checked)}
+                  onChange={e => setIsAllDay(e.target.checked)}
                   className="rounded border-gray-300"
                 />
                 All day event
@@ -139,14 +145,14 @@ export default function AddCalendarEventModal({
                   id="start-date"
                   type="date"
                   value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
+                  onChange={e => setStartDate(e.target.value)}
                   className="flex-1"
                 />
                 {!isAllDay && (
                   <Input
                     type="time"
                     value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
+                    onChange={e => setStartTime(e.target.value)}
                     className="w-24"
                   />
                 )}
@@ -159,14 +165,14 @@ export default function AddCalendarEventModal({
                   id="end-date"
                   type="date"
                   value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
+                  onChange={e => setEndDate(e.target.value)}
                   className="flex-1"
                 />
                 {!isAllDay && (
                   <Input
                     type="time"
                     value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
+                    onChange={e => setEndTime(e.target.value)}
                     className="w-24"
                   />
                 )}
@@ -180,7 +186,7 @@ export default function AddCalendarEventModal({
               <Input
                 id="location"
                 value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                onChange={e => setLocation(e.target.value)}
                 placeholder="Enter location"
               />
             </div>
@@ -191,7 +197,7 @@ export default function AddCalendarEventModal({
             <Textarea
               id="description"
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={e => setDescription(e.target.value)}
               className="min-h-[100px]"
               placeholder="Add description or notes"
             />

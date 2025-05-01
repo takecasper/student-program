@@ -1,51 +1,58 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Check, Plus, X } from "lucide-react";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import Image from "next/image";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Check, Plus, X } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import Image from 'next/image';
 
 export default function AdmissionContent() {
-  const [activeFilter, setActiveFilter] = useState("ALL");
+  const [activeFilter, setActiveFilter] = useState('ALL');
   const [selectedProgram, setSelectedProgram] = useState<string | undefined>(undefined);
   const [showSidebar, setShowSidebar] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    country: "United States of America",
-    admissionCycle: "2025 - 2026",
-    programType: "",
+    country: 'United States of America',
+    admissionCycle: '2025 - 2026',
+    programType: '',
     schools: [] as string[],
   });
 
-  const filters = ["ALL", "CASPER", "DUET", "SNAPSHOT"];
+  const filters = ['ALL', 'CASPER', 'DUET', 'SNAPSHOT'];
 
   const tests = [
     {
       id: 1,
-      type: "CASPER",
-      date: "March 25, 2025",
-      startTime: "11:00 AM",
-      endTime: "12:00 PM",
-      status: "NOT STARTED",
-      image: "/category1.png",
+      type: 'CASPER',
+      date: 'March 25, 2025',
+      startTime: '11:00 AM',
+      endTime: '12:00 PM',
+      status: 'NOT STARTED',
+      image: '/category1.png',
     },
     {
       id: 2,
-      type: "DUET",
-      date: "March 25, 2025",
-      startTime: "11:00 AM",
-      endTime: "12:00 PM",
-      status: "NOT STARTED",
-      image: "/category1.png",
+      type: 'DUET',
+      date: 'March 25, 2025',
+      startTime: '11:00 AM',
+      endTime: '12:00 PM',
+      status: 'NOT STARTED',
+      image: '/category1.png',
     },
   ];
 
   // Filter tests based on active filter
-  const filteredTests = activeFilter === "ALL" ? tests : tests.filter((test) => test.type === activeFilter);
+  const filteredTests =
+    activeFilter === 'ALL' ? tests : tests.filter(test => test.type === activeFilter);
 
   const handleOpenSidebar = () => {
     setShowSidebar(true);
@@ -61,7 +68,7 @@ export default function AdmissionContent() {
       setCurrentStep(currentStep + 1);
     } else {
       // Submit form or go to next page
-      console.log("Form submitted:", formData);
+      console.log('Form submitted:', formData);
       handleCloseSidebar();
     }
   };
@@ -72,13 +79,13 @@ export default function AdmissionContent() {
 
   // Add a function to handle school selection
   const handleSchoolSelect = (value: string) => {
-    if (value === "all") {
-      setFormData({ ...formData, schools: ["all"] });
+    if (value === 'all') {
+      setFormData({ ...formData, schools: ['all'] });
     } else {
       // If "all" was previously selected, remove it
-      const updatedSchools = formData.schools.includes("all")
+      const updatedSchools = formData.schools.includes('all')
         ? [value]
-        : [...formData.schools.filter((school) => school !== value), value];
+        : [...formData.schools.filter(school => school !== value), value];
       setFormData({ ...formData, schools: updatedSchools });
     }
   };
@@ -105,12 +112,14 @@ export default function AdmissionContent() {
 
         <div className="flex justify-between items-center mb-6">
           <div className="flex gap-2">
-            {filters.map((filter) => (
+            {filters.map(filter => (
               <Button
                 key={filter}
-                variant={activeFilter === filter ? "default" : "outline"}
+                variant={activeFilter === filter ? 'default' : 'outline'}
                 className={`rounded-full ${
-                  activeFilter === filter ? "bg-[#364699] text-white" : "border-[#d9d9d9] text-[#333333]"
+                  activeFilter === filter
+                    ? 'bg-[#364699] text-white'
+                    : 'border-[#d9d9d9] text-[#333333]'
                 }`}
                 onClick={() => setActiveFilter(filter)}
               >
@@ -131,7 +140,7 @@ export default function AdmissionContent() {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {filteredTests.map((test) => (
+          {filteredTests.map(test => (
             <Card
               key={test.id}
               className="w-[234px] h-[240px] border border-[#D9D9D9] shadow-none rounded-[20px] overflow-hidden"
@@ -141,7 +150,7 @@ export default function AdmissionContent() {
                   {test.status}
                 </div>
                 <Image
-                  src={test.image || "/placeholder.svg"}
+                  src={test.image || '/placeholder.svg'}
                   alt={`${test.type} test`}
                   width={215}
                   height={104}
@@ -177,7 +186,7 @@ export default function AdmissionContent() {
                   <div className="flex items-center gap-4 mb-2">
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        currentStep >= 1 ? "bg-[#00a59b] text-white" : "bg-[#f5f5f5] text-[#6c6c6c]"
+                        currentStep >= 1 ? 'bg-[#00a59b] text-white' : 'bg-[#f5f5f5] text-[#6c6c6c]'
                       }`}
                     >
                       {currentStep > 1 ? <Check className="h-5 w-5" /> : <span>1</span>}
@@ -190,7 +199,7 @@ export default function AdmissionContent() {
 
                     <div
                       className={`border rounded-md p-3 mb-4 ${
-                        currentStep === 1 ? "border-[#00a59b]" : "border-[#d9d9d9]"
+                        currentStep === 1 ? 'border-[#00a59b]' : 'border-[#d9d9d9]'
                       }`}
                     >
                       <div className="flex items-center gap-2">
@@ -208,7 +217,7 @@ export default function AdmissionContent() {
                   <div className="flex items-center gap-4 mb-2">
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        currentStep >= 2 ? "bg-[#00a59b] text-white" : "bg-[#f5f5f5] text-[#6c6c6c]"
+                        currentStep >= 2 ? 'bg-[#00a59b] text-white' : 'bg-[#f5f5f5] text-[#6c6c6c]'
                       }`}
                     >
                       {currentStep > 2 ? <Check className="h-5 w-5" /> : <span>2</span>}
@@ -223,7 +232,7 @@ export default function AdmissionContent() {
 
                     <div
                       className={`border rounded-md p-3 mb-4 ${
-                        currentStep === 2 ? "border-[#00a59b]" : "border-[#d9d9d9]"
+                        currentStep === 2 ? 'border-[#00a59b]' : 'border-[#d9d9d9]'
                       }`}
                     >
                       <div className="flex items-center gap-2">
@@ -241,7 +250,7 @@ export default function AdmissionContent() {
                   <div className="flex items-center gap-4 mb-2">
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        currentStep >= 3 ? "bg-[#00a59b] text-white" : "bg-[#f5f5f5] text-[#6c6c6c]"
+                        currentStep >= 3 ? 'bg-[#00a59b] text-white' : 'bg-[#f5f5f5] text-[#6c6c6c]'
                       }`}
                     >
                       <span>3</span>
@@ -257,20 +266,30 @@ export default function AdmissionContent() {
                     {currentStep === 3 && (
                       <div className="space-y-6">
                         <div>
-                          <h4 className="font-medium text-[#333333] mb-3">GRADUATE MEDICAL EDUATION</h4>
+                          <h4 className="font-medium text-[#333333] mb-3">
+                            GRADUATE MEDICAL EDUATION
+                          </h4>
                           <div className="grid grid-cols-2 gap-3">
                             <ProgramOption
                               id="anesthesiology"
                               label="Anesthesiology"
                               onSelect={handleProgramTypeSelect}
                             />
-                            <ProgramOption id="obgyn" label="OBGYN" onSelect={handleProgramTypeSelect} />
+                            <ProgramOption
+                              id="obgyn"
+                              label="OBGYN"
+                              onSelect={handleProgramTypeSelect}
+                            />
                             <ProgramOption
                               id="internal-medicine"
                               label="Internal Medicine"
                               onSelect={handleProgramTypeSelect}
                             />
-                            <ProgramOption id="surgery" label="Surgery" onSelect={handleProgramTypeSelect} />
+                            <ProgramOption
+                              id="surgery"
+                              label="Surgery"
+                              onSelect={handleProgramTypeSelect}
+                            />
                           </div>
                         </div>
 
@@ -282,7 +301,11 @@ export default function AdmissionContent() {
                               label="Athletic Training"
                               onSelect={handleProgramTypeSelect}
                             />
-                            <ProgramOption id="other" label="Other" onSelect={handleProgramTypeSelect} />
+                            <ProgramOption
+                              id="other"
+                              label="Other"
+                              onSelect={handleProgramTypeSelect}
+                            />
                             <ProgramOption
                               id="dentistry"
                               label="Dentistry"
@@ -304,7 +327,7 @@ export default function AdmissionContent() {
                   <div className="flex items-center gap-4 mb-2">
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        currentStep >= 4 ? "bg-[#00a59b] text-white" : "bg-[#f5f5f5] text-[#6c6c6c]"
+                        currentStep >= 4 ? 'bg-[#00a59b] text-white' : 'bg-[#f5f5f5] text-[#6c6c6c]'
                       }`}
                     >
                       <span>4</span>
@@ -321,16 +344,23 @@ export default function AdmissionContent() {
                       <div className="space-y-4">
                         <div className="bg-[#fcedca] p-4 rounded-md text-sm">
                           <p>
-                            The program type you have selected includes up to 8 distributions as part of the
-                            base fee. Additional distributions beyond that are $ 15.00.
+                            The program type you have selected includes up to 8 distributions as
+                            part of the base fee. Additional distributions beyond that are $ 15.00.
                           </p>
                         </div>
 
                         <div className="space-y-3">
                           <div className="border border-[#d9d9d9] rounded-md p-3">
-                            <RadioGroup defaultValue="" onValueChange={() => handleSchoolSelect("all")}>
+                            <RadioGroup
+                              defaultValue=""
+                              onValueChange={() => handleSchoolSelect('all')}
+                            >
                               <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="all" id="all-schools" className="text-[#00a59b]" />
+                                <RadioGroupItem
+                                  value="all"
+                                  id="all-schools"
+                                  className="text-[#00a59b]"
+                                />
                                 <Label htmlFor="all-schools">Select All Schools</Label>
                               </div>
                             </RadioGroup>
@@ -339,7 +369,7 @@ export default function AdmissionContent() {
                           <div className="border border-[#d9d9d9] rounded-md p-3">
                             <RadioGroup
                               defaultValue=""
-                              onValueChange={() => handleSchoolSelect("sam-houston")}
+                              onValueChange={() => handleSchoolSelect('sam-houston')}
                             >
                               <div className="flex items-center space-x-2">
                                 <RadioGroupItem
@@ -353,10 +383,19 @@ export default function AdmissionContent() {
                           </div>
 
                           <div className="border border-[#d9d9d9] rounded-md p-3">
-                            <RadioGroup defaultValue="" onValueChange={() => handleSchoolSelect("san-juan")}>
+                            <RadioGroup
+                              defaultValue=""
+                              onValueChange={() => handleSchoolSelect('san-juan')}
+                            >
                               <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="san-juan" id="san-juan" className="text-[#00a59b]" />
-                                <Label htmlFor="san-juan">San Juan Bautista School of Medicine</Label>
+                                <RadioGroupItem
+                                  value="san-juan"
+                                  id="san-juan"
+                                  className="text-[#00a59b]"
+                                />
+                                <Label htmlFor="san-juan">
+                                  San Juan Bautista School of Medicine
+                                </Label>
                               </div>
                             </RadioGroup>
                           </div>

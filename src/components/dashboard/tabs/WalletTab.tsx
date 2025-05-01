@@ -1,21 +1,21 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { useState } from 'react';
+import { Input } from '@/components/ui/input';
 
 export function WalletTab() {
   const [isEditing, setIsEditing] = useState(false);
   const [cardInfo, setCardInfo] = useState({
-    cardholderName: "Isabella Ding",
-    cardNumber: "**** - **** - ****",
-    cvv: "***",
-    expiryDate: "****",
-    billingAddress: "12 Agnes, Mississauga",
+    cardholderName: 'Isabella Ding',
+    cardNumber: '**** - **** - ****',
+    cvv: '***',
+    expiryDate: '****',
+    billingAddress: '12 Agnes, Mississauga',
   });
 
   const handleInputChange = (field: keyof typeof cardInfo, value: string) => {
-    setCardInfo((prev) => ({
+    setCardInfo(prev => ({
       ...prev,
       [field]: value,
     }));
@@ -41,7 +41,7 @@ export function WalletTab() {
               className="h-8 text-[#364699] hover:text-[#364699] hover:bg-[#e5e7f4] px-3"
               onClick={toggleEdit}
             >
-              {isEditing ? "Save" : "Edit"}
+              {isEditing ? 'Save' : 'Edit'}
             </Button>
           </CardHeader>
           <CardContent className="grid gap-4 pt-4">
@@ -51,7 +51,7 @@ export function WalletTab() {
                 <Input
                   className="h-8 text-sm bg-white"
                   value={cardInfo.cardholderName}
-                  onChange={(e) => handleInputChange("cardholderName", e.target.value)}
+                  onChange={e => handleInputChange('cardholderName', e.target.value)}
                 />
               ) : (
                 <p className="text-sm">{cardInfo.cardholderName}</p>
@@ -63,7 +63,7 @@ export function WalletTab() {
                 <Input
                   className="h-8 text-sm bg-white"
                   value={cardInfo.cardNumber}
-                  onChange={(e) => handleInputChange("cardNumber", e.target.value)}
+                  onChange={e => handleInputChange('cardNumber', e.target.value)}
                 />
               ) : (
                 <p className="text-sm">{cardInfo.cardNumber}</p>
@@ -75,7 +75,7 @@ export function WalletTab() {
                 <Input
                   className="h-8 text-sm bg-white "
                   value={cardInfo.cvv}
-                  onChange={(e) => handleInputChange("cvv", e.target.value)}
+                  onChange={e => handleInputChange('cvv', e.target.value)}
                 />
               ) : (
                 <p className="text-sm">{cardInfo.cvv}</p>
@@ -87,7 +87,7 @@ export function WalletTab() {
                 <Input
                   className="h-8 text-sm bg-white"
                   value={cardInfo.expiryDate}
-                  onChange={(e) => handleInputChange("expiryDate", e.target.value)}
+                  onChange={e => handleInputChange('expiryDate', e.target.value)}
                 />
               ) : (
                 <p className="text-sm">{cardInfo.expiryDate}</p>
@@ -99,7 +99,7 @@ export function WalletTab() {
                 <Input
                   className="h-8 text-sm bg-white"
                   value={cardInfo.billingAddress}
-                  onChange={(e) => handleInputChange("billingAddress", e.target.value)}
+                  onChange={e => handleInputChange('billingAddress', e.target.value)}
                 />
               ) : (
                 <p className="text-sm">{cardInfo.billingAddress}</p>
@@ -111,7 +111,9 @@ export function WalletTab() {
         {/* Transaction History Section */}
         <Card className="border-none shadow-none">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-[#333333]">TRANSACTION HISTORY</CardTitle>
+            <CardTitle className="text-sm font-medium text-[#333333]">
+              TRANSACTION HISTORY
+            </CardTitle>
           </CardHeader>
           <CardContent className="pt-4 px-0">
             <ScrollArea className="h-[300px] pr-4">

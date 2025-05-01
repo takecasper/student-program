@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button";
-import { ReactNode, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Button } from '@/components/ui/button';
+import { ReactNode, useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 type SidebarNavItemProps = {
   icon: ReactNode;
@@ -25,8 +25,8 @@ export function SidebarNavItem({
   // More precise path matching logic
   const isActive = href
     ? pathname === href ||
-      (pathname.startsWith(href) && href !== "/dashboard") ||
-      (href === "/dashboard" && pathname === "/dashboard")
+      (pathname.startsWith(href) && href !== '/dashboard') ||
+      (href === '/dashboard' && pathname === '/dashboard')
     : active;
 
   // For debugging - you can remove this after fixing
@@ -41,10 +41,10 @@ export function SidebarNavItem({
           variant="ghost"
           className={`w-full justify-start py-6 gap-3 cursor-pointer hover:bg-gray-200 ${
             isActive
-              ? "bg-[#D9D9D94D] text-[#364699] font-medium"
+              ? 'bg-[#D9D9D94D] text-[#364699] font-medium'
               : isFooterItem
-              ? "py-3 px-4 text-[#333333]"
-              : "text-[#333333]"
+                ? 'py-3 px-4 text-[#333333]'
+                : 'text-[#333333]'
           }`}
           type="button"
         >
@@ -60,10 +60,10 @@ export function SidebarNavItem({
       variant="ghost"
       className={`w-full justify-start gap-3 cursor-pointer hover:bg-gray-200 ${
         isActive
-          ? "bg-[#f5f5f5] text-[#364699] font-medium"
+          ? 'bg-[#f5f5f5] text-[#364699] font-medium'
           : isFooterItem
-          ? "py-3 px-4 text-[#333333]"
-          : "text-[#333333]"
+            ? 'py-3 px-4 text-[#333333]'
+            : 'text-[#333333]'
       }`}
       onClick={onClick}
       type="button"

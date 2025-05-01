@@ -1,5 +1,5 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function LoginPage() {
   return (
@@ -9,7 +9,13 @@ export default function LoginPage() {
         {/* Profile Cards */}
         <div className="flex flex-col md:flex-row gap-6 mt-auto mb-16 relative  items-center justify-center">
           <div className="border -rotate-6 border-white rounded-xl p-4 w-64 text-white mb-8">
-            <Image src="/logo.png" alt="Acuity Insights Logo" width={60} height={80} className="mb-1" />
+            <Image
+              src="/logo.png"
+              alt="Acuity Insights Logo"
+              width={60}
+              height={80}
+              className="mb-1"
+            />
             <h2 className="text-2xl font-bold leading-tight">See the potential that others miss</h2>
           </div>
           {/* First Card left */}
@@ -94,7 +100,13 @@ export default function LoginPage() {
 
           <button className="w-full border border-gray-200 rounded-full py-3 px-4 flex items-center justify-center gap-2">
             <div className="w-6 h-6 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <path
                   d="M17.64 9.20455C17.64 8.56636 17.5827 7.95273 17.4764 7.36364H9V10.845H13.8436C13.635 11.97 13.0009 12.9232 12.0477 13.5614V15.8195H14.9564C16.6582 14.2527 17.64 11.9455 17.64 9.20455Z"
                   fill="#4285F4"
@@ -119,7 +131,7 @@ export default function LoginPage() {
 
         {/* Sign Up Link */}
         <div className="text-sm text-[#333333]">
-          Don&apos;t have an account yet?{" "}
+          Don&apos;t have an account yet?{' '}
           <Link href="#" className="text-[#364699] font-medium">
             Sign Up
           </Link>

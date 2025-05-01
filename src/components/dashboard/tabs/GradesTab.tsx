@@ -1,5 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card, CardContent } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export function GradesTab() {
   return (
@@ -242,7 +242,7 @@ export function GradesTab() {
                   <span className="text-sm text-[#333333]">Leadership</span>
                 </div>
                 <div className="h-2 w-full bg-[#f5f5f5] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#ffd87c] rounded-full" style={{ width: "70%" }}>
+                  <div className="h-full bg-[#ffd87c] rounded-full" style={{ width: '70%' }}>
                     <span className="sr-only">70%</span>
                   </div>
                 </div>
@@ -254,7 +254,7 @@ export function GradesTab() {
                   <span className="text-sm text-[#333333]">Self-Awareness</span>
                 </div>
                 <div className="h-2 w-full bg-[#f5f5f5] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#00a59b] rounded-full" style={{ width: "90%" }}>
+                  <div className="h-full bg-[#00a59b] rounded-full" style={{ width: '90%' }}>
                     <span className="sr-only">90%</span>
                   </div>
                 </div>
@@ -266,7 +266,7 @@ export function GradesTab() {
                   <span className="text-sm text-[#333333]">Collaboration</span>
                 </div>
                 <div className="h-2 w-full bg-[#f5f5f5] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#fa8d8f] rounded-full" style={{ width: "40%" }}>
+                  <div className="h-full bg-[#fa8d8f] rounded-full" style={{ width: '40%' }}>
                     <span className="sr-only">40%</span>
                   </div>
                 </div>
@@ -278,7 +278,7 @@ export function GradesTab() {
                   <span className="text-sm text-[#333333]">Communication</span>
                 </div>
                 <div className="h-2 w-full bg-[#f5f5f5] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#00a59b] rounded-full" style={{ width: "90%" }}>
+                  <div className="h-full bg-[#00a59b] rounded-full" style={{ width: '90%' }}>
                     <span className="sr-only">90%</span>
                   </div>
                 </div>

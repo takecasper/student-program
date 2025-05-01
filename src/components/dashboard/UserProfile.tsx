@@ -1,11 +1,11 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AccountTab } from "./tabs/AccountTab";
-import { GradesTab } from "./tabs/GradesTab";
-import { WalletTab } from "./tabs/WalletTab";
-import { VacationTab } from "./tabs/VacationTab";
-import { SettingsTab } from "./tabs/SettingsTab";
-import { TabIcon } from "./TabIcon";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AccountTab } from './tabs/AccountTab';
+import { GradesTab } from './tabs/GradesTab';
+import { WalletTab } from './tabs/WalletTab';
+import { VacationTab } from './tabs/VacationTab';
+import { SettingsTab } from './tabs/SettingsTab';
+import { TabIcon } from './TabIcon';
 
 type UserProfileProps = {
   user: {
@@ -27,9 +27,9 @@ export default function UserProfile({ user, activeTab, setActiveTab }: UserProfi
           <AvatarImage src={user.avatar} alt={user.name} />
           <AvatarFallback>
             {user.name
-              .split(" ")
-              .map((n) => n[0])
-              .join("")}
+              .split(' ')
+              .map(n => n[0])
+              .join('')}
           </AvatarFallback>
         </Avatar>
         <div>
@@ -43,7 +43,12 @@ export default function UserProfile({ user, activeTab, setActiveTab }: UserProfi
           <TabTrigger value="account" activeTab={activeTab} icon="user" label="MY ACCOUNT" />
           <TabTrigger value="grades" activeTab={activeTab} icon="calendar" label="MY GRADES" />
           <TabTrigger value="wallet" activeTab={activeTab} icon="wallet" label="MY WALLET" />
-          <TabTrigger value="vacation" activeTab={activeTab} icon="vacation" label="MY VACATION/ LEAVE" />
+          <TabTrigger
+            value="vacation"
+            activeTab={activeTab}
+            icon="vacation"
+            label="MY VACATION/ LEAVE"
+          />
           <TabTrigger value="settings" activeTab={activeTab} icon="settings" label="SETTINGS" />
         </TabsList>
 
@@ -74,7 +79,7 @@ export default function UserProfile({ user, activeTab, setActiveTab }: UserProfi
 type TabTriggerProps = {
   value: string;
   activeTab: string;
-  icon: "user" | "calendar" | "wallet" | "vacation" | "settings";
+  icon: 'user' | 'calendar' | 'wallet' | 'vacation' | 'settings';
   label: string;
 };
 
@@ -82,9 +87,9 @@ function TabTrigger({ value, activeTab, icon, label }: TabTriggerProps) {
   return (
     <TabsTrigger
       value={value}
-      style={activeTab === value ? { backgroundColor: "#364699", color: "white" } : {}}
+      style={activeTab === value ? { backgroundColor: '#364699', color: 'white' } : {}}
       className={`rounded-full py-2 px-4 ${
-        activeTab === value ? "" : "bg-white text-[#333333] border border-[#d9d9d9]"
+        activeTab === value ? '' : 'bg-white text-[#333333] border border-[#d9d9d9]'
       }`}
     >
       <div className="flex items-center gap-2">

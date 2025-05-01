@@ -1,18 +1,25 @@
-"use client";
+'use client';
 
-import { Check, FileText, LayoutGrid, ChevronDown, ChevronUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Check, FileText, LayoutGrid, ChevronDown, ChevronUp } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import Image from "next/image";
-import { useState } from "react";
-import CourseDetailSidebar from "@/components/CourseDetailSidebar";
+} from '@/components/ui/breadcrumb';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import Image from 'next/image';
+import { useState } from 'react';
+import CourseDetailSidebar from '@/components/CourseDetailSidebar';
 
 interface ProgramDetailProps {
   selectedView: string;
@@ -25,14 +32,14 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
   // Get title and breadcrumb based on selectedView
-  const title = selectedView.toUpperCase().replace("-", " - ");
+  const title = selectedView.toUpperCase().replace('-', ' - ');
   const breadcrumb = title;
 
   // Determine if this is a clinical phase view
-  const isClinical = selectedView === "year3-s3" || selectedView === "year4-clinical";
+  const isClinical = selectedView === 'year3-s3' || selectedView === 'year4-clinical';
 
   // Determine if we should show the academic sessions table
-  const showAcademicSessions = !selectedView.startsWith("year2");
+  const showAcademicSessions = !selectedView.startsWith('year2');
 
   const toggleSessions = () => {
     setShowSessions(!showSessions);
@@ -41,37 +48,37 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
   // Sessions data for Women's Health
   const womensHealthSessions = [
     {
-      name: "Lecture: Arm & Intro to Forearm",
-      location: "H&S 403",
-      date: "Jan 28, 2025",
-      time: "1:00 PM - 3:00 PM",
+      name: 'Lecture: Arm & Intro to Forearm',
+      location: 'H&S 403',
+      date: 'Jan 28, 2025',
+      time: '1:00 PM - 3:00 PM',
     },
     {
-      name: "Lecture: Arm & Intro to Forearm",
-      location: "H&S 403",
-      date: "Jan 28, 2025",
-      time: "1:00 PM - 3:00 PM",
+      name: 'Lecture: Arm & Intro to Forearm',
+      location: 'H&S 403',
+      date: 'Jan 28, 2025',
+      time: '1:00 PM - 3:00 PM',
     },
     {
-      name: "Lecture: Arm & Intro to Forearm",
-      location: "H&S 403",
-      date: "Jan 28, 2025",
-      time: "1:00 PM - 3:00 PM",
+      name: 'Lecture: Arm & Intro to Forearm',
+      location: 'H&S 403',
+      date: 'Jan 28, 2025',
+      time: '1:00 PM - 3:00 PM',
     },
   ];
 
   // Add this data for Women's Health
   const womensHealthData = {
     courseName: "Women's Health",
-    startDate: "Jan 28, 2025",
-    endDate: "Feb 2, 2025",
-    gradYear: "2026",
-    facilitators: "None",
+    startDate: 'Jan 28, 2025',
+    endDate: 'Feb 2, 2025',
+    gradYear: '2026',
+    facilitators: 'None',
     objectives: [
-      "To perform a comprehensive history and physical examination with special emphasis on mental status, mobility, medications and functional status.",
-      "To understand the physiological changes associated with pregnancy and childbirth.",
-      "To identify common gynecological conditions and their management.",
-      "To develop skills in obstetric and gynecological examinations.",
+      'To perform a comprehensive history and physical examination with special emphasis on mental status, mobility, medications and functional status.',
+      'To understand the physiological changes associated with pregnancy and childbirth.',
+      'To identify common gynecological conditions and their management.',
+      'To develop skills in obstetric and gynecological examinations.',
       "To understand the psychosocial aspects of women's health.",
     ],
   };
@@ -124,14 +131,14 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
         className={`grid grid-cols-1 ${
           showWomensHealthDetails
             ? sidebarExpanded
-              ? "lg:grid-cols-[25%_75%]"
-              : "lg:grid-cols-[60%_40%]"
-            : "lg:grid-cols-1"
+              ? 'lg:grid-cols-[25%_75%]'
+              : 'lg:grid-cols-[60%_40%]'
+            : 'lg:grid-cols-1'
         } gap-6`}
       >
         <div>
           {/* Rotations Table */}
-          <div className={showAcademicSessions ? "mb-10" : ""}>
+          <div className={showAcademicSessions ? 'mb-10' : ''}>
             <Table>
               <TableHeader className="bg-[#D9D9D91A]">
                 <TableRow className="border-b border-[#f5f5f5]">
@@ -151,7 +158,7 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
               </TableHeader>
               <TableBody>
                 {/* Year 2 Rotations */}
-                {selectedView.startsWith("year2") && (
+                {selectedView.startsWith('year2') && (
                   <>
                     <TableRow
                       className="border-b border-[#f5f5f5] cursor-pointer hover:bg-gray-50"
@@ -170,12 +177,12 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                               variant="ghost"
                               size="sm"
                               className=" text-xs text-[#364699] "
-                              onClick={(e) => {
+                              onClick={e => {
                                 e.stopPropagation();
                                 toggleSessions();
                               }}
                             >
-                              3 Sessions{" "}
+                              3 Sessions{' '}
                               {showSessions ? (
                                 <ChevronUp className="h-3 w-3 ml-1" />
                               ) : (
@@ -184,7 +191,9 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                             </Button>
                           </div>
                         ) : (
-                          <div className="text-sm text-gray-500 mt-1">Jan 28, 2025 - Feb 2, 2025</div>
+                          <div className="text-sm text-gray-500 mt-1">
+                            Jan 28, 2025 - Feb 2, 2025
+                          </div>
                         )}
                       </TableCell>
                       {!sidebarExpanded ? (
@@ -209,7 +218,7 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                             >
                               <div className="border border-[#D9D9D9] rounded p-1">
                                 <Image src="/grade.svg" alt="form" width={14} height={14} />
-                              </div>{" "}
+                              </div>{' '}
                               Gradesheet
                             </Button>
                           </TableCell>
@@ -245,7 +254,9 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                       <TableCell className="font-medium">
                         Physiology
                         {sidebarExpanded && (
-                          <div className="text-sm text-gray-500 mt-1">Oct 1, 2023 - Nov 15, 2023</div>
+                          <div className="text-sm text-gray-500 mt-1">
+                            Oct 1, 2023 - Nov 15, 2023
+                          </div>
                         )}
                       </TableCell>
                       {!sidebarExpanded ? (
@@ -270,7 +281,7 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                             >
                               <div className="border border-[#D9D9D9] rounded p-1">
                                 <Image src="/grade.svg" alt="form" width={14} height={14} />
-                              </div>{" "}
+                              </div>{' '}
                               Gradesheet
                             </Button>
                           </TableCell>
@@ -288,7 +299,9 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                       <TableCell className="font-medium">
                         Death and Dying
                         {sidebarExpanded && (
-                          <div className="text-sm text-gray-500 mt-1">Oct 1, 2023 - Nov 15, 2023</div>
+                          <div className="text-sm text-gray-500 mt-1">
+                            Oct 1, 2023 - Nov 15, 2023
+                          </div>
                         )}
                       </TableCell>
                       {!sidebarExpanded ? (
@@ -313,7 +326,7 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                             >
                               <div className="border border-[#D9D9D9] rounded p-1">
                                 <Image src="/grade.svg" alt="form" width={14} height={14} />
-                              </div>{" "}
+                              </div>{' '}
                               Gradesheet
                             </Button>
                           </TableCell>
