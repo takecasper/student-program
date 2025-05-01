@@ -6,6 +6,8 @@ import { WalletTab } from "./tabs/WalletTab";
 import { VacationTab } from "./tabs/VacationTab";
 import { SettingsTab } from "./tabs/SettingsTab";
 import { TabIcon } from "./TabIcon";
+import { MSPETab } from "./tabs/MSPETab";
+import { EvalTab } from "./tabs/Evaltab";
 
 type UserProfileProps = {
   user: {
@@ -39,10 +41,12 @@ export default function UserProfile({ user, activeTab, setActiveTab }: UserProfi
       </div>
 
       <Tabs defaultValue="account" className="w-full" onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-5 gap-2 bg-white">
+        <TabsList className="flex gap-2 bg-white overflow-x-auto p-1">
           <TabTrigger value="account" activeTab={activeTab} icon="user" label="MY ACCOUNT" />
           <TabTrigger value="grades" activeTab={activeTab} icon="calendar" label="MY GRADES" />
+          <TabTrigger value="eval" activeTab={activeTab} icon="calendar" label="MY EVAL" />
           <TabTrigger value="wallet" activeTab={activeTab} icon="wallet" label="MY WALLET" />
+          <TabTrigger value="mspe" activeTab={activeTab} icon="calendar" label="MSPE LETTER" />
           <TabTrigger value="vacation" activeTab={activeTab} icon="vacation" label="MY VACATION/ LEAVE" />
           <TabTrigger value="settings" activeTab={activeTab} icon="settings" label="SETTINGS" />
         </TabsList>
@@ -55,6 +59,10 @@ export default function UserProfile({ user, activeTab, setActiveTab }: UserProfi
           <GradesTab />
         </TabsContent>
 
+        <TabsContent value="eval" className="mt-0">
+          <EvalTab />
+        </TabsContent>
+
         <TabsContent value="wallet">
           <WalletTab />
         </TabsContent>
@@ -65,6 +73,10 @@ export default function UserProfile({ user, activeTab, setActiveTab }: UserProfi
 
         <TabsContent value="settings">
           <SettingsTab />
+        </TabsContent>
+
+        <TabsContent value="mspe">
+          <MSPETab />
         </TabsContent>
       </Tabs>
     </main>
