@@ -8,6 +8,8 @@ import { useAuth } from '@/context/AuthContext';
 
 import { useUserStore } from '@/store/user';
 
+import { users } from '@/data/mockUserData';
+
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,14 +26,20 @@ export default function LoginPage() {
       return;
     }
 
+    if (password !== 'password') {
+      setError('Invalid email or password');
+      return;
+    }
+
     try {
       const success = await login(email, password);
       if (success) {
-        const randomType = Math.random() > 0.5 ? 'student' : 'program_experience';
+        const userType: 'program_experience' | 'student' =
+          users.find(user => user.email === email)?.role || 'student';
 
         useUserStore.getState().setUser({
           email,
-          type: randomType,
+          type: userType,
           name: 'Mock User',
           avatar: '/avatar.png',
           id: crypto.randomUUID(),
