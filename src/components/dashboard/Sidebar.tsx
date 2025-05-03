@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ReactNode } from 'react';
-import { LayoutGrid } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '../ui/button';
@@ -69,51 +68,17 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
             <SidebarNavItem
               href="/dashboard"
               label="My Dashboard"
-              icon={<LayoutGrid className="h-4 w-4" />}
+              icon={<Image src="/svgs/dashboard.svg" width={16} height={16} alt="Program" />}
             />
             <SidebarNavItem
               label={userType === 'student' ? 'My Program' : 'Program'}
-              href="/dashboard/program"
-              icon={
-                <svg
-                  width="16"
-                  height="16"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  className="h-4 w-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeWidth="2"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M8 6H21M8 12H21M8 18H21M3 6H3.01M3 12H3.01M3 18H3.01"
-                  />
-                </svg>
-              }
+              href={`/dashboard/${userType === 'student' ? 'my-program' : 'program'}`}
+              icon={<Image src="/svgs/golf_course.svg" width={16} height={16} alt="Program" />}
             />
             <SidebarNavItem
               label={userType === 'student' ? 'My Calendar' : 'Calendar'}
               href="/dashboard/calendar"
-              icon={
-                <svg
-                  width="16"
-                  height="16"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  className="h-4 w-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M8 2V5M16 2V5M3.5 9.09H20.5M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
-                  />
-                </svg>
-              }
+              icon={<Image src="/svgs/calendar_month.svg" width={16} height={16} alt="Program" />}
             />
 
             {userType === 'program_experience' && (
