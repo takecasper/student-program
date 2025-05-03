@@ -3,6 +3,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { AlignLeft, Plus, SendHorizontal } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
@@ -16,27 +17,37 @@ import {
   TableHeader,
 } from '@/components/ui/table';
 
+import { useProgram } from '@/store/program';
 import { useBreadcrumbStore } from '@/store/breadcrumbs';
 
-type ProgramData = {
-  name: string;
-  year: string;
-};
+import { ProgramData } from '@/types/program';
 
 const initialTableData: ProgramData[] = [
-  { name: 'Medicine', year: '2017 / 08' },
-  { name: 'Law', year: '2017 / 08' },
-  { name: 'Art', year: '2017 / 08' },
+  { id: '1', name: 'Medicine', year: '2017 / 08' },
+  { id: '2', name: 'Law', year: '2017 / 08' },
+  { id: '3', name: 'Art', year: '2017 / 08' },
 ];
 
 export default function ProgramPage() {
+  const router = useRouter();
+
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const [tableData, setTableData] = useState<ProgramData[]>(initialTableData);
-  const [newProgram, setNewProgram] = useState<ProgramData>({ name: '', year: '' });
+  const [newProgram, setNewProgram] = useState<ProgramData>({
+    name: '',
+    year: '',
+    id: crypto.randomUUID(),
+  });
 
+  const setData = useProgram(state => state.setData);
   const setTitle = useBreadcrumbStore(state => state.setTitle);
 
   setTitle('Program');
+
+  const handleRedirect = (program: ProgramData) => {
+    setData(program);
+    router.push(`/dashboard/program/${program.id}`);
+  };
 
   return (
     <div className="p-6 px-20">
@@ -63,7 +74,11 @@ export default function ProgramPage() {
           </TableHeader>
           <TableBody>
             {tableData.map((program, index) => (
-              <TableRow key={index} className="border-b border-[#f5f5f5]">
+              <TableRow
+                onClick={() => handleRedirect(program)}
+                key={index}
+                className="border-b border-[#f5f5f5] cursor-pointer"
+              >
                 <TableCell className="text-[#333333DE] font-medium flex items-center gap-3">
                   <div className=" flex items-center gap-3">
                     <div className="bg-[#F5F5F5] rounded-[10px] w-[50px] h-[50px] flex items-center justify-center">
@@ -109,11 +124,11 @@ export default function ProgramPage() {
                       onClick={() => {
                         setTableData([...tableData, newProgram]);
                         setIsAdding(false);
-                        setNewProgram({ name: '', year: '' });
+                        setNewProgram({ name: '', year: '', id: crypto.randomUUID() });
                       }}
                       className="bg-transparent hover:bg-transparent cursor-pointer text-white rounded-[4px] h-[30px] px-2"
                     >
-                      <SendHorizontal width={24} height={24} className='bg-none text-[#334599]'/>
+                      <SendHorizontal width={24} height={24} className="bg-none text-[#334599]" />
                     </Button>
                   </div>
                 </TableCell>
