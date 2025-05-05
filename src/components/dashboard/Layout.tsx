@@ -18,9 +18,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       }
     : null;
 
+  console.log('userWithAvatar', userWithAvatar);
+
   return (
     <div className="flex h-screen bg-[#ffffff]">
-      <DashboardSidebar user={userWithAvatar} logout={logout}>
+      <DashboardSidebar logout={logout}>
         <div className="flex-1 overflow-auto">
           <DashboardHeader />
           <main className="p-8">{children}</main>

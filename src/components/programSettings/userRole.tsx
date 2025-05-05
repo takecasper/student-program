@@ -2,8 +2,7 @@ import React from 'react';
 
 import Image from 'next/image';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { AlignLeft, Plus, SendHorizontal } from 'lucide-react';
+import {  Plus, SendHorizontal } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -20,13 +19,9 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-import { useProgram } from '@/store/program';
-import { useBreadcrumbStore } from '@/store/breadcrumbs';
 
 type UserData = {
   id: string;
