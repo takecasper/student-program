@@ -120,3 +120,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+.border-gradient {
+  border: 2px solid transparent;
+  border-image: linear-gradient(90deg, rgba(210, 210, 255, 0.4), rgba(221, 153, 246, 0.4)) 1;
+  border-image-slice: 1;
+}
