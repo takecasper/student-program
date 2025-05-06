@@ -1,14 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import Image from 'next/image';
+import { CircleUser } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Settings, CircleUser } from 'lucide-react';
 
+import UserRole from './components/userRole';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import UserRole from '@/components/programSettings/userRole';
+import CurriculumRotation from './components/curriculumRotation';
 
 import { useProgram } from '@/store/program';
 import { useBreadcrumbStore } from '@/store/breadcrumbs';
@@ -16,15 +14,14 @@ import { useBreadcrumbStore } from '@/store/breadcrumbs';
 import { programCards } from '../page';
 
 export default function ProgramPage() {
-  const router = useRouter();
-
   const program = useProgram(state => state.program);
   const setTitle = useBreadcrumbStore(state => state.setTitle);
 
   const [settingsView, setSettingsView] = useState<number>(0);
   const [subMenuSettingsView, setSubMenuSettingsView] = useState<number>(3);
 
-  const handleViewContent = () => {};
+  // For Course
+  const [isConfiguring, setIsConfiguring] = useState<boolean>(false);
 
   useEffect(() => {
     setTitle(`Program / ${program ? `${program.name} - ${program.year} / Settings` : ''}`);
@@ -66,50 +63,63 @@ export default function ProgramPage() {
 
   return (
     <div className="p-6 px-20 flex gap-2">
-      <div className="basis-1/5 mt-[2rem]">
-        <ul className="flex flex-col gap-2 ml-5">
-          {menuItems.map(item => (
-            <li key={item.id} className="relative">
-              <div>
-                {settingsView === item.id && (
-                  <div className="w-[5px] h-[26px] bg-[#364699] absolute left-[5px] top-[16px] m-auto"></div>
-                )}
+      {!isConfiguring && (
+        <>
+          <div className="basis-1/5 mt-[2rem]">
+            <ul className="flex flex-col gap-2 ml-5">
+              {menuItems.map(item => (
+                <li key={item.id} className="relative">
+                  <div>
+                    {settingsView === item.id && (
+                      <div className="w-[5px] h-[26px] bg-[#364699] absolute left-[5px] top-[16px] m-auto"></div>
+                    )}
 
-                <Button
-                  onClick={() => setSettingsView(item.id)}
-                  className={`${settingsView === item.id ? '!bg-[#f5f5f5]' : 'bg-transparent'} h-[58px] cursor-pointer text-[#4e4e4e] text-[14px] font-medium hover:text-[#364699] w-full hover:bg-[#f5f5f5] flex items-center gap-2 justify-start !pl-[1rem]`}
-                >
-                  {item.icon} {item.label}
-                </Button>
-              </div>
-
-              {item.subMenus && settingsView === item.id && (
-                <div>
-                  {item.subMenus.map((subMenu, index) => (
                     <Button
-                      key={index}
-                      onClick={() => setSubMenuSettingsView(index)}
-                      className={`${subMenuSettingsView === index ? '!bg-[#f5f5f5] text-[#364699]' : 'bg-transparent text-[#4e4e4e]'} h-[58px] cursor-pointer text-[14px] font-medium hover:text-[#364699] w-full hover:bg-[#f5f5f5] flex items-center gap-2 justify-start !pl-[1rem]`}
+                      onClick={() => setSettingsView(item.id)}
+                      className={`${settingsView === item.id ? '!bg-[#f5f5f5]' : 'bg-transparent'} h-[58px] cursor-pointer text-[#4e4e4e] text-[14px] font-medium hover:text-[#364699] w-full hover:bg-[#f5f5f5] flex items-center gap-2 justify-start !pl-[1rem]`}
                     >
-                      {subMenu.year}{' '}
-                      {subMenu.status === 'WIP' && (
-                        <span className="text-[#F5CA66] text-xs font-medium px-2 py-2 rounded-[10px] bg-white border-[1px] border-[#D9D9D9]">
-                          WIP
-                        </span>
-                      )}
+                      {item.icon} {item.label}
                     </Button>
-                  ))}
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
+                  </div>
 
-      <div className="w-[1px] bg-[#f5f5f5] h-auto"></div>
+                  {item.subMenus && settingsView === item.id && (
+                    <div>
+                      {item.subMenus.map((subMenu, index) => (
+                        <Button
+                          key={index}
+                          onClick={() => setSubMenuSettingsView(index)}
+                          className={`${subMenuSettingsView === index ? '!bg-[#f5f5f5] text-[#364699]' : 'bg-transparent text-[#4e4e4e]'} h-[58px] cursor-pointer text-[14px] font-medium hover:text-[#364699] w-full hover:bg-[#f5f5f5] flex items-center gap-2 justify-start !pl-[1rem]`}
+                        >
+                          {subMenu.year}{' '}
+                          {subMenu.status === 'WIP' && (
+                            <span className="text-[#F5CA66] text-xs font-medium px-2 py-2 rounded-[10px] bg-white border-[1px] border-[#D9D9D9]">
+                              WIP
+                            </span>
+                          )}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="w-[1px] bg-[#f5f5f5] h-auto"></div>
+        </>
+      )}
 
       {/* Content */}
-      <div className="basis-4/5">{settingsView === 0 && <UserRole />}</div>
+      <div className={`${isConfiguring ? 'basis-5/5 ' : 'basis-4/5 '}`}>
+        {settingsView === 0 && <UserRole />}
+        {settingsView === 1 && (
+          <CurriculumRotation
+            isConfiguring={isConfiguring}
+            setIsConfiguring={setIsConfiguring}
+            currentSelection={subMenuSettingsView}
+          />
+        )}
+      </div>
     </div>
   );
 }

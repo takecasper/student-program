@@ -65,20 +65,8 @@ export const programCards = [
     status: 'CURRENT',
     content: [
       {
-        name: 'S1',
+        name: 'CLINICAL PHASE',
         lock: false,
-      },
-      {
-        name: 'S2',
-        lock: false,
-      },
-      {
-        name: 'S3',
-        lock: false,
-      },
-      {
-        name: 'S4',
-        lock: true,
       },
     ],
   },
@@ -88,20 +76,8 @@ export const programCards = [
     year: 'YEAR 4',
     content: [
       {
-        name: 'S1',
-        lock: false,
-      },
-      {
-        name: 'S2',
-        lock: false,
-      },
-      {
-        name: 'S3',
-        lock: false,
-      },
-      {
-        name: 'S4',
-        lock: false,
+        name: 'CLINICAL PHASE',
+        lock: true,
       },
     ],
   },
@@ -185,9 +161,23 @@ export default function ProgramPage() {
                     size="sm"
                     variant="outline"
                     // onClick={() => handleViewContent(item)}
-                    className={`${item.lock ? 'opacity-50 pointer-events-none' : 'cursor-pointer'} rounded-[10px] w-[53px] text-xs h-7 px-2 border-[#d9d9d9] text-black font-bold`}
+                    className={`${item.name === 'CLINICAL PHASE' ? 'px-0 border-none shadow-none' : 'px-3 border-[#d9d9d9]'} ${item.lock ? 'opacity-50 pointer-events-none' : 'cursor-pointer'} rounded-[10px] w-auto text-xs h-7  text-black font-bold`}
                   >
-                    {item.name}
+                    {item.name === 'CLINICAL PHASE' ? (
+                      <>
+                        <Image
+                          width={24}
+                          height={24}
+                          alt="clinical phase"
+                          className="object-fit"
+                          src="/svgs/Clinical Icon.svg"
+                        />
+
+                        CLINICAL PHASE
+                      </>
+                    ) : (
+                      item.name
+                    )}
                   </Button>
                 ))}
               </div>
