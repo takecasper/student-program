@@ -12,7 +12,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useProgram } from '@/store/program';
 import { useBreadcrumbStore } from '@/store/breadcrumbs';
 
-const programCards = [
+export const programCards = [
   {
     lock: false,
     year: 'YEAR 1',
@@ -84,7 +84,7 @@ const programCards = [
   },
   {
     lock: true,
-    status: null,
+    status: 'WIP',
     year: 'YEAR 4',
     content: [
       {
