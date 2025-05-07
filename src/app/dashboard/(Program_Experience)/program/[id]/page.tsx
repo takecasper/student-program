@@ -12,76 +12,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useProgram } from '@/store/program';
 import { useBreadcrumbStore } from '@/store/breadcrumbs';
 
-export const programCards = [
-  {
-    lock: false,
-    year: 'YEAR 1',
-    status: 'PAST',
-    content: [
-      {
-        name: 'S1',
-        lock: false,
-      },
-      {
-        name: 'S2',
-        lock: false,
-      },
-      {
-        name: 'S3',
-        lock: false,
-      },
-      {
-        name: 'S4',
-        lock: true,
-      },
-    ],
-  },
-  {
-    lock: false,
-    year: 'YEAR 2',
-    status: 'PAST',
-    content: [
-      {
-        name: 'S1',
-        lock: false,
-      },
-      {
-        name: 'S2',
-        lock: false,
-      },
-      {
-        name: 'S3',
-        lock: false,
-      },
-      {
-        name: 'S4',
-        lock: true,
-      },
-    ],
-  },
-  {
-    lock: false,
-    year: 'YEAR 3',
-    status: 'CURRENT',
-    content: [
-      {
-        name: 'CLINICAL PHASE',
-        lock: false,
-      },
-    ],
-  },
-  {
-    lock: true,
-    status: 'WIP',
-    year: 'YEAR 4',
-    content: [
-      {
-        name: 'CLINICAL PHASE',
-        lock: true,
-      },
-    ],
-  },
-];
+import { programCards } from '@/data/programCards';
 
 export default function ProgramPage() {
   const router = useRouter();
