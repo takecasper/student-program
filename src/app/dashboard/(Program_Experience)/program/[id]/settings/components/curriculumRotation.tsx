@@ -16,7 +16,7 @@ import {
   TableHeader,
 } from '@/components/ui/table';
 
-import { programCards } from '../../page';
+import { programCards } from '@/data/programCards';
 
 type CourseData = {
   id: string;

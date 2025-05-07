@@ -11,7 +11,7 @@ import CurriculumRotation from './components/curriculumRotation';
 import { useProgram } from '@/store/program';
 import { useBreadcrumbStore } from '@/store/breadcrumbs';
 
-import { programCards } from '../page';
+import { programCards } from '@/data/programCards';
 
 export default function ProgramPage() {
   const program = useProgram(state => state.program);
