@@ -10,8 +10,9 @@ export function AccountTab({ user }: AccountTabProps) {
   return (
     <div className="grid grid-cols-2 gap-6 pt-6">
       <Card className="bg-[#f5f5f5] border-none shadow-none">
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-sm font-medium text-[#333333]">GENERAL INFO</CardTitle>
+          <button className="text-sm text-[#364699] hover:text-blue-800">Edit</button>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid grid-cols-2 items-center">
@@ -34,8 +35,9 @@ export function AccountTab({ user }: AccountTabProps) {
       </Card>
 
       <Card className="bg-[#f5f5f5] border-none shadow-none">
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-sm font-medium text-[#333333]">ASSOCIATE INFO</CardTitle>
+          <button className="text-sm text-[#364699] hover:text-blue-800">Edit</button>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid grid-cols-2 items-center">
