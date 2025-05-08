@@ -1,13 +1,20 @@
-import React from 'react';
 import Image from 'next/image';
+import React, { Dispatch, SetStateAction } from 'react';
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 
-const SetupRotationStepOne = () => {
+type SetupRotationStepOneProps = {
+  setActiveTab: Dispatch<SetStateAction<'INFO' | 'DAILY AVAILABILITY' | 'FINISH'>>;
+};
+
+const SetupRotationStepOne = ({ setActiveTab }: SetupRotationStepOneProps) => {
+  const handleSubmit = () => {
+    setActiveTab('DAILY AVAILABILITY');
+  };
   return (
-    <form className="space-y-5 text-gray-600 text-xs font-normal">
+    <form onSubmit={handleSubmit} className="space-y-5 text-gray-600 text-xs font-normal">
       <div>
         <Label htmlFor="rotationName" className="mb-1 font-semibold block">
           Rotation Name

@@ -5,13 +5,15 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
 import SetupRotationStepOne from './SetupRotationStepOne';
+import SetupRotationStepTwo from './SetupRotationStepTwo';
+import SetupRotationStepFinal from './SetupRotationStepFinal';
 
 type SetupRotationProps = {
   setIsSettingUpRotation: (isConfiguring: boolean) => void;
 };
 
 const SetupRotation = ({ setIsSettingUpRotation }: SetupRotationProps) => {
-  const [activeTab, setActiveTab] = useState<'INFO' | 'DAILY AVAILABILITY'>('INFO');
+  const [activeTab, setActiveTab] = useState<'INFO' | 'DAILY AVAILABILITY' | 'FINISH'>('INFO');
 
   const buttons = ['INFO', 'DAILY AVAILABILITY'];
 
@@ -71,29 +73,39 @@ const SetupRotation = ({ setIsSettingUpRotation }: SetupRotationProps) => {
               </Button>
             </div>
 
-            <div className="px-4 py-4">
-              <div className="flex space-x-2 mb-6">
-                {buttons.map(button => (
-                  <Button
-                    key={button}
-                    type="button"
-                    onClick={() => setActiveTab(button as 'INFO' | 'DAILY AVAILABILITY')}
-                    className={`flex items-center cursor-pointer border-[#D9D9D9] hover:bg-[#2F4489] hover:text-white hover:border-[#D9D9D9] space-x-1 ${
-                      activeTab === button ? 'bg-[#2F4489] text-white' : 'bg-white text-[#333333DE]'
-                    } text-xs font-semibold rounded-full px-3 py-1`}
-                  >
-                    <Image
-                      alt="flag"
-                      width={16}
-                      height={16}
-                      src={`/svgs/${activeTab === button ? 'white_golf_course' : 'golf_course'}.svg`}
-                    />
-                    <span>{button}</span>
-                  </Button>
-                ))}
-              </div>
+            <div className="px-4 py-4 h-[calc(80vh-48px)] bg-[#fbfbfb]">
+              {activeTab !== 'FINISH' && (
+                <div className="flex space-x-2 mb-6">
+                  {buttons.map(button => (
+                    <Button
+                      key={button}
+                      type="button"
+                      onClick={() => setActiveTab(button as 'INFO' | 'DAILY AVAILABILITY')}
+                      className={`flex items-center cursor-pointer border-[#D9D9D9] hover:bg-[#2F4489] hover:text-white hover:border-[#D9D9D9] space-x-1 ${
+                        activeTab === button
+                          ? 'bg-[#2F4489] text-white'
+                          : 'bg-white text-[#333333DE]'
+                      } text-xs font-semibold rounded-full px-3 py-1`}
+                    >
+                      <Image
+                        alt="flag"
+                        width={16}
+                        height={16}
+                        src={`/svgs/${activeTab === button ? 'white_golf_course' : 'golf_course'}.svg`}
+                      />
+                      <span>{button}</span>
+                    </Button>
+                  ))}
+                </div>
+              )}
 
-              {activeTab === 'INFO' && <SetupRotationStepOne />}
+              {activeTab === 'INFO' && <SetupRotationStepOne setActiveTab={setActiveTab} />}
+
+              {activeTab === 'DAILY AVAILABILITY' && (
+                <SetupRotationStepTwo setActiveTab={setActiveTab} />
+              )}
+
+              {activeTab === 'FINISH' && <SetupRotationStepFinal />}
             </div>
           </div>
         </div>
