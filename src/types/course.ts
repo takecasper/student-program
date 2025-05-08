@@ -42,3 +42,11 @@ export interface GradesData {
   };
   categories: GradeCategory[];
 }
+
+export type CourseData = {
+  id: string;
+  courseName: string;
+  location: string;
+  from: string;
+  to: string;
+};

@@ -4,9 +4,9 @@ import Image from 'next/image';
 import { CircleUser } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import UserRole from './components/userRole';
+import UserRole from './components/RoleUser';
 import { Button } from '@/components/ui/button';
-import CurriculumRotation from './components/curriculumRotation';
+import CurriculumRotation from './components/RotationCurriculum';
 
 import { useProgram } from '@/store/program';
 import { useBreadcrumbStore } from '@/store/breadcrumbs';
@@ -22,6 +22,9 @@ export default function ProgramPage() {
 
   // For Course
   const [isConfiguring, setIsConfiguring] = useState<boolean>(false);
+
+  // For Rotation
+  const [isSettingUpRotation, setIsSettingUpRotation] = useState<boolean>(false);
 
   useEffect(() => {
     setTitle(`Program / ${program ? `${program.name} - ${program.year} / Settings` : ''}`);
@@ -61,9 +64,14 @@ export default function ProgramPage() {
     },
   ];
 
+  console.log('debug isSettingUpRotation', isSettingUpRotation);
+  console.log('debug isConfiguring', isConfiguring);
+
+  const showSideBar = !isConfiguring && !isSettingUpRotation;
+
   return (
     <div className="p-6 px-20 flex gap-2">
-      {!isConfiguring && (
+      {showSideBar && (
         <>
           <div className="basis-1/5 mt-[2rem]">
             <ul className="flex flex-col gap-2 ml-5">
@@ -110,13 +118,16 @@ export default function ProgramPage() {
       )}
 
       {/* Content */}
-      <div className={`${isConfiguring ? 'basis-5/5 ' : 'basis-4/5 '}`}>
+      <div className={`${!showSideBar ? 'basis-5/5 ' : 'basis-4/5 '}`}>
         {settingsView === 0 && <UserRole />}
+
         {settingsView === 1 && (
           <CurriculumRotation
             isConfiguring={isConfiguring}
             setIsConfiguring={setIsConfiguring}
             currentSelection={subMenuSettingsView}
+            isSettingUpRotation={isSettingUpRotation}
+            setIsSettingUpRotation={setIsSettingUpRotation}
           />
         )}
       </div>
