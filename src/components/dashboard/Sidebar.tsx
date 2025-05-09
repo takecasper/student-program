@@ -80,11 +80,6 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
               href="/dashboard/calendar"
               icon={<Image src="/svgs/calendar_month.svg" width={16} height={16} alt="Program" />}
             />
-            <SidebarNavItem
-              label="Procedure"
-              href="/dashboard/procedure"
-              icon={<Image src="/svgs/settings.svg" width={16} height={16} alt="Settings" />}
-            />
 
             {userType === 'program_experience' && (
               <>
