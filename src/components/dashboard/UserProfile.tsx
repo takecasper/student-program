@@ -7,8 +7,8 @@ import { VacationTab } from './tabs/VacationTab';
 import { SettingsTab } from './tabs/SettingsTab';
 import { TabIcon } from './TabIcon';
 
-import { MSPETab } from "./tabs/MSPETab";
-import { EvalTab } from "./tabs/Evaltab";
+import { MSPETab } from './tabs/MSPETab';
+import { EvalTab } from './tabs/Evaltab';
 
 type UserProfileProps = {
   user: {
@@ -48,7 +48,6 @@ export default function UserProfile({ user, activeTab, setActiveTab }: UserProfi
           <TabTrigger value="eval" activeTab={activeTab} icon="calendar" label="MY EVAL" />
           <TabTrigger value="wallet" activeTab={activeTab} icon="wallet" label="MY WALLET" />
           <TabTrigger value="mspe" activeTab={activeTab} icon="calendar" label="MSPE LETTER" />
-          <TabTrigger value="vacation" activeTab={activeTab} icon="vacation" label="MY VACATION/ LEAVE" />
           <TabTrigger value="settings" activeTab={activeTab} icon="settings" label="SETTINGS" />
         </TabsList>
 
