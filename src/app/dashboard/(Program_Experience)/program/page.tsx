@@ -39,9 +39,9 @@ export default function ProgramPage() {
   });
 
   const setData = useProgram(state => state.setData);
-  const setTitle = useBreadcrumbStore(state => state.setTitle);
+  const setTitle  = useBreadcrumbStore(state => state.setTitle);
 
-  setTitle('Program');
+  setTitle?.('Program');
 
   const handleRedirect = (program: ProgramData) => {
     setData(program);

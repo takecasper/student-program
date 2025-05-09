@@ -33,6 +33,7 @@ export default function LoginPage() {
 
     try {
       const success = await login(email, password);
+
       if (success) {
         const userType: 'program_experience' | 'student' =
           users.find(user => user.email === email)?.role || 'student';
@@ -46,7 +47,7 @@ export default function LoginPage() {
           address: 'Toronto, Canada',
         });
 
-        router.push('/dashboard');
+        router.replace('/dashboard');
       } else {
         setError('Invalid email or password');
       }
