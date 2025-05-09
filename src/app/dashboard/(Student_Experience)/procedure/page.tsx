@@ -14,11 +14,6 @@ import {
 } from '@/components/ui/table';
 import { useState } from 'react';
 
-interface ProcedurePageProps {
-  selectedView?: string;
-  onBack?: () => void;
-}
-
 interface Procedure {
   id: string;
   icon: string;
@@ -132,7 +127,7 @@ const mockCompetencies: CompetencyGroup[] = [
   },
 ];
 
-export default function ProcedurePage({}: ProcedurePageProps) {
+export default function ProcedurePage() {
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
 
   const handleRowClick = (competencyId: string) => {
