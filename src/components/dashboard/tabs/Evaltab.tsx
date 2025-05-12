@@ -1,6 +1,9 @@
-import { Card } from "@/components/ui/card";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import Image from "next/image";
+import { Card } from '@/components/ui/card';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import Image from 'next/image';
+import { useState } from 'react';
+import { AssessmentList } from '../AssessmentList';
+import { mockAssessments, byMeAssessments } from '@/data/mockAssessments';
 
 interface EvalCardProps {
   title: string;
@@ -54,32 +57,47 @@ function EvalCard({ title, sentDate, courseName, imageUrl, onClick }: EvalCardPr
 }
 
 export function EvalTab() {
+  const [showAssessments, setShowAssessments] = useState(false);
+
   const evaluations = [
     {
       id: 1,
-      title: "Form Name",
-      sentDate: "Mar 20, 2023",
-      courseName: "Course Name",
-      imageUrl: "/mspe.png",
+      title: 'Form Name',
+      sentDate: 'Mar 20, 2023',
+      courseName: 'Course Name',
+      imageUrl: '/mspe.png',
     },
     {
       id: 2,
-      title: "Form Name",
-      sentDate: "Mar 25, 2023",
-      courseName: "Course Name",
-      imageUrl: "/mspe.png",
+      title: 'Form Name',
+      sentDate: 'Mar 25, 2023',
+      courseName: 'Course Name',
+      imageUrl: '/mspe.png',
     },
   ];
+
+  if (showAssessments) {
+    return (
+      <div className="p-6">
+        <div className="mb-4">
+          <button
+            onClick={() => setShowAssessments(false)}
+            className="flex items-center gap-2 text-sm text-primary hover:text-primary/80"
+          >
+            <Image src="/arrow-left.svg" alt="Back" width={20} height={20} />
+            Back to Forms
+          </button>
+        </div>
+        <AssessmentList ofMeAssessments={mockAssessments} byMeAssessments={byMeAssessments} />
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
       <div className="flex flex-row space-x-6">
-        {evaluations.map((evaluation) => (
-          <EvalCard
-            key={evaluation.id}
-            {...evaluation}
-            onClick={() => console.log(`Clicked evaluation ${evaluation.id}`)}
-          />
+        {evaluations.map(evaluation => (
+          <EvalCard key={evaluation.id} {...evaluation} onClick={() => setShowAssessments(true)} />
         ))}
       </div>
     </div>
