@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 
 import UserRole from './components/RoleUser';
 import { Button } from '@/components/ui/button';
+import EvaluationForms from './components/EvaluationForms';
 import CurriculumRotation from './components/RotationCurriculum';
 
 import { useProgram } from '@/store/program';
@@ -129,6 +130,10 @@ export default function ProgramPage() {
             isSettingUpRotation={isSettingUpRotation}
             setIsSettingUpRotation={setIsSettingUpRotation}
           />
+        )}
+
+        {settingsView === 2 && (
+          <EvaluationForms />
         )}
       </div>
     </div>
