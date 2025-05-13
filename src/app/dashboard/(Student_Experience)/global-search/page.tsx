@@ -64,6 +64,8 @@ const filters = [
   },
 ];
 
+const SUGGESTED_SEARCHES = ["Women's Health", 'Internal Medicine', 'Pediatrics'];
+
 const MOCK_SEARCH_RESULTS: SearchResult[] = [
   {
     id: '1',
@@ -113,6 +115,7 @@ export default function GlobalSearchPage() {
   const [filterValues, setFilterValues] = useState<FilterValue>({});
   const [sortBy, setSortBy] = useState('relevance');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const { data: searchResults, isLoading } = useQuery({
     queryKey: ['search', debouncedSearchTerm, filterValues, sortBy],
@@ -149,9 +152,33 @@ export default function GlobalSearchPage() {
                       value={searchTerm}
                       onChange={e => setSearchTerm(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && handleSearch()}
+                      onFocus={() => setIsSearchFocused(true)}
+                      onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
                     />
                     <Search className="h-4 w-4 text-gray-500 absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none" />
+
+                    {/* Dropdown for suggested searches */}
+                    {isSearchFocused && !debouncedSearchTerm && (
+                      <div className="absolute z-10 w-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200">
+                        <div className="p-2">
+                          <p className="text-sm text-gray-500 px-2 pb-2">Suggested searches:</p>
+                          {SUGGESTED_SEARCHES.map(suggestion => (
+                            <button
+                              key={suggestion}
+                              className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded-md"
+                              onClick={() => {
+                                setSearchTerm(suggestion);
+                                setDebouncedSearchTerm(suggestion);
+                              }}
+                            >
+                              {suggestion}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
+
                   <Button className="mt-2 bg-[#364699] rounded-full" onClick={handleSearch}>
                     Search
                   </Button>
