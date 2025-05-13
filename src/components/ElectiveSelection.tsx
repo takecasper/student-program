@@ -100,7 +100,20 @@ export default function ElectiveSelection({ onSubmit }: ElectiveSelectionProps) 
           <Button variant="outline" onClick={handleReset} className="px-6">
             Reset
           </Button>
-          <Button variant="default" className="bg-blue-600 hover:bg-blue-700 text-white px-6">
+          <Button
+            variant="default"
+            onClick={() =>
+              onSubmit({
+                name: selectedElective,
+                duration: selectedDuration,
+                dates: [selectedDate],
+                instructor: selectedInstructor,
+                city: selectedCity,
+                id: selectedElective,
+              })
+            }
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6"
+          >
             List This Schedule
           </Button>
         </div>
