@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { AlignLeft, Plus, SendHorizontal } from 'lucide-react';
 
@@ -39,9 +39,11 @@ export default function ProgramPage() {
   });
 
   const setData = useProgram(state => state.setData);
-  const setTitle  = useBreadcrumbStore(state => state.setTitle);
+  const setTitle = useBreadcrumbStore(state => state.setTitle);
 
-  setTitle?.('Program');
+  useEffect(() => {
+    if(setTitle) setTitle('Program');
+  }, [setTitle]);
 
   const handleRedirect = (program: ProgramData) => {
     setData(program);
