@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 
 import UserRole from './components/RoleUser';
 import { Button } from '@/components/ui/button';
+import EvaluationForms from './components/EvaluationForms';
 import CurriculumRotation from './components/RotationCurriculum';
 
 import { useProgram } from '@/store/program';
@@ -25,6 +26,9 @@ export default function ProgramPage() {
 
   // For Rotation
   const [isSettingUpRotation, setIsSettingUpRotation] = useState<boolean>(false);
+
+  // For Evaluation Forms
+  const [isSettingUpEvaluationForms, setIsSettingUpEvaluationForms] = useState<boolean>(false);
 
   useEffect(() => {
     setTitle(`Program / ${program ? `${program.name} - ${program.year} / Settings` : ''}`);
@@ -64,13 +68,10 @@ export default function ProgramPage() {
     },
   ];
 
-  console.log('debug isSettingUpRotation', isSettingUpRotation);
-  console.log('debug isConfiguring', isConfiguring);
-
-  const showSideBar = !isConfiguring && !isSettingUpRotation;
+  const showSideBar = !isConfiguring && !isSettingUpRotation && !isSettingUpEvaluationForms;
 
   return (
-    <div className="p-6 px-20 flex gap-2">
+    <div className="p-6 flex gap-2">
       {showSideBar && (
         <>
           <div className="basis-1/5 mt-[2rem]">
@@ -128,6 +129,13 @@ export default function ProgramPage() {
             currentSelection={subMenuSettingsView}
             isSettingUpRotation={isSettingUpRotation}
             setIsSettingUpRotation={setIsSettingUpRotation}
+          />
+        )}
+
+        {settingsView === 2 && (
+          <EvaluationForms
+            isSettingUpEvaluationForms={isSettingUpEvaluationForms}
+            setIsSettingUpEvaluationForms={setIsSettingUpEvaluationForms}
           />
         )}
       </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AlignLeft, Plus, SendHorizontal } from 'lucide-react';
 
@@ -27,7 +27,7 @@ const initialTableData: ProgramData[] = [
   { id: '3', name: 'Art', year: '2017 / 08' },
 ];
 
-export default function ProgramPage() {
+export default function HelpCenter() {
   const router = useRouter();
 
   const [isAdding, setIsAdding] = useState<boolean>(false);
@@ -39,11 +39,9 @@ export default function ProgramPage() {
   });
 
   const setData = useProgram(state => state.setData);
-  const setTitle = useBreadcrumbStore(state => state.setTitle);
+  const setTitle  = useBreadcrumbStore(state => state.setTitle);
 
-  useEffect(() => {
-    if(setTitle) setTitle('Program');
-  }, [setTitle]);
+  setTitle?.('Help Center');
 
   const handleRedirect = (program: ProgramData) => {
     setData(program);
