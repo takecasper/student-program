@@ -1,4 +1,5 @@
-// Mock user data
+import { ElectiveOption } from '@/types/elective';
+
 export const mockUser = {
   id: 'user123',
   name: 'John Doe',
@@ -39,3 +40,38 @@ export const mockDashboardData = {
     },
   ],
 };
+
+export const mockElectives: ElectiveOption[] = [
+  {
+    id: '1',
+    name: 'AN-ANES-DELTA-DH',
+    duration: '4 Weeks',
+    dates: ['July 1 - July 7, 2025', 'July 7 - July 14, 2025', 'July 15 - July 24, 2025'],
+    instructor: 'Mr. Padila',
+    city: 'Davao City',
+  },
+  {
+    id: '2',
+    name: 'AN-ANES-BETA-DH',
+    duration: '4 Weeks',
+    dates: [
+      'August 1 - August 7, 2025',
+      'August 8 - August 15, 2025',
+      'August 16 - August 23, 2025',
+    ],
+    instructor: 'Dr. Santos',
+    city: 'Manila City',
+  },
+  {
+    id: '3',
+    name: 'AN-ANES-GAMMA-DH',
+    duration: '4 Weeks',
+    dates: [
+      'September 1 - September 7, 2025',
+      'September 8 - September 15, 2025',
+      'September 16 - September 23, 2025',
+    ],
+    instructor: 'Dr. Reyes',
+    city: 'Cebu City',
+  },
+];
