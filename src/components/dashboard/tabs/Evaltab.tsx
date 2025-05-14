@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { AssessmentList } from '../AssessmentList';
 import { mockAssessments, byMeAssessments } from '@/data/mockAssessments';
+import EvalSidebar from './EvalSidebar';
 
 interface EvalCardProps {
   title: string;
@@ -95,6 +96,7 @@ export function EvalTab() {
 
   return (
     <div className="p-6">
+      <EvalSidebar />
       <div className="flex flex-row space-x-6">
         {evaluations.map(evaluation => (
           <EvalCard key={evaluation.id} {...evaluation} onClick={() => setShowAssessments(true)} />
