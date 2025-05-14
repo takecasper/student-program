@@ -59,6 +59,7 @@ function EvalCard({ title, sentDate, courseName, imageUrl, onClick }: EvalCardPr
 
 export function EvalTab() {
   const [showAssessments, setShowAssessments] = useState(false);
+  const [showEvalPanel, setShowEvalPanel] = useState(false);
 
   const evaluations = [
     {
@@ -67,13 +68,15 @@ export function EvalTab() {
       sentDate: 'Mar 20, 2023',
       courseName: 'Course Name',
       imageUrl: '/mspe.png',
+      completed: true,
     },
     {
       id: 2,
       title: 'Form Name',
-      sentDate: 'Mar 25, 2023',
+      sentDate: 'Not Started',
       courseName: 'Course Name',
       imageUrl: '/mspe.png',
+      completed: false,
     },
   ];
 
@@ -96,10 +99,10 @@ export function EvalTab() {
 
   return (
     <div className="p-6">
-      <EvalSidebar />
+      {showEvalPanel ? <EvalSidebar setShowEvalPanel={setShowEvalPanel} /> : <></>}
       <div className="flex flex-row space-x-6">
         {evaluations.map(evaluation => (
-          <EvalCard key={evaluation.id} {...evaluation} onClick={() => setShowAssessments(true)} />
+          <EvalCard key={evaluation.id} {...evaluation} onClick={() => (evaluation.completed ? setShowAssessments(true) : setShowEvalPanel(true))} />
         ))}
       </div>
     </div>
