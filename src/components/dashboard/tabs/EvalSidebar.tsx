@@ -1,4 +1,6 @@
-import { useState } from "react"
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
+import { useState, useRef, useEffect } from "react"
 import * as Select from '@radix-ui/react-select';
 import * as Accordion from '@radix-ui/react-accordion';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
@@ -22,7 +24,7 @@ const fields = [
   { label: 'Physical Exam/ Mental Status Skills', key: 'physicalExam' },
 ];
 
-const EvalSidebar = () => {
+const EvalSidebar = ({setShowEvalPanel}: {setShowEvalPanel: Function}) => {
 	const [step, setStep] = useState(0)
 	const [setting, setSetting] = useState('');
 	const [number, setNumber] = useState('');
@@ -32,7 +34,21 @@ const EvalSidebar = () => {
     physicalExam: 'N/A',
   });
   const [selected, setSelected] = useState('N/A');
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
+	useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setShowEvalPanel(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+	
   const handleChange = (field: keyof typeof ratings, value: string) => {
     setRatings({ ...ratings, [field]: value });
   };
@@ -46,7 +62,10 @@ const EvalSidebar = () => {
 	}
 
 	return (
-		<div className=" absolute z-10 right-4 top-[85px] h-[calc(100vh-101px)] w-full md:w-2/5 lg:w-1/3 border-l border-gray-200 bg-white p-[35px] shadow-md font-sans max-w-[485px]">
+		<div 
+			ref={wrapperRef}
+			className=" absolute z-10 right-4 top-[85px] h-[calc(100vh-101px)] w-full md:w-2/5 lg:w-1/3 border-l border-gray-200 bg-white p-[35px] shadow-md font-sans max-w-[485px]"
+		>
        {/* Header Info */}
 			 <div className="text-[16px] text-[#1B1B1B] mb-5 space-y-1 leading-snug">
         <p>
