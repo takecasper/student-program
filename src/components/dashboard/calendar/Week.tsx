@@ -84,6 +84,7 @@ const Week = ({ daysOfWeek, events, timeSlots }: WeekProps) => {
 							{getEventsForDay(day, true).map((event: CalendarEventType) => (
 								<div key={event.id} className="mb-2">
 									<CalendarEvent
+										event={event}
 										title={event.title}
 										startTime={event.startTime || ''}
 										endTime={event.endTime || ''}
@@ -117,6 +118,7 @@ const Week = ({ daysOfWeek, events, timeSlots }: WeekProps) => {
 										{getEventsForTimeSlot(day, hour).map((event: CalendarEventType) => (
 											<div key={event.id} className="absolute top-1 left-2 right-2 z-10">
 												<CalendarEvent
+													event={event}
 													title={event.title}
 													startTime={event.startTime || ''}
 													endTime={event.endTime || ''}
