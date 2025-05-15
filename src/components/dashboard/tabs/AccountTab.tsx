@@ -26,6 +26,8 @@ export function AccountTab({ user }: AccountTabProps) {
     facility: 2323
   });
 
+  console.log('user', user)
+
   const handleGeneralInfo = (field: keyof typeof generalInfo, value: string) => {
     setGeneralInfo(prev => ({
       ...prev,

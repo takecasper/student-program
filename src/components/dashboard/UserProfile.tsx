@@ -50,9 +50,13 @@ export default function UserProfile({ user, activeTab, setActiveTab }: UserProfi
           <TabTrigger value="wallet" activeTab={activeTab} icon="wallet" label="MY WALLET" />
           <TabTrigger value="settings" activeTab={activeTab} icon="settings" label="SETTINGS" />
         </TabsList>
-
         <TabsContent value="account" className="mt-0">
-          <AccountTab user={user} />
+          <AccountTab user={{
+            email: user.email,
+            address: '',
+            phone: '',
+            pager: ''
+          }} />
         </TabsContent>
 
         <TabsContent value="grades">
