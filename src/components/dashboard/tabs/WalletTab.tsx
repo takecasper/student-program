@@ -36,13 +36,24 @@ export function WalletTab() {
         <Card className="bg-[#f5f5f5] border-none shadow-none">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-[#333333]">CARD INFO</CardTitle>
-            <Button
-              variant="ghost"
-              className="h-8 text-[#364699] hover:text-[#364699] hover:bg-[#e5e7f4] px-3"
-              onClick={toggleEdit}
-            >
-              {isEditing ? 'Save' : 'Edit'}
-            </Button>
+            <div className='flex space-x-1'>
+              {isEditing ?
+                <Button
+                  variant="ghost"
+                  className="h-8 text-[#364699] hover:text-[#364699] hover:bg-[#e5e7f4] px-3 cursor-pointer"
+                  onClick={toggleEdit}
+                >
+                  Cancel
+                </Button>:<></>
+              }
+              <Button
+                variant="ghost"
+                className="h-8 text-[#364699] hover:text-[#364699] hover:bg-[#e5e7f4] px-3 cursor-pointer"
+                onClick={toggleEdit}
+              >
+                {isEditing ? 'Save' : 'Edit'}
+              </Button>
+            </div>
           </CardHeader>
           <CardContent className="grid gap-4 pt-4">
             <div className="grid grid-cols-2 items-center">
