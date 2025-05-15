@@ -46,8 +46,8 @@ export default function UserProfile({ user, activeTab, setActiveTab }: UserProfi
           <TabTrigger value="account" activeTab={activeTab} icon="user" label="MY ACCOUNT" />
           <TabTrigger value="grades" activeTab={activeTab} icon="calendar" label="MY GRADES" />
           <TabTrigger value="eval" activeTab={activeTab} icon="calendar" label="MY EVAL" />
-          <TabTrigger value="wallet" activeTab={activeTab} icon="wallet" label="MY WALLET" />
           <TabTrigger value="mspe" activeTab={activeTab} icon="calendar" label="MSPE LETTER" />
+          <TabTrigger value="wallet" activeTab={activeTab} icon="wallet" label="MY WALLET" />
           <TabTrigger value="settings" activeTab={activeTab} icon="settings" label="SETTINGS" />
         </TabsList>
 

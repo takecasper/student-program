@@ -69,6 +69,7 @@ const Month = ({ weeksOfMonth, events, currentDate }: MonthProps) => {
 									{getEventsForWeek(day).map((event: CalendarEventType) => (
 										<div key={event.id} className="top-1 left-2 right-2 z-10">
 											<CalendarEvent
+												event={event}
 												title={event.title}
 												startTime={event.startTime || ''}
 												endTime={event.endTime || ''}
