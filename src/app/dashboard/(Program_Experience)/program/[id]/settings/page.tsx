@@ -4,8 +4,10 @@ import Image from 'next/image';
 import { CircleUser } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
+import SiteSettings from './components/Site';
 import UserRole from './components/RoleUser';
 import { Button } from '@/components/ui/button';
+import GradeSheet from './components/GradeSheet';
 import EvaluationForms from './components/EvaluationForms';
 import CurriculumRotation from './components/RotationCurriculum';
 
@@ -138,6 +140,10 @@ export default function ProgramPage() {
             setIsSettingUpEvaluationForms={setIsSettingUpEvaluationForms}
           />
         )}
+
+        {settingsView === 3 && <GradeSheet />}
+
+        {settingsView === 4 && <SiteSettings />}
       </div>
     </div>
   );
