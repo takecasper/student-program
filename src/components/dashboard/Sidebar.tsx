@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 import { Button } from '../ui/button';
 import { SidebarNavItem } from './SidebarNavItem';
@@ -10,6 +10,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 import { useUserStore } from '@/store/user';
 
+import WorkflowIcon from '../../../public/svgs/workflow.svg';
+import DashboardIcon from '../../../public/svgs/dashboard.svg';
+import GolfCourseIcon from '../../../public/svgs/golf_course.svg';
+import CalendarIcon from '../../../public/svgs/calendar_month.svg';
+
 type DashboardSidebarProps = {
   logout: () => void;
   children: ReactNode;
@@ -17,6 +22,7 @@ type DashboardSidebarProps = {
 
 export default function DashboardSidebar({ logout, children }: DashboardSidebarProps) {
   const router = useRouter();
+  const pathname = usePathname();
 
   const userStore = useUserStore(state => state.user);
 
@@ -28,6 +34,8 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
   };
 
   const userType = userStore?.type;
+
+  console.log('pathname', pathname);
 
   return (
     <>
@@ -68,22 +76,30 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
             <SidebarNavItem
               href="/dashboard"
               label="My Dashboard"
-              icon={<Image src="/svgs/dashboard.svg" width={16} height={16} alt="Program" />}
+              icon={
+                <DashboardIcon
+                  className={` ${pathname === '/dashboard' ? 'fill-[#364799]' : 'fill-[#818181]'}`}
+                />
+              }
             />
             <SidebarNavItem
               label={userType === 'student' ? 'My Program' : 'Program'}
               href={`/dashboard/${userType === 'student' ? 'my-program' : 'program'}`}
-              icon={<Image src="/svgs/golf_course.svg" width={16} height={16} alt="Program" />}
+              // icon={<Image src="/svgs/golf_course.svg" width={16} height={16} alt="Program" />}
+              icon={
+                <GolfCourseIcon
+                  className={`${pathname.includes('program') ? 'fill-[#364799]' : 'fill-[#818181]'}`}
+                />
+              }
             />
             <SidebarNavItem
               label={userType === 'student' ? 'My Calendar' : 'Calendar'}
               href="/dashboard/calendar"
-              icon={<Image src="/svgs/calendar_month.svg" width={16} height={16} alt="Program" />}
-            />
-            <SidebarNavItem
-              label={userType === 'student' ? 'Procedure Log' : 'Procedure'}
-              href="/dashboard/procedure"
-              icon={<Image src="/svgs/schedule.svg" width={18} height={18} alt="Procedure" />}
+              icon={
+                <CalendarIcon
+                  className={`${pathname === '/dashboard/calendar' ? 'fill-[#364799]' : 'fill-[#818181]'}`}
+                />
+              }
             />
 
             {userType === 'program_experience' && (
@@ -96,10 +112,19 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
                   }
                 />
                 <SidebarNavItem
-                  label="Role"
-                  href="/dashboard/roles"
+                  label="Users & Roles"
+                  href="/dashboard/useroles"
                   icon={
                     <Image src="/svgs/settings.svg" width={16} height={16} alt="account roles" />
+                  }
+                />
+                <SidebarNavItem
+                  label="Workflow"
+                  href="/dashboard/workflow"
+                  icon={
+                    <WorkflowIcon
+                      className={`${pathname === '/dashboard/workflow' ? 'fill-[#364799]' : 'fill-[#818181]'}`}
+                    />
                   }
                 />
               </>
