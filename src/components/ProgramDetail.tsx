@@ -48,19 +48,19 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
   // Sessions data for Women's Health
   const womensHealthSessions = [
     {
-      name: 'Lecture: Arm & Intro to Forearm',
+      name: 'Arm & Intro to Forearm',
       location: 'H&S 403',
       date: 'Jan 28, 2025',
       time: '1:00 PM - 3:00 PM',
     },
     {
-      name: 'Lecture: Arm & Intro to Forearm',
+      name: 'Arm & Intro to Forearm',
       location: 'H&S 403',
       date: 'Jan 28, 2025',
       time: '1:00 PM - 3:00 PM',
     },
     {
-      name: 'Lecture: Arm & Intro to Forearm',
+      name: 'Arm & Intro to Forearm',
       location: 'H&S 403',
       date: 'Jan 28, 2025',
       time: '1:00 PM - 3:00 PM',
@@ -149,7 +149,6 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                       <TableHead className="text-[#6c6c6c] font-medium ">From</TableHead>
                       <TableHead className="text-[#6c6c6c] font-medium ">To</TableHead>
                       <TableHead className="text-[#6c6c6c] font-medium">Evaluation Form</TableHead>
-                      <TableHead className="text-[#6c6c6c] font-medium">Grade</TableHead>
                     </>
                   ) : (
                     <TableHead className="text-[#6c6c6c] font-medium" colSpan={4}></TableHead>
@@ -166,7 +165,7 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                     >
                       <TableCell className="py-4">
                         <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
-                          <Check className="h-4 w-4 text-[#00a59b]" />
+                          <Image src="/hotel_class.svg" alt="star" width={16} height={16} />
                         </div>
                       </TableCell>
                       <TableCell className="font-medium">
@@ -211,20 +210,10 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                               Form Name
                             </Button>
                           </TableCell>
-                          <TableCell>
-                            <Button
-                              variant="ghost"
-                              className="text-[#333333DE] p-0 h-auto hover:bg-transparent hover:underline"
-                            >
-                              <div className="border border-[#D9D9D9] rounded p-1">
-                                <Image src="/grade.svg" alt="form" width={14} height={14} />
-                              </div>{' '}
-                              Gradesheet
-                            </Button>
-                          </TableCell>
+                          <TableCell></TableCell>
                         </>
                       ) : (
-                        <TableCell colSpan={4}></TableCell>
+                        <TableCell></TableCell>
                       )}
                     </TableRow>
 
@@ -232,12 +221,14 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                     {showSessions &&
                       womensHealthSessions.map((session, index) => (
                         <TableRow key={index} className="border-b border-[#f5f5f5] bg-gray-50 ">
-                          <TableCell className="py-4 ">
-                            <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
-                              <Image src="/lecture.svg" alt="form" width={14} height={14} />
-                            </div>
+                          <TableCell className="py-4 "></TableCell>
+                          <TableCell className="flex flex-col font-medium text-sm">
+                            {session.name}
+                            <span className="bg-[#F5CA66] w-20 flex gap-1 px-2 py-1 rounded-full text-xs text-[#3C3C3C] font-medium">
+                              <Image src="/svgs/lecture.svg" width={12} height={12} alt="lecture" />{' '}
+                              Lecture
+                            </span>
                           </TableCell>
-                          <TableCell className="font-medium">{session.name}</TableCell>
                           <TableCell>{session.location}</TableCell>
                           <TableCell>{session.date}</TableCell>
                           <TableCell>{session.time}</TableCell>
@@ -248,7 +239,7 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                     <TableRow className="border-b border-[#f5f5f5]">
                       <TableCell className="py-4">
                         <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
-                          <Check className="h-4 w-4 text-[#00a59b]" />
+                          <Image src="/hotel_class.svg" alt="star" width={16} height={16} />
                         </div>
                       </TableCell>
                       <TableCell className="font-medium">
@@ -274,17 +265,7 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                               Form Name
                             </Button>
                           </TableCell>
-                          <TableCell>
-                            <Button
-                              variant="ghost"
-                              className="text-[#333333DE] p-0 h-auto hover:bg-transparent hover:underline"
-                            >
-                              <div className="border border-[#D9D9D9] rounded p-1">
-                                <Image src="/grade.svg" alt="form" width={14} height={14} />
-                              </div>{' '}
-                              Gradesheet
-                            </Button>
-                          </TableCell>
+                          <TableCell></TableCell>
                         </>
                       ) : (
                         <TableCell colSpan={4}></TableCell>
@@ -293,7 +274,7 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                     <TableRow className="border-b border-[#f5f5f5]">
                       <TableCell className="py-4">
                         <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
-                          <Check className="h-4 w-4 text-[#00a59b]" />
+                          <Image src="/hotel_class.svg" alt="star" width={16} height={16} />
                         </div>
                       </TableCell>
                       <TableCell className="font-medium">
@@ -319,17 +300,7 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                               Form Name
                             </Button>
                           </TableCell>
-                          <TableCell>
-                            <Button
-                              variant="ghost"
-                              className="text-[#333333DE] p-0 h-auto hover:bg-transparent hover:underline"
-                            >
-                              <div className="border border-[#D9D9D9] rounded p-1">
-                                <Image src="/grade.svg" alt="form" width={14} height={14} />
-                              </div>{' '}
-                              Gradesheet
-                            </Button>
-                          </TableCell>
+                          <TableCell></TableCell>
                         </>
                       ) : (
                         <TableCell colSpan={4}></TableCell>

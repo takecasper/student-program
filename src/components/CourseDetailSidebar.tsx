@@ -217,7 +217,12 @@ export default function CourseDetailSidebar({
           <div className="flex flex-1 overflow-hidden">
             {/* Left side content */}
             <div className="w-1/2 px-4 overflow-y-auto">
-              <Image src="/video.png" alt="course-detail-sidebar" width={580} height={200} />
+              <Image
+                src="/images/abstract.png"
+                alt="course-detail-sidebar"
+                width={580}
+                height={200}
+              />
 
               <div className="flex flex-col gap-4 mt-4">
                 <Card className="px-4 border border-[#D9D9D9] shadow-none">
@@ -311,7 +316,12 @@ export default function CourseDetailSidebar({
         ) : (
           <div className="flex flex-col overflow-y-auto">
             <div className="px-4">
-              <Image src="/video.png" alt="course-detail-sidebar" width={580} height={200} />
+              <Image
+                src="/images/abstract.png"
+                alt="course-detail-sidebar"
+                width={580}
+                height={200}
+              />
             </div>
             {/* tabs */}
             <div className="p-4 gap-2 flex">
