@@ -1,15 +1,23 @@
-import { Card } from "@/components/ui/card";
-import { Info } from "lucide-react";
-import Image from "next/image";
+'use client';
+import { Card } from '@/components/ui/card';
+import { Info } from 'lucide-react';
+import Image from 'next/image';
+import { useState } from 'react';
+import MSPEPanel from '../MSPEPanel';
 
 export function MSPETab() {
+  const [showPanel, setShowPanel] = useState<boolean>(false);
+
   return (
     <div className="space-y-6 p-6">
       <div className="relative w-fit">
         <span className="flex gap-2 absolute top-2 right-2 px-3 py-2 text-xs bg-[#FA8D8F] text-[#333333DE] font-semibold rounded-[10px] z-10">
           <Info className="w-4 h-4" /> Not Reviewed
         </span>
-        <Card className="w-[308px] p-6 bg-white rounded-lg shadow-none hover:shadow-md transition-shadow cursor-pointer">
+        <Card
+          onClick={() => setShowPanel(true)}
+          className="w-[308px] p-6 bg-white rounded-lg shadow-none hover:shadow-md transition-shadow cursor-pointer"
+        >
           <div className="flex flex-col items-start gap-4">
             <div className="bg-[#F6F8FF] p-4 rounded-lg">
               <Image src="/mspe.png" alt="MSPE Form" width={267} height={100} />
@@ -33,6 +41,7 @@ export function MSPETab() {
           </div>
         </Card>
       </div>
+      {showPanel ? <MSPEPanel setShowPanel={setShowPanel} /> : <></>}
     </div>
   );
 }
