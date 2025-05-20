@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, FileText, LayoutGrid, ChevronDown, ChevronUp } from 'lucide-react';
+import { FileText, LayoutGrid, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Breadcrumb,

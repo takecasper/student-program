@@ -1,0 +1,48 @@
+interface Country {
+  code: string;
+  name: string;
+  flagCode: string; // ISO 3166-1 alpha-2 code
+}
+
+export const countries: Country[] = [
+  { code: 'US', name: 'United States', flagCode: 'US' },
+  { code: 'GB', name: 'United Kingdom', flagCode: 'GB' },
+  { code: 'CA', name: 'Canada', flagCode: 'CA' },
+  { code: 'AU', name: 'Australia', flagCode: 'AU' },
+  { code: 'NZ', name: 'New Zealand', flagCode: 'NZ' },
+  { code: 'DE', name: 'Germany', flagCode: 'DE' },
+  { code: 'FR', name: 'France', flagCode: 'FR' },
+  { code: 'IT', name: 'Italy', flagCode: 'IT' },
+  { code: 'ES', name: 'Spain', flagCode: 'ES' },
+  { code: 'PT', name: 'Portugal', flagCode: 'PT' },
+  { code: 'NL', name: 'Netherlands', flagCode: 'NL' },
+  { code: 'BE', name: 'Belgium', flagCode: 'BE' },
+  { code: 'CH', name: 'Switzerland', flagCode: 'CH' },
+  { code: 'AT', name: 'Austria', flagCode: 'AT' },
+  { code: 'SE', name: 'Sweden', flagCode: 'SE' },
+  { code: 'NO', name: 'Norway', flagCode: 'NO' },
+  { code: 'DK', name: 'Denmark', flagCode: 'DK' },
+  { code: 'FI', name: 'Finland', flagCode: 'FI' },
+  { code: 'IE', name: 'Ireland', flagCode: 'IE' },
+  { code: 'JP', name: 'Japan', flagCode: 'JP' },
+  { code: 'KR', name: 'South Korea', flagCode: 'KR' },
+  { code: 'CN', name: 'China', flagCode: 'CN' },
+  { code: 'IN', name: 'India', flagCode: 'IN' },
+  { code: 'SG', name: 'Singapore', flagCode: 'SG' },
+  { code: 'MY', name: 'Malaysia', flagCode: 'MY' },
+  { code: 'PH', name: 'Philippines', flagCode: 'PH' },
+  { code: 'ID', name: 'Indonesia', flagCode: 'ID' },
+  { code: 'TH', name: 'Thailand', flagCode: 'TH' },
+  { code: 'VN', name: 'Vietnam', flagCode: 'VN' },
+  { code: 'BR', name: 'Brazil', flagCode: 'BR' },
+  { code: 'MX', name: 'Mexico', flagCode: 'MX' },
+  { code: 'AR', name: 'Argentina', flagCode: 'AR' },
+  { code: 'CL', name: 'Chile', flagCode: 'CL' },
+  { code: 'CO', name: 'Colombia', flagCode: 'CO' },
+  { code: 'PE', name: 'Peru', flagCode: 'PE' },
+  { code: 'ZA', name: 'South Africa', flagCode: 'ZA' },
+  { code: 'AE', name: 'United Arab Emirates', flagCode: 'AE' },
+  { code: 'SA', name: 'Saudi Arabia', flagCode: 'SA' },
+  { code: 'IL', name: 'Israel', flagCode: 'IL' },
+  { code: 'TR', name: 'Turkey', flagCode: 'TR' },
+].sort((a, b) => a.name.localeCompare(b.name));
