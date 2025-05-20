@@ -3,23 +3,35 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ProgramDetail from '@/components/ProgramDetail';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function ProgramContentWithImages() {
   const [selectedView, setSelectedView] = useState<string | null>(null);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const view = searchParams.get('view');
+    setSelectedView(view ?? null);
+  }, [searchParams]);
 
   // Handle going back to the main view
   const handleBack = () => {
-    setSelectedView(null);
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('view');
+    router.push(`?${params.toString()}`);
   };
 
   console.log('Current selectedView in main page:', selectedView);
 
   const handleViewSelection = (view: string) => {
     console.log('Setting selectedView to:', view);
-    setSelectedView(view);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('view', view);
+    router.push(`?${params.toString()}`);
   };
 
   if (selectedView) {
