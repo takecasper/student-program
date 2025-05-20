@@ -274,7 +274,10 @@ export default function CourseDetailSidebar({
                   className={`py-3 rounded-full border border-[#D9D9D9] ${
                     activeTab === 'SESSION' ? 'bg-[#364699] text-white' : ''
                   }`}
-                  onClick={() => setActiveTab('SESSION')}
+                  onClick={() => {
+                    setActiveTab('SESSION');
+                    setIsExpanded(true);
+                  }}
                 >
                   SESSION
                 </Button>
@@ -283,7 +286,10 @@ export default function CourseDetailSidebar({
                   className={`py-3 rounded-full border border-[#D9D9D9] ${
                     activeTab === 'GRADES' ? 'bg-[#364699] text-white' : ''
                   }`}
-                  onClick={() => setActiveTab('GRADES')}
+                  onClick={() => {
+                    setActiveTab('GRADES');
+                    setIsExpanded(true);
+                  }}
                 >
                   GRADES
                 </Button>
@@ -292,11 +298,14 @@ export default function CourseDetailSidebar({
                   className={`py-3 rounded-full border border-[#D9D9D9] ${
                     activeTab === 'HANDOUTS' ? 'bg-[#364699] text-white' : ''
                   }`}
-                  onClick={() => setActiveTab('HANDOUTS')}
+                  onClick={() => {
+                    setActiveTab('HANDOUTS');
+                    setIsExpanded(true);
+                  }}
                 >
                   HANDOUTS
                 </Button>
-                <Button
+                {/* <Button
                   variant="ghost"
                   className={`py-3 rounded-full border border-[#D9D9D9] ${
                     activeTab === 'EVAL' ? 'bg-[#364699] text-white' : ''
@@ -304,7 +313,7 @@ export default function CourseDetailSidebar({
                   onClick={() => setActiveTab('EVAL')}
                 >
                   EVAL
-                </Button>
+                </Button> */}
               </div>
 
               {/* Tab content */}
@@ -331,18 +340,42 @@ export default function CourseDetailSidebar({
               >
                 INFO & OBJECTIVE
               </Button>
-              <Button variant="ghost" className="flex-1 py-3 rounded-full border border-[#D9D9D9]">
+              <Button
+                variant="ghost"
+                className="flex-1 py-3 rounded-full border border-[#D9D9D9]"
+                onClick={() => {
+                  setActiveTab('SESSION');
+                  setIsExpanded(true);
+                  onExpand(true);
+                }}
+              >
                 SESSION
               </Button>
-              <Button variant="ghost" className="flex-1 py-3 rounded-full border border-[#D9D9D9]">
+              <Button
+                variant="ghost"
+                className="flex-1 py-3 rounded-full border border-[#D9D9D9]"
+                onClick={() => {
+                  setActiveTab('GRADES');
+                  setIsExpanded(true);
+                  onExpand(true);
+                }}
+              >
                 GRADES
               </Button>
-              <Button variant="ghost" className="flex-1 py-3 rounded-full border border-[#D9D9D9]">
+              <Button
+                variant="ghost"
+                className="flex-1 py-3 rounded-full border border-[#D9D9D9]"
+                onClick={() => {
+                  setActiveTab('HANDOUTS');
+                  setIsExpanded(true);
+                  onExpand(true);
+                }}
+              >
                 HANDOUTS
               </Button>
-              <Button variant="ghost" className="flex-1 py-3 rounded-full border border-[#D9D9D9]">
+              {/* <Button variant="ghost" className="flex-1 py-3 rounded-full border border-[#D9D9D9]">
                 EVAL
-              </Button>
+              </Button> */}
             </div>
 
             <div className="flex flex-col gap-4 px-4">

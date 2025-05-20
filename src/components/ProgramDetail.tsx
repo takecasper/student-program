@@ -143,9 +143,10 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
               <TableHeader className="bg-[#D9D9D91A]">
                 <TableRow className="border-b border-[#f5f5f5]">
                   <TableHead className="w-12"></TableHead>
-                  <TableHead className="text-[#6c6c6c] font-medium ">Rotation</TableHead>
+                  <TableHead className="text-[#6c6c6c] font-medium ">Course Name</TableHead>
                   {!sidebarExpanded ? (
                     <>
+                      <TableHead className="text-[#6c6c6c] font-medium ">Location</TableHead>
                       <TableHead className="text-[#6c6c6c] font-medium ">From</TableHead>
                       <TableHead className="text-[#6c6c6c] font-medium ">To</TableHead>
                       <TableHead className="text-[#6c6c6c] font-medium">Evaluation Form</TableHead>
@@ -197,6 +198,7 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                       </TableCell>
                       {!sidebarExpanded ? (
                         <>
+                          <TableCell></TableCell>
                           <TableCell>Jan 28, 2025</TableCell>
                           <TableCell>Feb 2, 2025</TableCell>
                           <TableCell>
@@ -252,6 +254,7 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                       </TableCell>
                       {!sidebarExpanded ? (
                         <>
+                          <TableCell></TableCell>
                           <TableCell>Oct 1, 2023</TableCell>
                           <TableCell>Nov 15, 2023</TableCell>
                           <TableCell>
@@ -287,6 +290,7 @@ export default function ProgramDetail({ selectedView, onBack }: ProgramDetailPro
                       </TableCell>
                       {!sidebarExpanded ? (
                         <>
+                          <TableCell></TableCell>
                           <TableCell>Oct 1, 2023</TableCell>
                           <TableCell>Nov 15, 2023</TableCell>
                           <TableCell>
