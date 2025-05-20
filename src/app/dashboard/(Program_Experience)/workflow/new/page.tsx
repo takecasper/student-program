@@ -41,6 +41,19 @@ const actionOptions = [
   'Unassign',
   'Send Reminder',
 ];
+const userTypesOptions = [
+  'Reading Physician',
+  'Performing Physician',
+  'Performing Technologist',
+  'Transcriptionist',
+  'Scheduler / Front Desk',
+  'Assigned Reading Physician', 
+  'Assigned Referring Physician',
+  'Assigned Performing Physician',
+  'Assigned Performing Technologist',
+  'Assigned Transcriptionist',
+  'Assigned Consulting Physician',
+]
 
 const NewWorkFlowPage = () => {
   const [action, setAction] = useState('');
@@ -256,7 +269,7 @@ const NewWorkFlowPage = () => {
                               <SelectValue placeholder="Select User Type / Organization" />
                             </SelectTrigger>
                             <SelectContent>
-                              {changedToOptions.map(option => (
+                              {userTypesOptions.map(option => (
                                 <SelectItem
                                   key={option}
                                   value={option}
