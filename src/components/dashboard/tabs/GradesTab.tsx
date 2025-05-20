@@ -1,292 +1,131 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ChevronUpIcon, ChevronDownIcon, DownloadIcon } from '@radix-ui/react-icons';
+import { Flag } from 'lucide-react';
+
+type Trait = {
+  label: string;
+  value: number;
+  color: string;
+};
+
+const traits: Trait[] = [
+  { label: 'Leadership', value: 60, color: 'bg-[#FFD87C]' },
+  { label: 'Self-Awareness', value: 80, color: 'bg-[#00A59B]' },
+  { label: 'Collaboration', value: 40, color: 'bg-[#FA8D8F]' },
+  { label: 'Communication', value: 80, color: 'bg-[#00A59B]' },
+];
 
 export function GradesTab() {
   return (
-    <div className="w-full">
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-6">
-        {/* Grades Table with ScrollArea */}
-        <Card className="border-none shadow-none bg-white">
-          <CardContent className="p-0">
-            <div className="w-full">
-              {/* Fixed Table Header */}
-              <div className="grid grid-cols-5 border-b border-[#f5f5f5] py-3 sticky top-0 bg-white z-10">
-                <div className="text-[#333333] font-medium pl-4">Subjects</div>
-                <div className="text-[#333333] font-medium text-center">1st Year</div>
-                <div className="text-[#333333] font-medium text-center">2nd Year</div>
-                <div className="text-[#333333] font-medium text-center">3rd Year</div>
-                <div className="text-[#333333] font-medium text-center">4th Year</div>
-              </div>
-
-              {/* Scrollable Table Body */}
-              <ScrollArea className="h-[400px]">
-                <div className="min-w-full">
-                  {/* Table Rows */}
-                  {Array.from({ length: 10 }).map((_, index) => (
-                    <div key={index} className="grid grid-cols-5 border-b border-[#f5f5f5] py-4">
-                      <div className="flex items-center gap-3 pl-4">
-                        <div className="w-8 h-8 rounded-full bg-[#f5f5f5]"></div>
-                        <div>
-                          <p className="text-sm font-medium text-[#333333]">Women&apos;s Health</p>
-                          <p className="text-xs text-[#6c6c6c]">January 10, 2025</p>
-                        </div>
+    <div className="w-full flex">
+      {/* Grades Table with ScrollArea */}
+      <Card className="border-none shadow-none bg-white w-2/3 rounded-none">
+        <CardContent className="p-0 border-r pr-11 border-[#CCCCCC] rounded-none">
+          <div className="flex flex-col gap-8 text-sm font-sans h-[425px] text-[#1B1B1B] bg-white relative overflow-auto pr-1">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="flex-1 space-y-6">
+                <div>
+                  <div className="flex justify-between">
+                    <h2 className="font-semibold uppercase text-xs">Undergraduate 2021–2025</h2>
+                    <div className="cursor-pointer p-1 border border-[#3333331A] rounded-sm">
+                      <DownloadIcon className="w-4 h-4 text-gray-400" />
+                    </div>
+                  </div>
+                  <div className="flex justify-between mt-7">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-gray-300 mb-6" />
+                      <div>
+                        <p className="font-semibold">Neuroscience</p>
+                        <p className="text-xs text-gray-500">Mar 7, 2025 – May 2, 2025</p>
+                        <button className="text-[#364699] text-xs mt-3 cursor-pointer flex items-center">
+                          Hide Details
+                          <ChevronUpIcon className="w-6 h-4 text-[#364699] ml-3" />
+                        </button>
                       </div>
+                    </div>
 
-                      <div className="flex items-center justify-center">
-                        <div className="flex items-center gap-1">
-                          <span className="text-sm">88.00</span>
-                          <button className="text-[#6c6c6c]">
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M6 9L12 15L18 9"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </button>
+                    {/* YEAR GRADES */}
+                    <div className="flex gap-7 items-center">
+                      {['1st Year', '2nd Year', '3rd Year', '4th Year'].map((label, idx) => (
+                        <div
+                          key={label}
+                          className="text-center flex flex-col justify-between h-full"
+                        >
+                          <p>{label}</p>
+                          <div className="flex items-center justify-center gap-1 border border-gray-300 px-3 py-1 rounded-full">
+                            <p className="font-semibold text-xs">88.00</p>
+                            {idx % 2 === 1 ? (
+                              <ChevronDownIcon className="w-3 h-3 text-red-500" />
+                            ) : (
+                              <ChevronUpIcon className="w-3 h-3 text-green-500" />
+                            )}
+                          </div>
                         </div>
-                      </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
 
-                      <div className="flex items-center justify-center">
-                        <div className="flex items-center gap-1">
-                          <span className="text-sm">82.00</span>
-                          <button className="text-[#6c6c6c]">
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M6 9L12 15L18 9"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-center">
-                        <div className="flex items-center gap-1">
-                          <span className="text-sm">88.00</span>
-                          <button className="text-[#6c6c6c]">
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M6 9L12 15L18 9"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-center">
-                        <div className="flex items-center gap-1">
-                          <span className="text-sm">88.00</span>
-                          <button className="text-[#6c6c6c]">
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M6 9L12 15L18 9"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
+                {/* COURSE DATA */}
+                <div className="grid grid-cols-2 gap-6 gap-x-21 gap-y-8 text-sm">
+                  {['Assignments', 'iQuiz', 'Lab', 'Exams'].map(section => (
+                    <div key={section}>
+                      <h4 className="font-medium mb-2.5">{section}</h4>
+                      {section !== 'Exams' &&
+                        ['1', '2', '3'].map(num => (
+                          <div key={num} className="flex justify-between mb-2.5">
+                            <p>
+                              ↳ {section} {num}
+                            </p>
+                            <p className="font-semibold">78.00</p>
+                          </div>
+                        ))}
+                      {section === 'Exams' && (
+                        <>
+                          <div className="flex justify-between mb-2.5">
+                            <p>↳ Midterm Exam</p>
+                            <p className="font-semibold">78.00</p>
+                          </div>
+                          <div className="flex justify-between mb-2.5">
+                            <p>↳ Final Exam</p>
+                            <p className="font-semibold">78.00</p>
+                          </div>
+                        </>
+                      )}
                     </div>
                   ))}
-
-                  {/* Overall Grade Row */}
-                  <div className="grid grid-cols-5 py-4 sticky bottom-0 bg-white border-t border-[#f5f5f5]">
-                    <div className="flex items-center pl-4">
-                      <p className="text-sm font-medium text-[#333333]">Overall Grade</p>
-                    </div>
-
-                    <div className="flex items-center justify-center">
-                      <div className="flex items-center gap-1">
-                        <span className="text-sm">88.00</span>
-                        <button className="text-[#6c6c6c]">
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M6 9L12 15L18 9"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-center">
-                      <div className="flex items-center gap-1">
-                        <span className="text-sm">82.00</span>
-                        <button className="text-[#6c6c6c]">
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M6 9L12 15L18 9"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-center">
-                      <div className="flex items-center gap-1">
-                        <span className="text-sm">88.00</span>
-                        <button className="text-[#6c6c6c]">
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M6 9L12 15L18 9"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-center">
-                      <div className="flex items-center gap-1">
-                        <span className="text-sm">88.00</span>
-                        <button className="text-[#6c6c6c]">
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M6 9L12 15L18 9"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-              </ScrollArea>
-            </div>
-          </CardContent>
-        </Card>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
-        {/* Character Traits Card */}
-        <Card className="border border-[#f5f5f5] shadow-none h-fit">
-          <CardContent className="p-6">
-            <h3 className="text-[#333333] font-medium mb-6">Character Traits</h3>
-
-            <div className="space-y-6">
-              {/* Leadership */}
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-[#333333]">Leadership</span>
-                </div>
-                <div className="h-2 w-full bg-[#f5f5f5] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#ffd87c] rounded-full" style={{ width: '70%' }}>
-                    <span className="sr-only">70%</span>
+      {/* Character Traits Card */}
+      <Card className="shadow-none h-fit w-1/3 border-none">
+        <CardContent className="p-0 pl-12">
+          <div className="flex items-center justify-between mb-7">
+            <h3 className="text-gray-700 font-semibold text-sm">CHARACTER TRAITS</h3>
+          </div>
+          <div className="border rounded-xl p-5 space-y-6 shadow-sm">
+            {traits.map(({ label, value, color }) => (
+              <div key={label} className="space-y-1">
+                <p className="text-sm font-medium text-gray-700">{label}</p>
+                <div className="relative w-full h-8 bg-white rounded-full border-[0.5px] border-[#CCCCCC] p-0.5">
+                  <div className={`h-full ${color} rounded-full`} style={{ width: `${value}%` }} />
+                  <div className="absolute left-0 top-0 h-8 w-8 rounded-full border-[0.5px] bg-white border-[#CCCCCC] p-0.5 flex items-center justify-center -ml-1 -mt-[1px]">
+                    <div
+                      className={`top-0 h-full w-full rounded-full flex items-center justify-center ${color}`}
+                    >
+                      <Flag className="w-3 h-3 text-white" />
+                    </div>
                   </div>
                 </div>
               </div>
-
-              {/* Self-Awareness */}
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-[#333333]">Self-Awareness</span>
-                </div>
-                <div className="h-2 w-full bg-[#f5f5f5] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#00a59b] rounded-full" style={{ width: '90%' }}>
-                    <span className="sr-only">90%</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Collaboration */}
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-[#333333]">Collaboration</span>
-                </div>
-                <div className="h-2 w-full bg-[#f5f5f5] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#fa8d8f] rounded-full" style={{ width: '40%' }}>
-                    <span className="sr-only">40%</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Communication */}
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-[#333333]">Communication</span>
-                </div>
-                <div className="h-2 w-full bg-[#f5f5f5] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#00a59b] rounded-full" style={{ width: '90%' }}>
-                    <span className="sr-only">90%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
