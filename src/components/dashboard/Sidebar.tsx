@@ -102,6 +102,14 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
               }
             />
 
+            {userType === 'student' && (
+              <SidebarNavItem
+                label="Procedure Log"
+                href="/dashboard/procedure-logs"
+                icon={<Image src="/svgs/schedule.svg" width={16} height={16} alt="procedure logs" />}
+              />
+            )}
+
             {userType === 'program_experience' && (
               <>
                 <SidebarNavItem
