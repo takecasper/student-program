@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { Plus, Filter } from 'lucide-react';
 
@@ -87,10 +88,12 @@ export default function WorkflowAutomation() {
       {/* Top Section: Add New + 3 cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Add New */}
-        <div className="border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center py-10 hover:bg-gray-50 cursor-pointer">
-          <Plus className="w-8 h-8 text-gray-500 mb-2" />
-          <span className="text-sm font-medium text-gray-500">ADD NEW</span>
-        </div>
+        <Link href="/dashboard/workflow/new">
+          <div className="h-full border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center py-10 hover:bg-gray-50 cursor-pointer">
+            <Plus className="w-8 h-8 text-gray-500 mb-2" />
+            <span className="text-sm font-medium text-gray-500">ADD NEW</span>
+          </div>
+        </Link>
         {/* Top Workflows */}
         {topWorkflows.map((workflow, idx) => (
           <WorkflowCard key={idx} {...workflow} />
