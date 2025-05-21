@@ -164,9 +164,8 @@ export default function ProcedurePage() {
           </TableHeader>
           <TableBody>
             {mockCompetencies.map(competency => (
-              <>
+              <div key={competency.id}>
                 <TableRow
-                  key={competency.id}
                   className="border-b border-[#f5f5f5] cursor-pointer hover:bg-gray-50"
                   onClick={() => handleRowClick(competency.id)}
                 >
@@ -263,7 +262,7 @@ export default function ProcedurePage() {
                       </TableCell>
                     </TableRow>
                   ))}
-              </>
+              </div>
             ))}
           </TableBody>
         </Table>
