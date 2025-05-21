@@ -150,10 +150,10 @@ export default function ProcedurePage() {
               <TableHead className="text-[#6c6c6c] font-medium border-r border-[#f5f5f5] px-2">
                 Competency Name
               </TableHead>
-              <TableHead className="text-[#6c6c6c] font-medium border-r border-[#f5f5f5] px-2 w-[120px]">
+              <TableHead className="text-[#6c6c6c] font-medium border-r border-[#f5f5f5] px-2 w-[140px]">
                 Date Entered
               </TableHead>
-              <TableHead className="text-[#6c6c6c] font-medium border-r border-[#f5f5f5] px-2 w-[120px]">
+              <TableHead className="text-[#6c6c6c] font-medium border-r border-[#f5f5f5] px-2 w-[140px]">
                 Date of Procedure
               </TableHead>
               <TableHead className="text-[#6c6c6c] font-medium border-r border-[#f5f5f5] px-2 w-[140px]">
@@ -164,17 +164,18 @@ export default function ProcedurePage() {
           </TableHeader>
           <TableBody>
             {mockCompetencies.map(competency => (
-              <div key={competency.id}>
+              <>
                 <TableRow
+                  key={competency.id}
                   className="border-b border-[#f5f5f5] cursor-pointer hover:bg-gray-50"
                   onClick={() => handleRowClick(competency.id)}
                 >
-                  <TableCell className="py-4 ">
+                  <TableCell className="py-4">
                     <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
                       <Image src="/svgs/stars.svg" alt="clinical" width={16} height={16} />
                     </div>
                   </TableCell>
-                  <TableCell className="font-medium ">
+                  <TableCell className="font-medium">
                     {competency.name}
                     <div className="mt-2">
                       <Button variant="ghost" size="sm" className="text-xs text-[#364699]">
@@ -216,11 +217,16 @@ export default function ProcedurePage() {
                 {expandedRow === competency.id &&
                   competency.procedures.map(procedure => (
                     <TableRow key={procedure.id} className="bg-gray-50 border-b border-[#f5f5f5]">
-                      <TableCell className="py-4 "></TableCell>
+                      <TableCell className="py-4"></TableCell>
                       <TableCell className="font-medium border-r border-[#f5f5f5] py-4 px-4">
                         <div className="flex items-start gap-2">
                           <div className="w-6 h-6 rounded-[8px] bg-[#f5f5f5] flex items-center justify-center">
-                            <Image src={procedure.icon} alt="procedure" width={12} height={12} />
+                            <Image
+                              src={procedure.icon || '/placeholder.svg'}
+                              alt="procedure"
+                              width={12}
+                              height={12}
+                            />
                           </div>
                           <div>
                             <div>{procedure.name}</div>
@@ -245,7 +251,7 @@ export default function ProcedurePage() {
                         <div className="flex items-center gap-2">
                           <div className="w-6 h-6 rounded-full overflow-hidden">
                             <Image
-                              src={procedure.supervisor.avatar}
+                              src={procedure.supervisor.avatar || '/placeholder.svg'}
                               alt={procedure.supervisor.name}
                               width={32}
                               height={32}
@@ -262,7 +268,7 @@ export default function ProcedurePage() {
                       </TableCell>
                     </TableRow>
                   ))}
-              </div>
+              </>
             ))}
           </TableBody>
         </Table>
