@@ -15,14 +15,6 @@ import {
   TableHead,
   TableHeader,
 } from '@/components/ui/table';
-import {
-  Select,
-  SelectItem,
-  SelectGroup,
-  SelectValue,
-  SelectTrigger,
-  SelectContent,
-} from '@/components/ui/select';
 
 const womensHealthSessions = [
   {
