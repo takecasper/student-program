@@ -102,8 +102,13 @@ export default function ProgramPage() {
                           className={`${subMenuSettingsView === index ? '!bg-[#f5f5f5] text-[#364699]' : 'bg-transparent text-[#4e4e4e]'} h-[58px] cursor-pointer text-[14px] font-medium hover:text-[#364699] w-full hover:bg-[#f5f5f5] flex items-center gap-2 justify-start !pl-[1rem]`}
                         >
                           {subMenu.year}{' '}
+                          {subMenu.status === 'COMPLETE' && (
+                            <span className="text-[#70C0B8] text-xs font-bold px-2 py-2 rounded-[10px] bg-white border-[1px] border-[#D9D9D9]">
+                              COMPLETE
+                            </span>
+                          )}
                           {subMenu.status === 'WIP' && (
-                            <span className="text-[#F5CA66] text-xs font-medium px-2 py-2 rounded-[10px] bg-white border-[1px] border-[#D9D9D9]">
+                            <span className="text-[#F5CA66] text-xs font-bold px-2 py-2 rounded-[10px] bg-white border-[1px] border-[#D9D9D9]">
                               WIP
                             </span>
                           )}

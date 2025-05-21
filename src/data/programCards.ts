@@ -2,7 +2,7 @@ export const programCards = [
   {
     lock: false,
     year: 'YEAR 1',
-    status: 'PAST',
+    status: 'COMPLETE',
     content: [
       {
         name: 'S1',
@@ -25,7 +25,7 @@ export const programCards = [
   {
     lock: false,
     year: 'YEAR 2',
-    status: 'PAST',
+    status: 'COMPLETE',
     content: [
       {
         name: 'S1',

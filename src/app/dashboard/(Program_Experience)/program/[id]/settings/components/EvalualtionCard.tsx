@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import { ChevronDown } from 'lucide-react';
 
-import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 import { EvaluationData } from '../types';
 
@@ -42,16 +43,80 @@ const EvaluationCard: React.FC<EvaluationData> = ({
             <p className="text-[12px] text-[#858585] mt-0">Sent Date: {date}</p>
           </div>
 
-          <div className="flex items-center bg-transparent border-[#D9D9D9] rounded-full px-2 py-1 gap-[-8px] border">
-            <div className="flex -space-x-2 pr-1">
-              {users.slice(0, 2).map(user => (
-                <Avatar key={user.id} className="w-6 h-6 border-2 border-white">
-                  <AvatarImage src={user.image} alt={user.username} />
-                </Avatar>
-              ))}
-            </div>
-            <ChevronDown className="w-4 h-4 text-gray-500" />
-          </div>
+          <Popover>
+            <PopoverTrigger asChild>
+              <div className="flex items-center bg-transparent border-[#D9D9D9] cursor-pointer rounded-full px-2 py-1 gap-[-8px] border">
+                <div className="flex -space-x-2 pr-1">
+                  {users.slice(0, 2).map(user => (
+                    <Avatar key={user.id} className="w-6 h-6 border-2 border-white">
+                      <AvatarImage src={user.image} alt={user.username} />
+                    </Avatar>
+                  ))}
+                </div>
+                <ChevronDown className="w-4 h-4 text-gray-500" />
+              </div>
+            </PopoverTrigger>
+            <PopoverContent className="w-55">
+              <Card className="border-0 shadow-none py-0 pt-2 gap-2">
+                <CardHeader className="p-0">
+                  <h3 className="font-semibold text-[#33333399]">EVALUATOR</h3>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="flex items-start space-x-4 mb-4">
+                    <Image
+                      width={24}
+                      height={24}
+                      alt="avatar"
+                      src="/images/avatar.png"
+                      className="border border-[#D9D9D9] rounded-full object-cover"
+                    />
+
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium">Isabella Ding</p>
+                      <p className="text-sm text-muted-foreground">Role</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <Image
+                      width={24}
+                      height={24}
+                      alt="avatar"
+                      src="/images/avatar.png"
+                      className="border border-[#D9D9D9] rounded-full object-cover"
+                    />
+
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium">Isabella Ding</p>
+                      <p className="text-sm text-muted-foreground">Role</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-none gap-2 pb-2">
+                <CardHeader className="p-0">
+                  <h3 className="font-semibold text-[#33333399]">TARGET</h3>
+                </CardHeader>
+                <CardContent className='px-0'>
+                  <div className="flex items-center space-x-4">
+                    <Image
+                      width={24}
+                      height={24}
+                      alt="placeholder"
+                      src="/images/placeholder.png"
+                      className="border border-[#D9D9D9] rounded-full object-cover"
+                    />
+
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium">Year 1</p>
+                      <p className="text-sm text-muted-foreground">Learner</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </PopoverContent>
+          </Popover>
         </div>
 
         <div className="border-t border-gray-200 my-4" />
@@ -61,8 +126,8 @@ const EvaluationCard: React.FC<EvaluationData> = ({
             width={16}
             height={16}
             alt="stars"
-            src="/svgs/hotel_class.svg"
             className="object-cover"
+            src="/svgs/hotel_class.svg"
           />{' '}
           {courseName}
         </div>
