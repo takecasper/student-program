@@ -83,15 +83,6 @@ export function EvalTab() {
   if (showAssessments) {
     return (
       <div className="p-6">
-        <div className="mb-4">
-          <button
-            onClick={() => setShowAssessments(false)}
-            className="flex items-center gap-2 text-sm text-primary hover:text-primary/80"
-          >
-            <Image src="/arrow-left.svg" alt="Back" width={20} height={20} />
-            Back to Forms
-          </button>
-        </div>
         <AssessmentList ofMeAssessments={mockAssessments} byMeAssessments={byMeAssessments} />
       </div>
     );
@@ -102,7 +93,13 @@ export function EvalTab() {
       {showEvalPanel ? <EvalSidebar setShowEvalPanel={setShowEvalPanel} /> : <></>}
       <div className="flex flex-row space-x-6">
         {evaluations.map(evaluation => (
-          <EvalCard key={evaluation.id} {...evaluation} onClick={() => (evaluation.completed ? setShowAssessments(true) : setShowEvalPanel(true))} />
+          <EvalCard
+            key={evaluation.id}
+            {...evaluation}
+            onClick={() =>
+              evaluation.completed ? setShowAssessments(true) : setShowEvalPanel(true)
+            }
+          />
         ))}
       </div>
     </div>

@@ -1,6 +1,9 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { ChevronUpIcon, ChevronDownIcon, DownloadIcon } from '@radix-ui/react-icons';
+import { DownloadIcon } from '@radix-ui/react-icons';
 import { Flag } from 'lucide-react';
+import GradeCard from '../GradeCard';
+import { useState } from 'react';
+import { Document, Page, Text, View, StyleSheet, PDFDownloadLink } from '@react-pdf/renderer';
 
 type Trait = {
   label: string;
@@ -15,87 +18,177 @@ const traits: Trait[] = [
   { label: 'Communication', value: 80, color: 'bg-[#00A59B]' },
 ];
 
+// Create styles for PDF
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: 'column',
+    backgroundColor: '#ffffff',
+    padding: 30,
+  },
+  gradeCard: {
+    marginBottom: 30,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 15,
+  },
+  courseInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  courseAvatar: {
+    width: 40,
+    height: 40,
+    backgroundColor: '#d1d5dc',
+    borderRadius: 20,
+  },
+  courseDetails: {
+    gap: 4,
+  },
+  courseTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  courseDate: {
+    fontSize: 10,
+    color: '#6a7282',
+  },
+  yearGrades: {
+    flexDirection: 'row',
+    gap: 28,
+  },
+  yearGrade: {
+    alignItems: 'center',
+    gap: 4,
+  },
+  yearLabel: {
+    fontSize: 10,
+  },
+  gradeValue: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    padding: '4 12',
+    border: '1 solid #d1d5dc',
+    borderRadius: 12,
+  },
+  courseData: {
+    marginLeft: 56,
+    marginTop: 24,
+  },
+  dataGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 84,
+  },
+  dataColumn: {
+    width: '40%',
+  },
+  dataTitle: {
+    fontSize: 12,
+    fontWeight: 'medium',
+    marginBottom: 10,
+  },
+  dataItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  dataLabel: {
+    fontSize: 12,
+  },
+  dataScore: {
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+});
+
+// PDF Document Component
+const GradesPDF = () => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      {Array.from({ length: 4 }).map((_, i) => (
+        <View key={i} style={styles.gradeCard}>
+          <View style={styles.cardHeader}>
+            <View style={styles.courseInfo}>
+              <View style={styles.courseAvatar} />
+              <View style={styles.courseDetails}>
+                <Text style={styles.courseTitle}>Neuroscience</Text>
+                <Text style={styles.courseDate}>Mar 7, 2025 – May 2, 2025</Text>
+              </View>
+            </View>
+            <View style={styles.yearGrades}>
+              {['1st Year', '2nd Year', '3rd Year', '4th Year'].map(year => (
+                <View key={year} style={styles.yearGrade}>
+                  <Text style={styles.yearLabel}>{year}</Text>
+                  <Text style={styles.gradeValue}>88.00</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+          <View style={styles.courseData}>
+            <View style={styles.dataGrid}>
+              {['Assignments', 'iQuiz', 'Lab', 'Exams'].map(section => (
+                <View key={section} style={styles.dataColumn}>
+                  <Text style={styles.dataTitle}>{section}</Text>
+                  {section !== 'Exams' ? (
+                    ['1', '2', '3'].map(num => (
+                      <View key={num} style={styles.dataItem}>
+                        <Text style={styles.dataLabel}>
+                          ↳ {section} {num}
+                        </Text>
+                        <Text style={styles.dataScore}>78.00</Text>
+                      </View>
+                    ))
+                  ) : (
+                    <>
+                      <View style={styles.dataItem}>
+                        <Text style={styles.dataLabel}>↳ Midterm Exam</Text>
+                        <Text style={styles.dataScore}>78.00</Text>
+                      </View>
+                      <View style={styles.dataItem}>
+                        <Text style={styles.dataLabel}>↳ Final Exam</Text>
+                        <Text style={styles.dataScore}>78.00</Text>
+                      </View>
+                    </>
+                  )}
+                </View>
+              ))}
+            </View>
+          </View>
+        </View>
+      ))}
+    </Page>
+  </Document>
+);
+
 export function GradesTab() {
+  const [isGenerating, setIsGenerating] = useState(false);
+
   return (
     <div className="w-full flex">
       {/* Grades Table with ScrollArea */}
       <Card className="border-none shadow-none bg-white w-2/3 rounded-none">
         <CardContent className="p-0 border-r pr-11 border-[#CCCCCC] rounded-none">
-          <div className="flex flex-col gap-8 text-sm font-sans h-[425px] text-[#1B1B1B] bg-white relative overflow-auto pr-1">
+          <div className="flex justify-between mb-7 items-center">
+            <h2 className="font-semibold uppercase text-sm">Undergraduate 2021–2025</h2>
+            <PDFDownloadLink
+              document={<GradesPDF />}
+              fileName="grades-content.pdf"
+              className={`cursor-pointer p-1 border border-[#3333331A] rounded-sm hover:bg-gray-50 ${isGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}
+              onClick={() => setIsGenerating(true)}
+              onLoad={() => setIsGenerating(false)}
+            >
+              {() => <DownloadIcon className="w-4 h-4 text-gray-400" />}
+            </PDFDownloadLink>
+          </div>
+          <div
+            id="grades-content"
+            className="flex flex-col gap-8 text-sm font-sans h-[425px] text-[#1B1B1B] bg-[#fff] relative overflow-auto pr-4"
+          >
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="flex-1 space-y-6">
-                <div>
-                  <div className="flex justify-between">
-                    <h2 className="font-semibold uppercase text-xs">Undergraduate 2021–2025</h2>
-                    <div className="cursor-pointer p-1 border border-[#3333331A] rounded-sm">
-                      <DownloadIcon className="w-4 h-4 text-gray-400" />
-                    </div>
-                  </div>
-                  <div className="flex justify-between mt-7">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-gray-300 mb-6" />
-                      <div>
-                        <p className="font-semibold">Neuroscience</p>
-                        <p className="text-xs text-gray-500">Mar 7, 2025 – May 2, 2025</p>
-                        <button className="text-[#364699] text-xs mt-3 cursor-pointer flex items-center">
-                          Hide Details
-                          <ChevronUpIcon className="w-6 h-4 text-[#364699] ml-3" />
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* YEAR GRADES */}
-                    <div className="flex gap-7 items-center">
-                      {['1st Year', '2nd Year', '3rd Year', '4th Year'].map((label, idx) => (
-                        <div
-                          key={label}
-                          className="text-center flex flex-col justify-between h-full"
-                        >
-                          <p>{label}</p>
-                          <div className="flex items-center justify-center gap-1 border border-gray-300 px-3 py-1 rounded-full">
-                            <p className="font-semibold text-xs">88.00</p>
-                            {idx % 2 === 1 ? (
-                              <ChevronDownIcon className="w-3 h-3 text-red-500" />
-                            ) : (
-                              <ChevronUpIcon className="w-3 h-3 text-green-500" />
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* COURSE DATA */}
-                <div className="grid grid-cols-2 gap-6 gap-x-21 gap-y-8 text-sm">
-                  {['Assignments', 'iQuiz', 'Lab', 'Exams'].map(section => (
-                    <div key={section}>
-                      <h4 className="font-medium mb-2.5">{section}</h4>
-                      {section !== 'Exams' &&
-                        ['1', '2', '3'].map(num => (
-                          <div key={num} className="flex justify-between mb-2.5">
-                            <p>
-                              ↳ {section} {num}
-                            </p>
-                            <p className="font-semibold">78.00</p>
-                          </div>
-                        ))}
-                      {section === 'Exams' && (
-                        <>
-                          <div className="flex justify-between mb-2.5">
-                            <p>↳ Midterm Exam</p>
-                            <p className="font-semibold">78.00</p>
-                          </div>
-                          <div className="flex justify-between mb-2.5">
-                            <p>↳ Final Exam</p>
-                            <p className="font-semibold">78.00</p>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <GradeCard key={i} />
             ))}
           </div>
         </CardContent>
