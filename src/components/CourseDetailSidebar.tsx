@@ -10,6 +10,7 @@ import { CourseDetailSidebarProps } from '@/types/course';
 import { sessionData } from '@/data/sessionData';
 import { handoutsData } from '@/data/handoutsData';
 import { gradesData } from '@/data/gradesData';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 
 export default function CourseDetailSidebar({
   courseName,
@@ -39,7 +40,7 @@ export default function CourseDetailSidebar({
             {sessionData.map((session, index) => (
               <div
                 key={index}
-                className="border border-[#d9d9d9] rounded-[20px] pr-2  flex items-center"
+                className="border border-[#d9d9d9] rounded-[20px] flex items-center px-6 py-4"
               >
                 <div className="flex flex-col items-center justify-center w-20 h-20 rounded-lg mr-4">
                   <span
@@ -62,9 +63,6 @@ export default function CourseDetailSidebar({
                   <div className="flex items-center mb-2">
                     <Clock className="h-4 w-4 text-[#333333] mr-2" />
                     <span className="text-sm text-[#333333]">{session.time}</span>
-                    <span className="ml-4 text-sm  text-[#333333]">
-                      With <span className="font-bold">{session.facilitator}</span>
-                    </span>
                   </div>
                   <div className="flex items-center">
                     <MapPin className="h-4 w-4 text-[#333333] mr-2" />
@@ -72,13 +70,23 @@ export default function CourseDetailSidebar({
                   </div>
                 </div>
 
-                <div className="flex items-center">
-                  <div className="flex -space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-[#b0b1d7] flex items-center justify-center text-xs text-white">
-                      CC
+                <div className="flex flex-col items-center">
+                  <div className="text-sm text-gray-700">
+                    With <span className="font-bold">{session.facilitator}</span>
+                  </div>
+                  <div className="flex items-center mt-2">
+                    <div className="flex -space-x-3">
+                      {Array.from({ length: 3 }).map((_, i) => (
+                        <Avatar key={i} className="w-6 h-6 border-2 border-white">
+                          <AvatarImage src="/avatar.png" alt="avatar" />
+                        </Avatar>
+                      ))}
+                    </div>
+
+                    <div className="-ml-3 border-[0.125rem] border-white bg-gray-200 text-gray-800 text-xs font-bold rounded-full px-2 py-0.5 z-10">
+                      +50
                     </div>
                   </div>
-                  <span className="ml-1 text-xs text-[#6a6eec]">+{session.attendees}</span>
                 </div>
               </div>
             ))}

@@ -33,101 +33,105 @@ export function WalletTab() {
     <div className="w-full pt-6">
       <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6">
         {/* Card Info Section */}
-        <Card className="bg-[#f5f5f5] border-none shadow-none">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-[#333333]">CARD INFO</CardTitle>
-            <div className='flex space-x-1'>
-              {isEditing ?
+        <div className="md:pr-12 md:border-r md:border-[#CCCCCC] h-fit">
+          <Card className="bg-[#f5f5f5] border-none shadow-none">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-[#333333]">CARD INFO</CardTitle>
+              <div className="flex space-x-1">
+                {isEditing ? (
+                  <Button
+                    variant="ghost"
+                    className="h-8 text-[#364699] hover:text-[#364699] hover:bg-[#e5e7f4] px-3 cursor-pointer"
+                    onClick={toggleEdit}
+                  >
+                    Cancel
+                  </Button>
+                ) : (
+                  <></>
+                )}
                 <Button
                   variant="ghost"
                   className="h-8 text-[#364699] hover:text-[#364699] hover:bg-[#e5e7f4] px-3 cursor-pointer"
                   onClick={toggleEdit}
                 >
-                  Cancel
-                </Button>:<></>
-              }
-              <Button
-                variant="ghost"
-                className="h-8 text-[#364699] hover:text-[#364699] hover:bg-[#e5e7f4] px-3 cursor-pointer"
-                onClick={toggleEdit}
-              >
-                {isEditing ? 'Save' : 'Edit'}
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent className="grid gap-4 pt-4">
-            <div className="grid grid-cols-2 items-center">
-              <p className="text-sm text-[#6c6c6c]">Cardholder Name:</p>
-              {isEditing ? (
-                <Input
-                  className="h-8 text-sm bg-white"
-                  value={cardInfo.cardholderName}
-                  onChange={e => handleInputChange('cardholderName', e.target.value)}
-                />
-              ) : (
-                <p className="text-sm">{cardInfo.cardholderName}</p>
-              )}
-            </div>
-            <div className="grid grid-cols-2 items-center">
-              <p className="text-sm text-[#6c6c6c]">Credit Card Number:</p>
-              {isEditing ? (
-                <Input
-                  className="h-8 text-sm bg-white"
-                  value={cardInfo.cardNumber}
-                  onChange={e => handleInputChange('cardNumber', e.target.value)}
-                />
-              ) : (
-                <p className="text-sm">{cardInfo.cardNumber}</p>
-              )}
-            </div>
-            <div className="grid grid-cols-2 items-center">
-              <p className="text-sm text-[#6c6c6c]">CVV Code:</p>
-              {isEditing ? (
-                <Input
-                  className="h-8 text-sm bg-white "
-                  value={cardInfo.cvv}
-                  onChange={e => handleInputChange('cvv', e.target.value)}
-                />
-              ) : (
-                <p className="text-sm">{cardInfo.cvv}</p>
-              )}
-            </div>
-            <div className="grid grid-cols-2 items-center">
-              <p className="text-sm text-[#6c6c6c]">Expiry Date:</p>
-              {isEditing ? (
-                <Input
-                  className="h-8 text-sm bg-white"
-                  value={cardInfo.expiryDate}
-                  onChange={e => handleInputChange('expiryDate', e.target.value)}
-                />
-              ) : (
-                <p className="text-sm">{cardInfo.expiryDate}</p>
-              )}
-            </div>
-            <div className="grid grid-cols-2 items-center">
-              <p className="text-sm text-[#6c6c6c]">Billing Address:</p>
-              {isEditing ? (
-                <Input
-                  className="h-8 text-sm bg-white"
-                  value={cardInfo.billingAddress}
-                  onChange={e => handleInputChange('billingAddress', e.target.value)}
-                />
-              ) : (
-                <p className="text-sm">{cardInfo.billingAddress}</p>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+                  {isEditing ? 'Save' : 'Edit'}
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="grid gap-4 pt-4">
+              <div className="grid grid-cols-2 items-center">
+                <p className="text-sm text-[#6c6c6c]">Cardholder Name:</p>
+                {isEditing ? (
+                  <Input
+                    className="h-8 text-sm bg-white"
+                    value={cardInfo.cardholderName}
+                    onChange={e => handleInputChange('cardholderName', e.target.value)}
+                  />
+                ) : (
+                  <p className="text-sm">{cardInfo.cardholderName}</p>
+                )}
+              </div>
+              <div className="grid grid-cols-2 items-center">
+                <p className="text-sm text-[#6c6c6c]">Credit Card Number:</p>
+                {isEditing ? (
+                  <Input
+                    className="h-8 text-sm bg-white"
+                    value={cardInfo.cardNumber}
+                    onChange={e => handleInputChange('cardNumber', e.target.value)}
+                  />
+                ) : (
+                  <p className="text-sm">{cardInfo.cardNumber}</p>
+                )}
+              </div>
+              <div className="grid grid-cols-2 items-center">
+                <p className="text-sm text-[#6c6c6c]">CVV Code:</p>
+                {isEditing ? (
+                  <Input
+                    className="h-8 text-sm bg-white "
+                    value={cardInfo.cvv}
+                    onChange={e => handleInputChange('cvv', e.target.value)}
+                  />
+                ) : (
+                  <p className="text-sm">{cardInfo.cvv}</p>
+                )}
+              </div>
+              <div className="grid grid-cols-2 items-center">
+                <p className="text-sm text-[#6c6c6c]">Expiry Date:</p>
+                {isEditing ? (
+                  <Input
+                    className="h-8 text-sm bg-white"
+                    value={cardInfo.expiryDate}
+                    onChange={e => handleInputChange('expiryDate', e.target.value)}
+                  />
+                ) : (
+                  <p className="text-sm">{cardInfo.expiryDate}</p>
+                )}
+              </div>
+              <div className="grid grid-cols-2 items-center">
+                <p className="text-sm text-[#6c6c6c]">Billing Address:</p>
+                {isEditing ? (
+                  <Input
+                    className="h-8 text-sm bg-white"
+                    value={cardInfo.billingAddress}
+                    onChange={e => handleInputChange('billingAddress', e.target.value)}
+                  />
+                ) : (
+                  <p className="text-sm">{cardInfo.billingAddress}</p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Transaction History Section */}
-        <Card className="border-none shadow-none">
+        <Card className="border-none shadow-none py-0 gap-0">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-[#333333]">
               TRANSACTION HISTORY
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-4 px-0">
-            <ScrollArea className="h-[300px] pr-4">
+            <ScrollArea className="h-[300px] pr-4 px-6">
               <div className="space-y-0">
                 <div className="py-4 border-b border-[#f5f5f5]">
                   <div className="flex justify-between items-start mb-1">
