@@ -66,7 +66,7 @@ const mockCompetencies: CompetencyGroup[] = [
           name: 'Isabella Ding',
           avatar: '/avatar.png',
         },
-        status: '🗸 Approved',
+        status: 'Approved',
       },
       {
         id: 'proc2',
@@ -86,7 +86,7 @@ const mockCompetencies: CompetencyGroup[] = [
           name: 'Isabella Ding',
           avatar: '/avatar.png',
         },
-        status: '🗸 Approved',
+        status: 'Approved',
       },
       {
         id: 'proc3',
@@ -105,7 +105,7 @@ const mockCompetencies: CompetencyGroup[] = [
           name: 'Isabella Ding',
           avatar: '/avatar.png',
         },
-        status: '🗸 Approved',
+        status: 'Approved',
       },
     ],
   },
@@ -262,7 +262,46 @@ export default function ProcedurePage() {
                         </div>
                       </TableCell>
                       <TableCell className="py-4 px-4">
-                        <div className="text-white bg-[#00A59B] font-semibold rounded-[10px] px-4 py-2">
+                        <div className="text-white bg-[#00A59B] font-semibold rounded-[10px] px-4 py-2 flex items-center gap-1">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="white"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <mask
+                              id="mask0_1770_27501"
+                              style={{ maskType: 'alpha' }}
+                              maskUnits="userSpaceOnUse"
+                              x="0"
+                              y="0"
+                              width="16"
+                              height="16"
+                            >
+                              <rect
+                                x="0.5"
+                                y="0.5"
+                                width="15"
+                                height="15"
+                                fill="#D9D9D9"
+                                stroke="white"
+                              />
+                            </mask>
+                            <g mask="url(#mask0_1770_27501)">
+                              <path
+                                d="M6.66667 10.9327L4 8.26602L4.93333 7.33268L6.66667 9.06602L11.0667 4.66602L12 5.59935L6.66667 10.9327Z"
+                                fill="white"
+                                fill-opacity="1"
+                              />
+                              <path
+                                d="M11.9824 5.59961L6.66699 10.915L4.01758 8.26562L4.93262 7.34961L6.66699 9.08398L6.67578 9.0752L11.0664 4.68359L11.9824 5.59961Z"
+                                stroke="white"
+                                stroke-opacity="1"
+                                stroke-width="0.5"
+                              />
+                            </g>
+                          </svg>
                           {procedure.status}
                         </div>
                       </TableCell>

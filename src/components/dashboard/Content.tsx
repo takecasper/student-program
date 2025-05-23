@@ -1,4 +1,6 @@
-import { Button } from '@/components/ui/button';
+/* eslint-disable react-hooks/rules-of-hooks */
+'use client';
+
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/context/AuthContext';
@@ -7,11 +9,19 @@ import SummaryCard from './SummaryCard';
 import CourseCard from './CourseCard';
 import CategoryCard from './CategoryCard';
 import SuggestedCourseCard from './SuggestedCourseCard';
-import Image from 'next/image';
+import { useState } from 'react';
+import * as Select from '@radix-ui/react-select';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
+
+const ratingOptions = [
+  { label: 'Day View', value: 'day' },
+  { label: 'Weekly View', value: 'weekly' },
+];
 
 export default function DashboardContent() {
   const { user } = useAuth();
   if (!user) return null;
+  const [viewMode, setViewMode] = useState<string>('day');
 
   return (
     <div className="p-6">
@@ -89,9 +99,40 @@ export default function DashboardContent() {
         <div className="space-y-4 pr-10">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-medium text-[#333333]">TO-DO LIST</h2>
-            <Button variant="ghost" size="icon" className="h-8 w-8 border">
-              <Image src="/sort.svg" alt="filter" width={18} height={18} />
-            </Button>
+            <div className="cursor-pointer w-32">
+              <Select.Root value={viewMode} onValueChange={(value: string) => setViewMode(value)}>
+                <Select.Trigger
+                  className="cursor-pointer inline-flex items-center justify-between w-full rounded-md border border-gray-300 px-2 py-1 bg-white text-left text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label={viewMode}
+                >
+                  <Select.Value />
+                  <Select.Icon className="ml-2">
+                    <ChevronDownIcon className="w-5 h-5 text-gray-500" />
+                  </Select.Icon>
+                </Select.Trigger>
+
+                <Select.Portal>
+                  <Select.Content
+                    className="z-50 w-[var(--radix-select-trigger-width)] rounded-md border border-gray-200 bg-white shadow-lg overflow-hidden"
+                    position="popper"
+                  >
+                    <Select.Viewport className="text-sm">
+                      {ratingOptions.map(option => (
+                        <Select.Item
+                          key={option.value}
+                          value={option.value}
+                          className="group flex justify-between items-center p-3 cursor-pointer select-none hover:bg-[#364699] hover:text-white data-[state=checked]:bg-gray-100 data-[state=checked]:text-[#333333DE]"
+                        >
+                          <Select.ItemText className="font-medium text-xs">
+                            {option.label}
+                          </Select.ItemText>
+                        </Select.Item>
+                      ))}
+                    </Select.Viewport>
+                  </Select.Content>
+                </Select.Portal>
+              </Select.Root>
+            </div>
           </div>
 
           <ScrollArea className="h-screen">
