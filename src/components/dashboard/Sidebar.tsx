@@ -10,7 +10,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 import { useUserStore } from '@/store/user';
 
-import WorkflowIcon from '../../../public/svgs/workflow.svg';
+import SchoolIcon from '../../../public/svgs/workflow.svg';
+import WorkflowIcon from '../../../public/svgs/school.svg';
 import DashboardIcon from '../../../public/svgs/dashboard.svg';
 import GolfCourseIcon from '../../../public/svgs/golf_course.svg';
 import CalendarIcon from '../../../public/svgs/calendar_month.svg';
@@ -106,7 +107,9 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
               <SidebarNavItem
                 label="Procedure Log"
                 href="/dashboard/procedure"
-                icon={<Image src="/svgs/schedule.svg" width={16} height={16} alt="procedure logs" />}
+                icon={
+                  <Image src="/svgs/schedule.svg" width={16} height={16} alt="procedure logs" />
+                }
               />
             )}
 
@@ -144,33 +147,14 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
           <SidebarNavItem
             label="Admission"
             isFooterItem={true}
-            href="/dashboard/admission"
+            href={`${userType === 'student' ? '/dashboard/my-admission' : '/dashboard/admission'}`}
             icon={
-              <svg
-                width="16"
-                height="16"
-                fill="none"
-                viewBox="0 0 24 24"
-                className="h-4 w-4"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 15L12 2M12 2L8 6M12 2L16 6"
-                />
-                <path
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8 22H16C19.3137 22 22 19.3137 22 16V12H18M2 12V16C2 19.3137 4.68629 22 8 22"
-                />
-              </svg>
+              <SchoolIcon
+                className={`${pathname === '/dashboard/my-admission' || pathname === '/dashboard/admission' ? 'fill-[#364799]' : 'fill-[#818181]'}`}
+              />
             }
           />
+
           <SidebarNavItem
             label="Marketplace"
             isFooterItem={true}
