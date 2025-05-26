@@ -1,7 +1,10 @@
+'use client';
+
+import type React from 'react';
+
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import { Info, FilePenLine } from 'lucide-react';
-import * as Select from '@radix-ui/react-select';
 import { useState, useRef, useEffect } from 'react';
 import * as Accordion from '@radix-ui/react-accordion';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
@@ -64,7 +67,11 @@ const EvalSidebar = ({ setShowEvalPanel }: { setShowEvalPanel: Function }) => {
   }, []);
 
   const handleChange = (field: keyof typeof ratings, value: string) => {
-    setRatings({ ...ratings, [field]: value });
+    try {
+      setRatings(prev => ({ ...prev, [field]: value }));
+    } catch (error) {
+      console.error('Error updating ratings:', error);
+    }
   };
 
   const backStep = () => {
@@ -75,13 +82,18 @@ const EvalSidebar = ({ setShowEvalPanel }: { setShowEvalPanel: Function }) => {
     setStep(step + 1);
   };
 
+  // Prevent event propagation to avoid click outside handler conflicts
+  const handleContentClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
     <div
       ref={wrapperRef}
-      className=" absolute z-10 right-4 top-[85px] h-[calc(100vh-101px)] w-full md:w-2/5 lg:w-1/3 border-l border-gray-200 bg-white p-[35px] shadow-md font-sans max-w-[485px]"
+      className="absolute z-10 right-4 top-[85px] h-[calc(100vh-101px)] w-full md:w-2/5 lg:w-1/3 border-l border-gray-200 bg-white shadow-md font-sans max-w-[485px] flex flex-col overflow-hidden"
     >
       {/* Header Info */}
-      <div className="text-[16px] text-[#1B1B1B] mb-5 space-y-1 leading-snug">
+      <div className="text-[16px] text-[#1B1B1B] mb-5 space-y-1 leading-snug px-[35px] pt-[35px]">
         <p>
           <span className="font-medium">Evaluated by:</span>{' '}
           <span className="text-[#00A6A7] cursor-pointer">Frank H Netter MD</span>
@@ -95,22 +107,26 @@ const EvalSidebar = ({ setShowEvalPanel }: { setShowEvalPanel: Function }) => {
       </div>
 
       {/* Title */}
-      <h2 className="text-[20px] font-semibold text-[#1B1B1B] mb-1">
-        Year 3 Student Clinical Performance Assessment
-      </h2>
-      <p className="text-[16px] text-[#666666] mb-4">
-        <span className="text-[#D32F2F] font-medium">*</span> indicates a mandatory response
-      </p>
+      <div className="px-[35px]">
+        <h2 className="text-[20px] font-semibold text-[#1B1B1B] mb-1">
+          Year 3 Student Clinical Performance Assessment
+        </h2>
+        <p className="text-[16px] text-[#666666] mb-4">
+          <span className="text-[#D32F2F] font-medium">*</span> indicates a mandatory response
+        </p>
+      </div>
 
       {/* Buttons */}
-      <div className="flex space-x-2 mb-5">
+      <div className="flex space-x-2 mb-5 px-[35px]">
         <button
+          onClick={() => setStep(0)}
           className={`flex items-center gap-1 ${step === 0 ? 'bg-[#364699] text-white border border-[#2D3EEC] hover:bg-blue-700' : 'bg-white text-[#1B1B1B] border border-gray-300 hover:bg-gray-100'} text-[10px] font-medium px-5 py-1.5 rounded-full  cursor-pointer`}
         >
-          <Info width={14} height={14} className={`${step === 0 ? 'text-white': 'text-[#333]'}`}/>
+          <Info width={14} height={14} className={`${step === 0 ? 'text-white' : 'text-[#333]'}`} />
           GUIDE
         </button>
         <button
+          onClick={() => setStep(1)}
           className={`flex items-center gap-1 ${step > 0 ? 'bg-[#364699] text-white border border-[#2D3EEC] hover:bg-blue-700' : 'bg-white text-[#1B1B1B] border border-gray-300 hover:bg-gray-100'} text-[10px] font-medium px-5 py-1.5 rounded-full  cursor-pointer`}
         >
           <FilePenLine width={14} height={14} />
@@ -119,7 +135,7 @@ const EvalSidebar = ({ setShowEvalPanel }: { setShowEvalPanel: Function }) => {
       </div>
 
       {/* Instructions */}
-      <div className="text-[16px] text-[#1B1B1B] leading-[22px] space-y-4 relative overflow-auto h-[495px] p-1">
+      <div className="flex-1 text-[16px] text-[#1B1B1B] leading-[22px] space-y-4 overflow-y-auto px-[35px] pb-[70px]">
         {step == 0 ? (
           <>
             <h3 className="font-medium">
@@ -138,8 +154,8 @@ const EvalSidebar = ({ setShowEvalPanel }: { setShowEvalPanel: Function }) => {
                   us)
                 </li>
                 <li>
-                  If you were not able to observe performance in a competency, check the “N/A” box.
-                  This will not reflect negatively on you or the student.
+                  If you were not able to observe performance in a competency, check the
+                  &quot;N/A&quot; box. This will not reflect negatively on you or the student.
                 </li>
               </ul>
             </div>
@@ -277,39 +293,21 @@ const EvalSidebar = ({ setShowEvalPanel }: { setShowEvalPanel: Function }) => {
                     {label} <span className="text-red-500">*</span>
                   </label>
 
-                  <Select.Root
-                    value={ratings[key as keyof typeof ratings]}
-                    onValueChange={value => handleChange(key as keyof typeof ratings, value)}
-                  >
-                    <Select.Trigger
-                      className="inline-flex items-center justify-between w-full rounded-md border border-gray-300 px-3 py-2 bg-white text-left text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  <div className="relative">
+                    <select
+                      value={ratings[key as keyof typeof ratings]}
+                      onChange={e => handleChange(key as keyof typeof ratings, e.target.value)}
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 bg-white text-left text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
                       aria-label={label}
                     >
-                      <Select.Value />
-                      <Select.Icon className="ml-2">
-                        <ChevronDownIcon className="w-5 h-5 text-gray-500" />
-                      </Select.Icon>
-                    </Select.Trigger>
-
-                    <Select.Portal>
-                      <Select.Content
-                        className="z-50 w-[var(--radix-select-trigger-width)] rounded-md border border-gray-200 bg-white shadow-lg"
-                        position="popper"
-                      >
-                        <Select.Viewport className="p-1 text-sm">
-                          {ratingOptions.map(option => (
-                            <Select.Item
-                              key={option}
-                              value={option}
-                              className="group flex justify-between items-center px-4 py-3 rounded-md cursor-pointer select-none hover:bg-gray-100 data-[state=checked]:bg-gray-100"
-                            >
-                              <Select.ItemText className="font-medium">{option}</Select.ItemText>
-                            </Select.Item>
-                          ))}
-                        </Select.Viewport>
-                      </Select.Content>
-                    </Select.Portal>
-                  </Select.Root>
+                      {ratingOptions.map(option => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDownIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none" />
+                  </div>
                 </div>
               ))}
             </div>
@@ -328,13 +326,16 @@ const EvalSidebar = ({ setShowEvalPanel }: { setShowEvalPanel: Function }) => {
                   </Accordion.Trigger>
 
                   {/* Dropdown Panel */}
-                  <Accordion.Content className="border border-t-0 border-gray-300 bg-white rounded-b-md shadow-sm overflow-hidden animate-slideDown">
+                  <Accordion.Content
+                    className="border border-t-0 border-gray-300 bg-white rounded-b-md shadow-sm overflow-hidden animate-slideDown"
+                    onClick={handleContentClick}
+                  >
                     {labels.map((option, idx) => (
                       <div
                         key={option.value}
                         onClick={() => setSelected(option.value)}
                         className={`flex justify-between items-start px-4 py-2 cursor-pointer hover:bg-gray-100 text-sm ${
-                          idx !== ratingOptions.length - 1 ? 'border-b border-gray-200' : ''
+                          idx !== labels.length - 1 ? 'border-b border-gray-200' : ''
                         }`}
                       >
                         <span className="font-medium">{option.value}</span>
