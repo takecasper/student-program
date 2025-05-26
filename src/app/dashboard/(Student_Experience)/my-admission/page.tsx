@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -16,6 +18,7 @@ import { Label } from '@/components/ui/label';
 import Image from 'next/image';
 import { countries } from '@/lib/countries'; // We'll create this file next
 import Flag from 'react-world-flags';
+import CasperPrepare from '@/components/addmission/Prepare';
 
 // First, create types for our step structure
 interface Step {
@@ -663,6 +666,7 @@ export default function AdmissionContent() {
     testDate: undefined,
   });
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
+  const [showPrepare, setShowPrepare] = useState<boolean>(false);
 
   const filters = ['ALL', 'CASPER', 'DUET', 'SNAPSHOT'];
 
@@ -818,7 +822,9 @@ export default function AdmissionContent() {
     setShowSuccessScreen(true);
   };
 
-  return (
+  return showPrepare ? (
+    <CasperPrepare />
+  ) : (
     <div className="p-6 relative">
       {/* Apply for a new program section */}
       <div className="mb-10">
@@ -871,13 +877,15 @@ export default function AdmissionContent() {
           {filteredTests.map(test => (
             <Card
               key={test.id}
-              className="w-[234px] h-[240px] border border-[#D9D9D9] shadow-none rounded-[20px] overflow-hidden"
+              onClick={() => setShowPrepare(true)}
+              className="w-[234px] h-[240px] border border-[#D9D9D9] shadow-none rounded-[20px] overflow-hidden py-3 cursor-pointer"
             >
-              <div className="relative h-[150px] bg-[#b0b1d7]">
-                <div className="absolute top-3 right-3 bg-[#fcedca] text-[#333333] text-xs font-medium py-1 px-3 rounded-full z-10">
+              <div className="relative h-[150px] bg-white">
+                <div className="absolute top-3 right-5 bg-[#fcedca] text-[#333333] text-xs font-medium py-1 px-3 rounded-full z-10">
                   {test.status}
                 </div>
                 <Image
+                  className="m-auto rounded-2xl"
                   src={test.image || '/placeholder.svg'}
                   alt={`${test.type} test`}
                   width={215}
