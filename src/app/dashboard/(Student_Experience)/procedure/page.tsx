@@ -1,18 +1,18 @@
 'use client';
-
-import { ChevronDown, ChevronUp, Plus } from 'lucide-react';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import { ChevronDown, ChevronUp, Plus, X } from 'lucide-react';
 
 import {
   Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
   TableRow,
+  TableBody,
+  TableHead,
+  TableCell,
+  TableHeader,
 } from '@/components/ui/table';
-import { useState } from 'react';
+import SearchInput from './components/SearchInput';
+import { Button } from '@/components/ui/button';
 
 interface Procedure {
   id: string;
@@ -128,24 +128,36 @@ const mockCompetencies: CompetencyGroup[] = [
 ];
 
 export default function ProcedurePage() {
+  const [open, setOpen] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
 
   const handleRowClick = (competencyId: string) => {
     setExpandedRow(expandedRow === competencyId ? null : competencyId);
   };
 
+  const handleAddNew = () => {
+    setShowSidebar(true);
+  };
+
+  const handleHideSidebar = () => {
+    setShowSidebar(false);
+  };
+
   return (
-    <div className="p-6">
+    <div className="relative p-6  w-full min-h-[calc(100vh_-_103px)]">
       {/* Header */}
       <div className="flex justify-between items-center mb-8 px-10">
         <h1 className="text-xl font-medium text-[#333333]">Procedure Log</h1>
         <Image src="/svgs/system_update.svg" alt="calendar" width={16} height={16} />
       </div>
 
-      <div className="w-full px-10">
+      <div className="relative w-full px-10">
+        {open && <SearchInput setOpen={setOpen} />}
+
         <Table>
-          <TableHeader className="bg-[#D9D9D91A]">
-            <TableRow className="border-b border-[#f5f5f5]">
+          <TableHeader className="bg-[#D9D9D91A] cursor-pointer">
+            <TableRow onClick={() => setOpen(true)} className="border-b border-[#f5f5f5]">
               <TableHead className="w-10 border-r border-[#f5f5f5]"></TableHead>
               <TableHead className="text-[#6c6c6c] font-medium border-r border-[#f5f5f5] px-2">
                 Competency Name
@@ -163,10 +175,10 @@ export default function ProcedurePage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {mockCompetencies.map(competency => (
+            {mockCompetencies.map((competency, index) => (
               <>
                 <TableRow
-                  key={competency.id}
+                  key={index}
                   className="border-b border-[#f5f5f5] cursor-pointer hover:bg-gray-50"
                   onClick={() => handleRowClick(competency.id)}
                 >
@@ -314,14 +326,41 @@ export default function ProcedurePage() {
 
         {/* Add New Button */}
         <div className="mt-6">
-          <Button variant="link" className="text-[#364699] hover:no-underline">
-            <div className="bg-[#364699] p-2 rounded-[8px] mr-2">
+          <Button
+            onClick={handleAddNew}
+            variant="link"
+            className="text-[#364699] hover:no-underline"
+          >
+            <div className="bg-[#364699] cursor-pointer p-2 rounded-[8px] mr-2">
               <Plus className="w-4 h-4 text-white" />
             </div>
             Add New
           </Button>
         </div>
       </div>
+
+      {showSidebar && (
+        <div className="absolute top-0 right-0 bottom-0 z-40 flex justify-end h-full">
+          <div className="bg-white w-[485px] py-[20px] px-[24px] h-full overflow-y-auto shadow-lg border-l border-[#f5f5f5] animate-in slide-in-from-right">
+            <div className="mb-10 flex items-center justify-between">
+              <h5 className="text-[16px] font-bold text-[#333333DE] p-0">
+                CLINICAL EXPERIENCE LOGBOOK
+              </h5>
+
+              <Button
+                size="icon"
+                variant="outline"
+                onClick={handleHideSidebar}
+                className="cursor-pointer rounded-[4px] h-[24px] w-[24px] border-[#d9d9d9]"
+              >
+                <X className="h-4 w-4 text-[#333333DE]" />
+              </Button>
+            </div>
+
+            {/* Content here */}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
