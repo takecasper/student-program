@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
@@ -16,11 +15,10 @@ import { Check, Plus, X } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import Image from 'next/image';
-import { countries } from '@/lib/countries'; // We'll create this file next
+import { countries } from '@/lib/countries';
 import Flag from 'react-world-flags';
 import CasperPrepare from '@/components/addmission/Prepare';
 
-// First, create types for our step structure
 interface Step {
   id: number;
   title: string;
@@ -755,13 +753,29 @@ export default function AdmissionContent() {
       }
     };
 
+    const isNotLastStep = step.id < ADMISSION_STEPS.length;
+
     return (
       <div key={step.id} className="relative">
-        <div className="flex flex-col items-start">
+        {/* Connecting line - show for all steps except the last one */}
+        {isNotLastStep && (
+          <div className="absolute left-4 top-8 bottom-0 w-0.5 bg-gray-200 z-0">
+            {/* Active line portion */}
+            <div
+              className={`w-full transition-all duration-300 ${
+                currentStep > step.id ? 'bg-[#00a59b] h-full' : 'bg-gray-200 h-0'
+              }`}
+            />
+          </div>
+        )}
+
+        <div className="flex flex-col items-start relative z-10">
           <div className="flex items-start gap-2">
             <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                currentStep >= step.id ? 'bg-[#00a59b] text-white' : 'bg-[#f5f5f5] text-[#6c6c6c]'
+              className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
+                currentStep >= step.id
+                  ? 'bg-[#00a59b] text-white border-[#00a59b]'
+                  : 'bg-white text-[#6c6c6c] border-gray-200'
               }`}
             >
               {currentStep > step.id ? <Check className="h-5 w-5" /> : <span>{step.id}</span>}
@@ -772,7 +786,7 @@ export default function AdmissionContent() {
           </div>
         </div>
 
-        <div className="ml-10">
+        <div className="ml-10 relative z-10">
           <div className="flex flex-col gap-2">
             <p className="text-xs text-[#6c6c6c]">{step.description}</p>
             {step.infoText && (
@@ -790,15 +804,18 @@ export default function AdmissionContent() {
             />
           </div>
 
-          <div className="mt-6">
-            <Button
-              className="rounded-full py-1 px-[23px] bg-[#364699] hover:bg-[#253170] disabled:opacity-50"
-              onClick={handleStepComplete}
-              disabled={!isStepValid()}
-            >
-              Next
-            </Button>
-          </div>
+          {/* Only show Next button if this is the current step */}
+          {currentStep === step.id && (
+            <div className="mt-6 mb-8">
+              <Button
+                className="rounded-full py-1 px-[23px] bg-[#364699] hover:bg-[#253170] disabled:opacity-50"
+                onClick={handleStepComplete}
+                disabled={!isStepValid()}
+              >
+                Next
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     );
