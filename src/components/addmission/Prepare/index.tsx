@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import CheckTab from './CheckTab';
+import WebcamCheck from './WebcamCheck';
 import CasperTestInterface from './CasperTestInterface';
 
 export default function CasperPrepare() {
@@ -43,15 +44,6 @@ export default function CasperPrepare() {
   const [showCheckTab, setShowCheckTab] = useState<boolean>(false);
   const [showTestInterface, setShowTestInterface] = useState<boolean>(false);
 
-  // Change the type to allow string values
-  const [completedChecks, setCompletedChecks] = useState<(boolean | string)[]>([
-    false, // Browser & Internet Speed Test
-    true, // Webcam Check - set to true by default
-    false, // Microphone Check
-    false, // Video Player Check
-    false, // Video Recording Check
-  ]);
-
   const checkSteps = [
     'Browser & Internet Speed Test',
     'Webcam Check',
@@ -59,6 +51,7 @@ export default function CasperPrepare() {
     'Video Player Check',
     'Video Recording Check',
   ];
+  const [checkStage, setCheckStage] = useState<number>(1);
 
   // If showing test interface, render it instead
   if (showTestInterface) {
@@ -200,192 +193,49 @@ export default function CasperPrepare() {
         (showCheckTab ? (
           <>
             <div className="relative">
-              {checkSteps.map((title, i) => (
-                <div key={i} className="flex flex-col">
-                  <div className="flex gap-4.5">
-                    <div className="shrink-0 w-6 h-6 rounded-full bg-[#F5F5F5] text-[#22C55E] text-sm flex items-center justify-center">
-                      {i + 1}
+              {checkSteps.map((title, i) => {
+                const isCompleted = i + 1 <= checkStage; // mark only first step as completed
+                return (
+                  <div key={i} className="flex flex-col">
+                    <div className="flex gap-4.5 items-center">
+                      <div
+                        className={`shrink-0 w-6 h-6 rounded-full text-sm flex items-center justify-center font-normal ${
+                          isCompleted ? 'bg-[#22C55E] text-white' : 'bg-[#F5F5F5] text-[#22C55E]'
+                        }`}
+                      >
+                        {isCompleted ? '✔' : i + 1}
+                      </div>
+                      <span
+                        className="text-xl font-bold cursor-pointer"
+                        onClick={() => setCheckStage(i)}
+                      >
+                        {title}
+                      </span>
                     </div>
-                    <span className="text-xl font-bold">{title}</span>
+                    <div
+                      className={`pb-4 border-l-6 ml-[9px] my-2 pl-6.5 ${
+                        checkSteps.length === i + 1
+                          ? 'border-none'
+                          : isCompleted
+                            ? 'border-[#22C55E]'
+                            : 'border-[#F5F5F5]'
+                      }`}
+                    >
+                      {i === 0 && checkStage === 0 && <CheckTab />}
+
+                      {i === 0 && isCompleted && checkStage !== 0 && (
+                        <p className="text-[#33333399] text-xs">Download Bitrate Approved!</p>
+                      )}
+
+                      {i === 1 && checkStage === 1 && <WebcamCheck />}
+
+                      {i === 1 && isCompleted && checkStage !== 1 && (
+                        <p className="text-[#33333399] text-xs">Download Bitrate Approved!</p>
+                      )}
+                    </div>
                   </div>
-                  <div className="pb-4 border-l-6 border-[#F5F5F5] ml-[9px] my-2 pl-6.5">
-                    {i === 0 && <CheckTab />}
-                    {i === 1 && (
-                      <div className="flex items-center gap-2 text-green-600">
-                        <span>✅</span>
-                        <span className="text-sm">Webcam check completed successfully</span>
-                      </div>
-                    )}
-                    {i === 2 && (
-                      <div className="space-y-4">
-                        {completedChecks[2] ? (
-                          <div className="flex items-center gap-2 text-green-600">
-                            <span>✅</span>
-                            <span className="text-sm">
-                              Success! Your microphone is functioning properly
-                            </span>
-                          </div>
-                        ) : (
-                          <>
-                            <p className="text-sm text-gray-600">
-                              Select your microphone. To minimize potential recording issues, we
-                              recommend not using wireless inputs (like Air pods), if possible.
-                            </p>
-
-                            <div className="space-y-3">
-                              <div>
-                                <span className="text-sm font-medium">
-                                  1. Select your microphone
-                                </span>
-                                <div className="mt-2">
-                                  <select className="w-full p-3 border border-gray-300 rounded-md text-sm bg-white">
-                                    <option>Default - Macbook Pro Microphone(Built-in)</option>
-                                  </select>
-                                </div>
-                              </div>
-
-                              <div>
-                                <span className="text-sm font-medium">2. Say a few words</span>
-                                <div className="mt-2 space-y-2">
-                                  <div className="flex items-center gap-1">
-                                    {Array.from({ length: 20 }, (_, index) => (
-                                      <div
-                                        key={index}
-                                        className={`w-3 h-6 rounded-sm ${
-                                          index < 15 ? 'bg-teal-500' : 'bg-gray-200'
-                                        }`}
-                                      />
-                                    ))}
-                                  </div>
-                                  <span className="text-xs text-gray-500">Input Level</span>
-                                </div>
-                              </div>
-
-                              <button
-                                onClick={() => {
-                                  const newChecks = [...completedChecks];
-                                  newChecks[2] = true;
-                                  setCompletedChecks(newChecks);
-                                }}
-                                className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700"
-                              >
-                                Complete Check
-                              </button>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    )}
-                    {i === 3 && (
-                      <div className="space-y-4">
-                        {completedChecks[3] ? (
-                          <div className="flex items-center gap-2 text-green-600">
-                            <span>✅</span>
-                            <span className="text-sm">
-                              Video player check completed successfully
-                            </span>
-                          </div>
-                        ) : (
-                          <>
-                            <div className="space-y-3">
-                              <p className="text-sm text-gray-600">
-                                On the next page, we will play a short 10-second video to test your
-                                browser&apos;s ability to display the Casper test video scenarios
-                                without difficulties.
-                              </p>
-
-                              <p className="text-sm text-gray-600">
-                                If you do not experience any technical issues with the audio or
-                                video, your browser should be able to display the Casper test video
-                                scenarios without difficulties.
-                              </p>
-
-                              <p className="text-sm text-gray-600">
-                                Under the video, you will be able to indicate whether the video
-                                played successfully after it ends. Instructions will be provided if
-                                you experience any technical issues (e.g. no sound or no image).
-                              </p>
-
-                              <button
-                                onClick={() => {
-                                  const newChecks = [...completedChecks];
-                                  newChecks[3] = 'playing';
-                                  setCompletedChecks(newChecks);
-                                }}
-                                className="bg-[#364699] text-white py-3 px-8 rounded-full text-sm font-medium hover:bg-[#2538A8] transition cursor-pointer"
-                              >
-                                Proceed
-                              </button>
-                            </div>
-                          </>
-                        )}
-
-                        {completedChecks[3] === 'playing' && (
-                          <div className="space-y-4">
-                            <p className="text-sm text-gray-600">
-                              If you don&apos;t hear audio with this video, please refresh your
-                              browser. This clip is only 10 seconds long.
-                            </p>
-
-                            <div className="bg-gray-800 rounded-lg aspect-video flex items-center justify-center relative">
-                              <button className="w-16 h-16 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition">
-                                <svg
-                                  className="w-6 h-6 ml-1"
-                                  fill="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path d="M8 5v14l11-7z" />
-                                </svg>
-                              </button>
-                            </div>
-
-                            <div className="space-y-3">
-                              <p className="text-sm text-gray-600">
-                                Please answer the question below before proceeding:
-                              </p>
-
-                              <div className="space-y-2">
-                                <p className="text-sm font-medium">
-                                  Did the video and audio play properly?
-                                </p>
-
-                                <div className="space-y-2">
-                                  <label className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                      type="radio"
-                                      name="videoCheck"
-                                      value="yes"
-                                      className="w-4 h-4 text-blue-600"
-                                      onChange={() => {
-                                        const newChecks = [...completedChecks];
-                                        newChecks[3] = true;
-                                        setCompletedChecks(newChecks);
-                                      }}
-                                    />
-                                    <span className="text-sm">Yes, the video played properly.</span>
-                                  </label>
-
-                                  <label className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                      type="radio"
-                                      name="videoCheck"
-                                      value="no"
-                                      className="w-4 h-4 text-blue-600"
-                                    />
-                                    <span className="text-sm">
-                                      No, I had trouble playing the video properly.
-                                    </span>
-                                  </label>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </>
         ) : (

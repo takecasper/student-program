@@ -37,6 +37,7 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "^19.0.0",
     "react-phone-input-2": "^2.15.1",
+    "react-webcam": "^7.2.0",
     "react-world-flags": "^1.6.0",
     "tailwind-merge": "^3.0.2",
     "tw-animate-css": "^1.2.4",
