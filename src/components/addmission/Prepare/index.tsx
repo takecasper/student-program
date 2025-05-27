@@ -41,6 +41,7 @@ export default function CasperPrepare() {
   ];
   const [state, setState] = useState<string>('prepare');
   const [showCheckTab, setShowCheckTab] = useState<boolean>(false);
+
   const checkSteps = [
     'Browser & Internet Speed Test',
     'Webcam Check',

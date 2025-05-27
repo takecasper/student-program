@@ -11,8 +11,9 @@ import {
   TableCell,
   TableHeader,
 } from '@/components/ui/table';
-import SearchInput from './components/SearchInput';
+import AddNewForm from './components/AddNew';
 import { Button } from '@/components/ui/button';
+import SearchInput from './components/SearchInput';
 
 interface Procedure {
   id: string;
@@ -128,7 +129,7 @@ const mockCompetencies: CompetencyGroup[] = [
 ];
 
 export default function ProcedurePage() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
 
@@ -358,6 +359,7 @@ export default function ProcedurePage() {
             </div>
 
             {/* Content here */}
+            <AddNewForm />
           </div>
         </div>
       )}
