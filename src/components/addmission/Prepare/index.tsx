@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import CheckTab from './CheckTab';
+import WebcamCheck from './WebcamCheck';
 
 export default function CasperPrepare() {
   const steps = [
@@ -47,6 +48,7 @@ export default function CasperPrepare() {
     'Video Player Check',
     'Video Recording Check',
   ];
+  const [checkStage, setCheckStage] = useState<number>(1);
 
   return (
     <div className="bg-white py-6 px-16 md:px-26 md:py-10 text-gray-800 flex flex-col md:flex-row gap-10">
@@ -177,19 +179,49 @@ export default function CasperPrepare() {
         (showCheckTab ? (
           <>
             <div className="relative">
-              {checkSteps.map((title, i) => (
-                <div key={i} className="flex flex-col">
-                  <div className="flex gap-4.5">
-                    <div className="shrink-0 w-6 h-6 rounded-full bg-[#F5F5F5] text-[#22C55E] text-sm flex items-center justify-center">
-                      {i + 1}
+              {checkSteps.map((title, i) => {
+                const isCompleted = i + 1 <= checkStage; // mark only first step as completed
+                return (
+                  <div key={i} className="flex flex-col">
+                    <div className="flex gap-4.5 items-center">
+                      <div
+                        className={`shrink-0 w-6 h-6 rounded-full text-sm flex items-center justify-center font-normal ${
+                          isCompleted ? 'bg-[#22C55E] text-white' : 'bg-[#F5F5F5] text-[#22C55E]'
+                        }`}
+                      >
+                        {isCompleted ? '✔' : i + 1}
+                      </div>
+                      <span
+                        className="text-xl font-bold cursor-pointer"
+                        onClick={() => setCheckStage(i)}
+                      >
+                        {title}
+                      </span>
                     </div>
-                    <span className="text-xl font-bold">{title}</span>
+                    <div
+                      className={`pb-4 border-l-6 ml-[9px] my-2 pl-6.5 ${
+                        checkSteps.length === i + 1
+                          ? 'border-none'
+                          : isCompleted
+                            ? 'border-[#22C55E]'
+                            : 'border-[#F5F5F5]'
+                      }`}
+                    >
+                      {i === 0 && checkStage === 0 && <CheckTab />}
+
+                      {i === 0 && isCompleted && checkStage !== 0 && (
+                        <p className="text-[#33333399] text-xs">Download Bitrate Approved!</p>
+                      )}
+
+                      {i === 1 && checkStage === 1 && <WebcamCheck />}
+
+                      {i === 1 && isCompleted && checkStage !== 1 && (
+                        <p className="text-[#33333399] text-xs">Download Bitrate Approved!</p>
+                      )}
+                    </div>
                   </div>
-                  <div className="pb-4 border-l-6 border-[#F5F5F5] ml-[9px] my-2 pl-6.5">
-                    {i === 0 && <CheckTab />}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </>
         ) : (
