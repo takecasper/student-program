@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import CheckTab from './CheckTab';
 import WebcamCheck from './WebcamCheck';
+import CasperTestInterface from './CasperTestInterface';
 
 export default function CasperPrepare() {
   const steps = [
@@ -41,6 +42,7 @@ export default function CasperPrepare() {
   ];
   const [state, setState] = useState<string>('prepare');
   const [showCheckTab, setShowCheckTab] = useState<boolean>(false);
+  const [showTestInterface, setShowTestInterface] = useState<boolean>(false);
 
   const checkSteps = [
     'Browser & Internet Speed Test',
@@ -50,6 +52,11 @@ export default function CasperPrepare() {
     'Video Recording Check',
   ];
   const [checkStage, setCheckStage] = useState<number>(1);
+
+  // If showing test interface, render it instead
+  if (showTestInterface) {
+    return <CasperTestInterface onBack={() => setShowTestInterface(false)} />;
+  }
 
   return (
     <div className="bg-white py-6 px-16 md:px-26 md:py-10 text-gray-800 flex flex-col md:flex-row gap-10">
@@ -99,7 +106,10 @@ export default function CasperPrepare() {
           <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center">
               <span className="text-gray-800 font-medium">2024/25 Cycle</span>
-              <button className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm text-nowrap cursor-pointer">
+              <button
+                onClick={() => setShowTestInterface(true)}
+                className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm text-nowrap cursor-pointer"
+              >
                 Start Test
               </button>
             </div>
@@ -107,7 +117,10 @@ export default function CasperPrepare() {
               <span className="text-gray-800 font-medium">
                 AUS Teachers Education <br /> (2024 - 2025 Cycle)
               </span>
-              <button className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm text-nowrap cursor-pointer">
+              <button
+                onClick={() => setShowTestInterface(true)}
+                className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm text-nowrap cursor-pointer"
+              >
                 Start Test
               </button>
             </div>
