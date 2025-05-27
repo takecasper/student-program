@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -11,8 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Check, Plus, X } from 'lucide-react';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Check, Database, Plus, Scissors, SendHorizonal, X } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import Image from 'next/image';
 import { countries } from '@/lib/countries';
@@ -39,8 +37,8 @@ interface FormData {
   programType: string;
   schools: string[];
   testDate?: {
-    casper?: { date: string; time: string };
-    duet?: { date: string; time: string };
+    CASPER?: { date: string; time: string };
+    DUET?: { date: string; time: string };
   };
   payment?: PaymentFormData;
 }
@@ -72,23 +70,47 @@ const CountryStep: React.FC<StepProps> = ({ formData, onChange }) => (
   </Select>
 );
 
-const AdmissionCycleStep: React.FC<StepProps> = ({ onChange }) => (
-  <div className="flex items-start gap-2">
-    {['2025-2026', '2026-2027'].map(cycle => (
-      <RadioGroup
-        key={cycle}
-        defaultValue=""
-        onValueChange={onChange}
-        className="border rounded-md p-3"
-      >
-        <div className="flex items-center space-x-2">
-          <RadioGroupItem value={cycle} id={`cycle-${cycle}`} className="text-[#00a59b]" />
-          <Label htmlFor={`cycle-${cycle}`}>{cycle}</Label>
+const AdmissionCycleStep: React.FC<StepProps> = ({ formData, onChange }) => {
+  const handleCycleChange = (value: string) => {
+    // If the same value is clicked again, deselect it
+    if (formData.admissionCycle === value) {
+      onChange('');
+    } else {
+      onChange(value);
+    }
+  };
+
+  return (
+    <div className="flex items-start gap-2">
+      {['2025-2026', '2026-2027'].map(cycle => (
+        <div
+          key={cycle}
+          className={`border rounded-md p-3 cursor-pointer hover:border-[#00a59b] transition-colors ${
+            formData.admissionCycle === cycle
+              ? 'border-[#00a59b] bg-[#00a59b]/5'
+              : 'border-[#d9d9d9]'
+          }`}
+          onClick={() => handleCycleChange(cycle)}
+        >
+          <div className="flex items-center space-x-2">
+            <div
+              className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                formData.admissionCycle === cycle
+                  ? 'border-[#00a59b] bg-[#00a59b]'
+                  : 'border-gray-300'
+              }`}
+            >
+              {formData.admissionCycle === cycle && (
+                <div className="w-2 h-2 rounded-full bg-white" />
+              )}
+            </div>
+            <Label className="cursor-pointer select-none">{cycle}</Label>
+          </div>
         </div>
-      </RadioGroup>
-    ))}
-  </div>
-);
+      ))}
+    </div>
+  );
+};
 
 // Add these components after the existing step components
 
@@ -99,93 +121,141 @@ interface ProgramOptionProps {
   onSelect: (value: string) => void;
 }
 
-const ProgramOption: React.FC<ProgramOptionProps> = ({ id, label, selected, onSelect }) => (
-  <div className="border border-[#d9d9d9] rounded-md p-3">
-    <RadioGroup defaultValue="" onValueChange={() => onSelect(id)}>
+const ProgramOption: React.FC<ProgramOptionProps> = ({ id, label, selected, onSelect }) => {
+  const handleClick = () => {
+    // If already selected, deselect it, otherwise select it
+    onSelect(selected ? '' : id);
+  };
+
+  return (
+    <div
+      className={`border rounded-md p-3 cursor-pointer hover:border-[#00a59b] transition-colors ${
+        selected ? 'border-[#00a59b] bg-[#00a59b]/5' : 'border-[#d9d9d9]'
+      }`}
+      onClick={handleClick}
+    >
       <div className="flex items-center space-x-2">
-        <RadioGroupItem value={id} id={id} className="text-[#00a59b]" checked={selected} />
-        <Label htmlFor={id}>{label}</Label>
-      </div>
-    </RadioGroup>
-  </div>
-);
-
-const ProgramTypeStep: React.FC<StepProps> = ({ formData, onChange }) => (
-  <div className="space-y-6">
-    <div>
-      <h4 className="font-medium text-[#333333] mb-3">GRADUATE MEDICAL EDUATION</h4>
-      <div className="grid grid-cols-2 gap-3">
-        {[
-          { id: 'anesthesiology', label: 'Anesthesiology' },
-          { id: 'obgyn', label: 'OBGYN' },
-          { id: 'internal-medicine', label: 'Internal Medicine' },
-          { id: 'surgery', label: 'Surgery' },
-        ].map(program => (
-          <ProgramOption
-            key={program.id}
-            id={program.id}
-            label={program.label}
-            selected={formData.programType === program.id}
-            onSelect={onChange}
-          />
-        ))}
-      </div>
-    </div>
-
-    <div>
-      <h4 className="font-medium text-[#333333] mb-3">MEDICINE</h4>
-      <div className="grid grid-cols-2 gap-3">
-        {[
-          { id: 'athletic-training', label: 'Athletic Training' },
-          { id: 'other', label: 'Other' },
-          { id: 'dentistry', label: 'Dentistry' },
-          { id: 'pharmacy', label: 'Pharmacy' },
-        ].map(program => (
-          <ProgramOption
-            key={program.id}
-            id={program.id}
-            label={program.label}
-            selected={formData.programType === program.id}
-            onSelect={onChange}
-          />
-        ))}
-      </div>
-    </div>
-  </div>
-);
-
-const SchoolStep: React.FC<StepProps> = ({ formData, onChange }) => (
-  <div className="space-y-4">
-    <div className="bg-[#fcedca] p-4 rounded-md text-sm">
-      <p>
-        The program type you have selected includes up to 8 distributions as part of the base fee.
-        Additional distributions beyond that are $ 15.00.
-      </p>
-    </div>
-
-    <div className="space-y-3">
-      {[
-        { id: 'all', name: 'Select All Schools' },
-        { id: 'sam-houston', name: 'Sam Houston State University' },
-        { id: 'san-juan', name: 'San Juan Bautista School of Medicine' },
-      ].map(school => (
-        <div key={school.id} className="border border-[#d9d9d9] rounded-md p-3">
-          <RadioGroup defaultValue="" onValueChange={() => onChange(school.id)}>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem
-                value={school.id}
-                id={school.id}
-                className="text-[#00a59b]"
-                checked={formData.schools.includes(school.id)}
-              />
-              <Label htmlFor={school.id}>{school.name}</Label>
-            </div>
-          </RadioGroup>
+        <div
+          className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+            selected ? 'border-[#00a59b] bg-[#00a59b]' : 'border-gray-300'
+          }`}
+        >
+          {selected && <div className="w-2 h-2 rounded-full bg-white" />}
         </div>
-      ))}
+        <Label className="cursor-pointer select-none">{label}</Label>
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
+const ProgramTypeStep: React.FC<StepProps> = ({ formData, onChange }) => {
+  const handleProgramChange = (value: string) => {
+    // If the same value is clicked again, deselect it
+    if (formData.programType === value) {
+      onChange('');
+    } else {
+      onChange(value);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h4 className="font-medium text-[#333333] mb-3">GRADUATE MEDICAL EDUCATION</h4>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { id: 'anesthesiology', label: 'Anesthesiology' },
+            { id: 'obgyn', label: 'OBGYN' },
+            { id: 'internal-medicine', label: 'Internal Medicine' },
+            { id: 'surgery', label: 'Surgery' },
+          ].map(program => (
+            <ProgramOption
+              key={program.id}
+              id={program.id}
+              label={program.label}
+              selected={formData.programType === program.id}
+              onSelect={handleProgramChange}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const SchoolStep: React.FC<StepProps> = ({ formData, onChange }) => {
+  const handleSchoolChange = (schoolId: string) => {
+    let newSchools = [...formData.schools];
+
+    if (schoolId === 'all') {
+      // Toggle all schools
+      const allSchoolIds = ['sam-houston', 'san-juan'];
+      if (formData.schools.length === allSchoolIds.length) {
+        newSchools = []; // Deselect all
+      } else {
+        newSchools = allSchoolIds; // Select all
+      }
+    } else {
+      // Toggle individual school
+      if (newSchools.includes(schoolId)) {
+        newSchools = newSchools.filter(id => id !== schoolId);
+      } else {
+        newSchools.push(schoolId);
+      }
+    }
+
+    onChange(JSON.stringify(newSchools));
+  };
+
+  const allSchoolIds = ['sam-houston', 'san-juan'];
+  const isAllSelected = allSchoolIds.every(id => formData.schools.includes(id));
+
+  return (
+    <div className="space-y-4">
+      <div className="bg-[#fcedca] p-4 rounded-md text-sm">
+        <p>
+          The program type you have selected includes up to 8 distributions as part of the base fee.
+          Additional distributions beyond that are $ 15.00.
+        </p>
+      </div>
+
+      <div className="space-y-3">
+        {[
+          { id: 'all', name: 'Select All Schools', selected: isAllSelected },
+          {
+            id: 'sam-houston',
+            name: 'Sam Houston State University',
+            selected: formData.schools.includes('sam-houston'),
+          },
+          {
+            id: 'san-juan',
+            name: 'San Juan Bautista School of Medicine',
+            selected: formData.schools.includes('san-juan'),
+          },
+        ].map(school => (
+          <div
+            key={school.id}
+            className={`border rounded-md p-3 cursor-pointer hover:border-[#00a59b] transition-colors ${
+              school.selected ? 'border-[#00a59b] bg-[#00a59b]/5' : 'border-[#d9d9d9]'
+            }`}
+            onClick={() => handleSchoolChange(school.id)}
+          >
+            <div className="flex items-center space-x-2">
+              <div
+                className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                  school.selected ? 'border-[#00a59b] bg-[#00a59b]' : 'border-gray-300'
+                }`}
+              >
+                {school.selected && <Check className="h-3 w-3 text-white" />}
+              </div>
+              <Label className="cursor-pointer select-none">{school.name}</Label>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 // Add these interfaces first
 interface TimeSlot {
@@ -219,26 +289,31 @@ const TestDateStep: React.FC<StepProps> = ({ formData, onChange }) => {
     { time: '11:00 AM - 12 PM', available: true },
   ];
 
-  // Update parent component when selections change
-  useEffect(() => {
+  // Handle date/time selection
+  const handleDateTimeSelection = () => {
     if (selectedDate && selectedTime) {
+      const currentTestDates = formData.testDate || {};
       const testDate = {
-        ...formData.testDate,
-        [selectedTest.toLowerCase()]: {
+        ...currentTestDates,
+        [selectedTest]: {
           date: `${selectedMonth} ${selectedDate}`,
           time: selectedTime,
         },
       };
       onChange(JSON.stringify(testDate));
+
+      // Reset selections after saving
+      setSelectedDate(null);
+      setSelectedTime(null);
     }
-  }, [selectedTest, selectedDate, selectedTime, selectedMonth]);
+  };
 
   return (
     <div className="space-y-6">
       <div className="bg-[#FFF9F0] p-4 rounded-[10px] text-xs">
         <p>
-          For this program which you have applied request to take Casper and Duet, Please select
-          time Date & Time you would like to take your tests.
+          For this program which you have applied request to take Casper and Duet, Please select the
+          tests you want to take and choose Date & Time for each.
         </p>
       </div>
 
@@ -246,9 +321,11 @@ const TestDateStep: React.FC<StepProps> = ({ formData, onChange }) => {
         <Button
           variant={selectedTest === 'CASPER' ? 'default' : 'outline'}
           className={`rounded-full ${
-            selectedTest === 'CASPER'
-              ? 'bg-[#364699] text-white'
-              : 'border-[#d9d9d9] text-[#333333]'
+            formData.testDate?.CASPER
+              ? 'bg-[#70C0B8] text-white border-[#00A59B] border-2' // Saved state - teal
+              : selectedTest === 'CASPER'
+                ? 'bg-[#364699] text-white' // Active state - blue
+                : 'border-[#d9d9d9] text-[#333333]' // Default state
           }`}
           onClick={() => {
             setSelectedTest('CASPER');
@@ -256,12 +333,17 @@ const TestDateStep: React.FC<StepProps> = ({ formData, onChange }) => {
             setSelectedTime(null);
           }}
         >
+          {formData.testDate?.CASPER && <Check className="h-4 w-4 mr-2" />}
           CASPER
         </Button>
         <Button
           variant={selectedTest === 'DUET' ? 'default' : 'outline'}
           className={`rounded-full ${
-            selectedTest === 'DUET' ? 'bg-[#364699] text-white' : 'border-[#d9d9d9] text-[#333333]'
+            formData.testDate?.DUET
+              ? 'bg-[#70C0B8] text-white border-[#00A59B] border-2' // Saved state - teal
+              : selectedTest === 'DUET'
+                ? 'bg-[#364699] text-white' // Active state - blue
+                : 'border-[#d9d9d9] text-[#333333]' // Default state
           }`}
           onClick={() => {
             setSelectedTest('DUET');
@@ -269,9 +351,27 @@ const TestDateStep: React.FC<StepProps> = ({ formData, onChange }) => {
             setSelectedTime(null);
           }}
         >
+          {formData.testDate?.DUET && <Check className="h-4 w-4 mr-2" />}
           DUET
         </Button>
       </div>
+
+      {/* Show current selections */}
+      {(formData.testDate?.CASPER || formData.testDate?.DUET) && (
+        <div className="bg-gray-50 p-3 rounded-lg text-sm">
+          <h4 className="font-medium mb-2">Selected Tests:</h4>
+          {formData.testDate?.CASPER && (
+            <div>
+              CASPER: {formData.testDate.CASPER.date} - {formData.testDate.CASPER.time}
+            </div>
+          )}
+          {formData.testDate?.DUET && (
+            <div>
+              DUET: {formData.testDate.DUET.date} - {formData.testDate.DUET.time}
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="space-y-4">
         <Select value={selectedMonth} onValueChange={setSelectedMonth}>
@@ -300,19 +400,31 @@ const TestDateStep: React.FC<StepProps> = ({ formData, onChange }) => {
           ))}
         </div>
 
-        <div className="space-y-2">
-          {timeSlots.map(slot => (
-            <div
-              key={slot.time}
-              className={`border rounded-lg p-3 cursor-pointer hover:border-[#00a59b] ${
-                selectedTime === slot.time ? 'border-[#00a59b] bg-[#00a59b]/5' : ''
-              }`}
-              onClick={() => setSelectedTime(slot.time)}
-            >
-              {slot.time}
-            </div>
-          ))}
-        </div>
+        {selectedDate && (
+          <div className="space-y-2">
+            {timeSlots.map(slot => (
+              <div
+                key={slot.time}
+                className={`border rounded-lg p-3 cursor-pointer hover:border-[#00a59b] flex justify-between items-center ${
+                  selectedTime === slot.time ? 'border-[#00a59b] bg-[#00a59b]/5' : ''
+                }`}
+                onClick={() => setSelectedTime(slot.time)}
+              >
+                <span>{slot.time}</span>
+                <span className="text-sm text-[#00a59b]">Available</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {selectedDate && selectedTime && (
+          <Button
+            onClick={handleDateTimeSelection}
+            className="w-full bg-[#364699] hover:bg-[#253170]"
+          >
+            Save {selectedTest} Schedule
+          </Button>
+        )}
       </div>
     </div>
   );
@@ -336,135 +448,187 @@ const PaymentStep: React.FC<StepProps> = ({ formData, onChange }) => {
     cvv: '',
     saveCard: false,
   });
-  const [showSummary, setShowSummary] = useState(false);
 
-  const handleInputChange =
-    (field: keyof PaymentFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-      const newPaymentData = { ...paymentData, [field]: value };
-      setPaymentData(newPaymentData);
-      onChange(JSON.stringify(newPaymentData));
-    };
-
+  // Initialize from form data
   useEffect(() => {
     if (formData.payment) {
       setPaymentData(formData.payment);
     }
   }, [formData.payment]);
 
-  // Function to validate card details before showing summary
-  const handleShowSummary = () => {
-    setShowSummary(true);
-    // Signal to parent component that we're showing summary
-    if (typeof window !== 'undefined') {
-      const event = new CustomEvent('showPaymentSummary');
-      window.dispatchEvent(event);
-    }
+  const handleInputChange = (field: keyof PaymentFormData) => (value: string | boolean) => {
+    const newPaymentData = {
+      ...paymentData,
+      [field]: value,
+    };
+    setPaymentData(newPaymentData);
+    onChange(JSON.stringify(newPaymentData));
   };
 
-  // Add event listener for reset
-  useEffect(() => {
-    const handleResetPaymentStep = () => {
-      setShowSummary(false);
-    };
-
-    window.addEventListener('resetPaymentStep', handleResetPaymentStep);
-
-    return () => {
-      window.removeEventListener('resetPaymentStep', handleResetPaymentStep);
-    };
-  }, []);
-
   return (
-    <div className="space-y-6">
-      {!showSummary ? (
-        // Payment Form - Only shown when summary is not visible
-        <div className="bg-white rounded-lg p-4">
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm text-gray-600 mb-1 block">Card Number</label>
-              <input
-                type="text"
-                placeholder="0123 **** **** ****"
-                className="w-full border border-gray-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#00a59b] focus:border-transparent"
-                value={paymentData.cardNumber}
-                onChange={handleInputChange('cardNumber')}
-              />
-            </div>
+    <div className="space-y-4">
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="cardNumber">Card Number</Label>
+          <input
+            id="cardNumber"
+            type="text"
+            placeholder="1234 5678 9012 3456"
+            value={paymentData.cardNumber}
+            onChange={e => handleInputChange('cardNumber')(e.target.value)}
+            className="w-full p-3 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#00a59b] focus:border-transparent"
+          />
+        </div>
 
-            <div>
-              <label className="text-sm text-gray-600 mb-1 block">Cardholder Name</label>
-              <input
-                type="text"
-                placeholder="Enter Card Holder Name"
-                className="w-full border border-gray-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#00a59b] focus:border-transparent"
-                value={paymentData.cardholderName}
-                onChange={handleInputChange('cardholderName')}
-              />
-            </div>
+        <div>
+          <Label htmlFor="cardholderName">Cardholder Name</Label>
+          <input
+            id="cardholderName"
+            type="text"
+            placeholder="John Doe"
+            value={paymentData.cardholderName}
+            onChange={e => handleInputChange('cardholderName')(e.target.value)}
+            className="w-full p-3 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#00a59b] focus:border-transparent"
+          />
+        </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm text-gray-600 mb-1 block">Expiry Date</label>
-                <input
-                  type="text"
-                  placeholder="MM/YY"
-                  className="w-full border border-gray-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#00a59b] focus:border-transparent"
-                  value={paymentData.expiryDate}
-                  onChange={handleInputChange('expiryDate')}
-                />
-              </div>
-              <div>
-                <label className="text-sm text-gray-600 mb-1 block">CVV Code</label>
-                <input
-                  type="text"
-                  placeholder="Enter Code"
-                  className="w-full border border-gray-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#00a59b] focus:border-transparent"
-                  value={paymentData.cvv}
-                  onChange={handleInputChange('cvv')}
-                />
-              </div>
-            </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="expiryDate">Expiry Date</Label>
+            <input
+              id="expiryDate"
+              type="text"
+              placeholder="MM/YY"
+              value={paymentData.expiryDate}
+              onChange={e => handleInputChange('expiryDate')(e.target.value)}
+              className="w-full p-3 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#00a59b] focus:border-transparent"
+            />
+          </div>
+          <div>
+            <Label htmlFor="cvv">CVV</Label>
+            <input
+              id="cvv"
+              type="text"
+              placeholder="123"
+              value={paymentData.cvv}
+              onChange={e => handleInputChange('cvv')(e.target.value)}
+              className="w-full p-3 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#00a59b] focus:border-transparent"
+            />
+          </div>
+        </div>
 
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="save-card"
-                className="rounded border-gray-300 text-[#00a59b] focus:ring-[#00a59b]"
-                checked={paymentData.saveCard}
-                onChange={handleInputChange('saveCard')}
-              />
-              <label htmlFor="save-card" className="text-sm text-gray-600">
-                Save my card for future
-              </label>
-            </div>
+        <div className="flex items-center space-x-2">
+          <input
+            id="saveCard"
+            type="checkbox"
+            checked={paymentData.saveCard}
+            onChange={e => handleInputChange('saveCard')(e.target.checked)}
+            className="rounded border-gray-300 text-[#00a59b] focus:ring-[#00a59b]"
+          />
+          <Label htmlFor="saveCard" className="text-sm">
+            Save card for future payments
+          </Label>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-            <div className="mt-4">
-              <Button
-                className="rounded-full py-1 px-[23px] bg-[#364699] hover:bg-[#253170]"
-                onClick={handleShowSummary}
-                disabled={
-                  !paymentData.cardNumber ||
-                  !paymentData.cardholderName ||
-                  !paymentData.expiryDate ||
-                  !paymentData.cvv
-                }
-              >
-                Next
-              </Button>
+// Add a new component for the final success screen
+const PurchaseSuccessScreen: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  return (
+    <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+      {/* Success Icon */}
+      <div className="w-16 h-16 bg-[#00a59b] rounded-full flex items-center justify-center mb-6">
+        <Check className="w-8 h-8 text-white" />
+      </div>
+
+      {/* Title */}
+      <h2 className="text-xl font-semibold text-[#333333] mb-2">Altus Suite Test</h2>
+      <h3 className="text-xl font-semibold text-[#333333] mb-4">Reservation Complete</h3>
+
+      {/* Description */}
+      <p className="text-sm text-gray-600 mb-6 max-w-sm leading-relaxed">
+        A confirmation email and receipt will be sent to your inbox. You will now be taken to the
+        Altus Suite Homepage with information on your assessments.
+      </p>
+
+      {/* Purchase Summary */}
+      <div className="w-full mb-6">
+        <h4 className="text-sm font-medium text-left mb-3">Purchase Summary:</h4>
+
+        {/* Test Items */}
+        <div className="space-y-3 mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-5 h-5 bg-[#F5F5F5] rounded-full flex items-center justify-center">
+              <span className="text-xs">📅</span>
+            </div>
+            <div className="text-left">
+              <p className="text-sm">12 Oct 2025 10:30 AM - 12:30 PM</p>
+              <p className="text-sm font-medium">Casper</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="w-5 h-5 bg-[#F5F5F5] rounded-full flex items-center justify-center">
+              <span className="text-xs">📅</span>
+            </div>
+            <div className="text-left">
+              <p className="text-sm">24 Oct 2025 10:30 AM - 12:30 PM</p>
+              <p className="text-sm font-medium">Duet</p>
             </div>
           </div>
         </div>
-      ) : (
-        // Test Reservation Summary - Only shown after clicking Next
-        <div className="bg-white  rounded-lg p-6 space-y-6">
-          <div className="space-y-4 ">
-            <div className="space-y-3 border rounded-[20px]">
+
+        {/* Total Amount */}
+        <div className="bg-[#EBEBFF] p-4 rounded-lg">
+          <p className="text-sm text-gray-600">TOTAL AMOUNT</p>
+          <p className="text-xl font-semibold">85.00 USD</p>
+        </div>
+      </div>
+
+      {/* Accommodation Note */}
+      <p className="text-xs text-gray-500 mb-6 max-w-sm">
+        If you require accommodations for your test, please visit accommodations for more
+        information.
+      </p>
+
+      {/* Done Button */}
+      <Button className="w-32 rounded-full bg-[#364699] hover:bg-[#253170]" onClick={onClose}>
+        DONE
+      </Button>
+    </div>
+  );
+};
+
+// Update the ReservationComplete component to accept the setter as a prop
+const ReservationComplete: React.FC<{
+  onClose: () => void;
+  onPurchase: () => void;
+}> = ({ onClose, onPurchase }) => {
+  const handlePurchase = () => {
+    onPurchase();
+  };
+
+  return (
+    <div>
+      <div className="flex justify-between items-center">
+        <h2 className="text-lg font-semibold text-[#364699]">Apply New</h2>
+        <Button variant="ghost" size="sm" onClick={onClose}>
+          <X className="h-4 w-4" />
+        </Button>
+      </div>
+      <div className="bg-white  rounded-lg p-6 space-y-6">
+        <div className="space-y-4 border rounded-t-2xl rounded-b-2xl">
+          <div>
+            <div className="space-y-3 border-b border-l border-r rounded-b-2xl rounded-t-2xl">
               <div className="flex flex-col items-start border-b p-2">
                 <h3 className="font-medium text-[#333333]">Altus Suite Test Reservation Summary</h3>
                 <p className="text-sm text-gray-600">US - Medicine (CSP - 10111)</p>
               </div>
-              <div className="flex items-center gap-3 p-2">
+
+              {/* Show scheduled tests */}
+              <div className="flex items-center gap-3 p-2 border-b">
                 <div className="w-5 h-5 bg-[#F5F5F5] rounded-full flex items-center justify-center">
                   <span className="text-xs">📅</span>
                 </div>
@@ -473,6 +637,7 @@ const PaymentStep: React.FC<StepProps> = ({ formData, onChange }) => {
                   <p className="text-sm font-medium">Casper</p>
                 </div>
               </div>
+
               <div className="flex items-center gap-3 p-2">
                 <div className="w-5 h-5 bg-[#F5F5F5] rounded-full flex items-center justify-center">
                   <span className="text-xs">📅</span>
@@ -484,15 +649,14 @@ const PaymentStep: React.FC<StepProps> = ({ formData, onChange }) => {
               </div>
             </div>
           </div>
-
           {/* Fee Breakdown */}
-          <div className="space-y-4">
+          <div className="space-y-4 px-4 ">
             <div className="bg-[#EBEBFF] p-4 rounded-lg text-center">
               <p className="text-sm text-gray-600">TOTAL AMOUNT</p>
               <p className="text-xl font-semibold">85.00 USD</p>
             </div>
 
-            <div className=" rounded-lg overflow-hidden">
+            <div className="rounded-lg overflow-hidden">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
@@ -505,15 +669,27 @@ const PaymentStep: React.FC<StepProps> = ({ formData, onChange }) => {
                 <tbody className="divide-y">
                   <tr>
                     <td className="p-3">
-                      <div className="text-sm">Base Test Fee</div>
-                      <div className="text-xs text-gray-600 mt-1">US - Medicine (CSP - 10111)</div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <span>
+                          <Database className="w-4 h-4" />
+                        </span>
+                        Base Test Fee
+                      </div>
+                      <div className="text-xs text-gray-600 mt-1 ml-6">
+                        US - Medicine (CSP - 10111)
+                      </div>
                     </td>
                     <td className="text-right p-3 text-sm">85.00 USD</td>
                   </tr>
                   <tr>
                     <td className="p-3">
-                      <div className="text-sm">Included Distribution (s)</div>
-                      <div className="text-xs text-gray-600 mt-1">
+                      <div className="text-sm flex items-center gap-2">
+                        <span>
+                          <SendHorizonal className="w-4 h-4" />
+                        </span>
+                        Included Distribution (s)
+                      </div>
+                      <div className="text-xs text-gray-600 mt-1 ml-6">
                         US - Alabama College of Osteopathic Medicine
                       </div>
                     </td>
@@ -521,131 +697,85 @@ const PaymentStep: React.FC<StepProps> = ({ formData, onChange }) => {
                   </tr>
                   <tr>
                     <td className="p-3">
-                      <div className="text-sm">Discount (s)</div>
-                      <div className="text-xs text-gray-600 mt-1">
+                      <div className="text-sm flex items-center gap-2">
+                        <span>
+                          <Scissors className="w-4 h-4" />
+                        </span>
+                        Discount (s)
+                      </div>
+                      <div className="text-xs text-gray-600 mt-1 ml-6">
                         Fee Assistance Program Discount
                       </div>
                     </td>
                     <td className="text-right p-3 text-sm">-00.00 USD</td>
                   </tr>
-                  <tr className="bg-gray-50 font-medium">
+                  <tr className="flex items-end font-medium ">
                     <td className="p-3 text-sm">TOTAL</td>
-                    <td className="text-right p-3 text-sm">85.00 USD</td>
+                    <td className=" p-3 text-sm">85.00 USD</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
-      )}
-    </div>
-  );
-};
 
-// Add this new component for the success confirmation
-const ReservationComplete: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  return (
-    <div className="flex flex-col items-center p-6 max-w-md mx-auto">
-      <div className="bg-[#00a59b] rounded-full p-3 mb-4">
-        <Check className="h-6 w-6 text-white" />
-      </div>
-
-      <h2 className="text-xl font-semibold text-[#333333] text-center">
-        Altus Suite Test Reservation Complete
-      </h2>
-
-      <div className="text-center text-[#6c6c6c] text-sm my-4 space-y-2">
-        <p>A confirmation email and receipt will be sent to your inbox</p>
-        <p>
-          You will now be taken to the Altus Suite Homepage with information on your assessments.
-        </p>
-      </div>
-
-      <div className="w-full mt-4">
-        <h3 className="font-medium text-[#333333] mb-4">Purchase Summary:</h3>
-
-        <div className="space-y-4">
-          <div className="flex items-start gap-3">
-            <div className="w-5 h-5 bg-[#F5F5F5] rounded-full flex items-center justify-center mt-1">
-              <span className="text-xs">📅</span>
-            </div>
-            <div>
-              <p className="text-sm">12 Oct 2025 10:30 AM - 12:30 PM</p>
-              <p className="text-sm font-medium">Casper</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3">
-            <div className="w-5 h-5 bg-[#F5F5F5] rounded-full flex items-center justify-center mt-1">
-              <span className="text-xs">📅</span>
-            </div>
-            <div>
-              <p className="text-sm">24 Oct 2025 10:30 AM - 12:30 PM</p>
-              <p className="text-sm font-medium">Duet</p>
-            </div>
-          </div>
+        {/* Action Buttons */}
+        <div className="flex gap-3 pt-4">
+          <Button
+            variant="outline"
+            className="flex-1 rounded-full border-gray-300"
+            onClick={onClose}
+          >
+            Go Back
+          </Button>
+          <Button
+            className="flex-1 rounded-full bg-[#364699] hover:bg-[#253170]"
+            onClick={handlePurchase}
+          >
+            Purchase
+          </Button>
         </div>
       </div>
-
-      <div className="bg-[#EBEBFF] p-4 rounded-lg text-center w-full my-6">
-        <p className="text-sm text-gray-600">TOTAL AMOUNT</p>
-        <p className="text-xl font-semibold">85.00 USD</p>
-      </div>
-
-      <p className="text-sm text-gray-600 text-center mb-6">
-        If you require accommodations for your test, please visit accomodations for more information
-      </p>
-
-      <div className="border-t w-full my-4"></div>
-
-      <Button
-        className="rounded-full py-1 px-8 bg-[#364699] hover:bg-[#253170] mt-4"
-        onClick={onClose}
-      >
-        DONE
-      </Button>
     </div>
   );
 };
 
-// Update the ADMISSION_STEPS array to include all steps
+// Remove the SummaryStep component and keep only 6 steps
 const ADMISSION_STEPS: Step[] = [
   {
     id: 1,
-    title: 'Program Country',
-    description: 'Select the country',
+    title: 'Select Country',
+    description: 'Choose your country of residence',
     component: CountryStep,
   },
   {
     id: 2,
     title: 'Admission Cycle',
-    description: 'Select the admission period for your program(s):',
-    infoText:
-      "If you're applying to Medicine programs (Including Osteopathic). Select the admissions cycle ending in the year of your program start date.",
+    description: 'Select your admission cycle',
     component: AdmissionCycleStep,
   },
   {
     id: 3,
     title: 'Program Type',
-    description: 'Select the programs you will be distributing your Altus Suite results to',
+    description: 'Choose your program type',
     component: ProgramTypeStep,
   },
   {
     id: 4,
-    title: 'School',
-    description: 'Select the school(s) you will be distributing your Altrus Suite results to:',
+    title: 'Schools',
+    description: 'Select schools to send your results',
     component: SchoolStep,
   },
   {
     id: 5,
     title: 'Test Date & Time',
-    description: 'Select your test Date & Time',
+    description: 'Schedule your test sessions',
     component: TestDateStep,
   },
   {
     id: 6,
     title: 'Payment',
-    description: 'Type in your Credit Card Information',
+    description: 'Enter payment information',
     component: PaymentStep,
   },
 ];
@@ -662,9 +792,11 @@ export default function AdmissionContent() {
     programType: '',
     schools: [],
     testDate: undefined,
+    payment: undefined,
   });
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
   const [showPrepare, setShowPrepare] = useState<boolean>(false);
+  const [showFinalSuccess, setShowFinalSuccess] = useState(false);
 
   const filters = ['ALL', 'CASPER', 'DUET', 'SNAPSHOT'];
 
@@ -701,13 +833,21 @@ export default function AdmissionContent() {
     setShowSidebar(false);
     setCurrentStep(1);
     setShowSuccessScreen(false);
+    setShowFinalSuccess(false);
     setHideSteps(false);
   };
 
   const handleStepChange = (field: keyof FormData) => (value: string) => {
     setFormData(prev => ({
       ...prev,
-      [field]: field === 'payment' ? JSON.parse(value) : value,
+      [field]:
+        field === 'payment'
+          ? JSON.parse(value)
+          : field === 'schools'
+            ? JSON.parse(value)
+            : field === 'testDate'
+              ? JSON.parse(value)
+              : value,
     }));
   };
 
@@ -726,17 +866,27 @@ export default function AdmissionContent() {
     const isStepValid = () => {
       switch (step.id) {
         case 1:
-          return !!formData.country;
+          return !!formData.country && formData.country.trim() !== '';
         case 2:
-          return !!formData.admissionCycle;
+          return !!formData.admissionCycle && formData.admissionCycle.trim() !== '';
         case 3:
-          return !!formData.programType;
+          return !!formData.programType && formData.programType.trim() !== '';
         case 4:
           return formData.schools.length > 0;
         case 5:
-          return !!formData.testDate;
+          if (!formData.testDate) return false;
+          const hasValidTest = Object.values(formData.testDate).some(
+            test => test && test.date && test.time,
+          );
+          return hasValidTest;
         case 6:
-          return !!formData.payment;
+          return (
+            !!formData.payment &&
+            formData.payment.cardNumber.trim() !== '' &&
+            formData.payment.cardholderName.trim() !== '' &&
+            formData.payment.expiryDate.trim() !== '' &&
+            formData.payment.cvv.trim() !== ''
+          );
         default:
           return false;
       }
@@ -745,9 +895,9 @@ export default function AdmissionContent() {
     // Handle step completion
     const handleStepComplete = () => {
       if (step.id === ADMISSION_STEPS.length) {
-        // Handle final submission
-        console.log('Form submitted:', formData);
-        handleCloseSidebar();
+        // After payment step, show summary and hide steps
+        setShowSuccessScreen(true);
+        setHideSteps(true);
       } else {
         setCurrentStep(prev => prev + 1);
       }
@@ -835,9 +985,9 @@ export default function AdmissionContent() {
   }, []);
 
   // Add a function to handle purchase completion
-  const handlePurchase = () => {
-    setShowSuccessScreen(true);
-  };
+  // const handlePurchase = () => {
+  //   setShowSuccessScreen(true);
+  // };
 
   return showPrepare ? (
     <CasperPrepare />
@@ -926,49 +1076,36 @@ export default function AdmissionContent() {
         <div className="absolute top-0 right-0 bottom-0 z-40 flex justify-end h-screen">
           <div className="bg-white w-full max-w-md h-full overflow-y-auto shadow-lg border-l border-[#f5f5f5] animate-in slide-in-from-right">
             <div className="p-6">
-              {!showSuccessScreen ? (
+              {showFinalSuccess ? (
+                <PurchaseSuccessScreen onClose={handleCloseSidebar} />
+              ) : showSuccessScreen ? (
+                <ReservationComplete
+                  onClose={handleCloseSidebar}
+                  onPurchase={() => setShowFinalSuccess(true)}
+                />
+              ) : (
                 <>
-                  <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold text-[#364699]">APPLY NEW</h2>
-                    <Button variant="ghost" size="icon" onClick={handleCloseSidebar}>
-                      <X className="h-5 w-5" />
-                    </Button>
-                  </div>
-
-                  {!hideSteps ? (
-                    <div className="space-y-8">{ADMISSION_STEPS.map(step => renderStep(step))}</div>
-                  ) : (
-                    <div>
-                      <PaymentStep
-                        formData={formData}
-                        onChange={handleStepChange('payment')}
-                        currentStep={6}
-                      />
-
-                      <div className="mt-6 flex justify-between">
+                  {/* Steps indicator - only show when not hideSteps */}
+                  {!hideSteps && (
+                    <div className="mb-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-lg font-semibold text-[#333333]">Apply New</h2>
                         <Button
-                          variant="outline"
-                          className="rounded-full py-1 px-[23px] border-[#364699] text-[#364699] hover:bg-[#364699]/10"
-                          onClick={() => {
-                            setHideSteps(false);
-                            const event = new CustomEvent('resetPaymentStep');
-                            window.dispatchEvent(event);
-                          }}
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleCloseSidebar}
+                          className="text-gray-500 hover:text-gray-700"
                         >
-                          Go Back
+                          <X className="h-4 w-4" />
                         </Button>
-                        <Button
-                          className="rounded-full py-1 px-[23px] bg-[#364699] hover:bg-[#253170]"
-                          onClick={handlePurchase}
-                        >
-                          Purchase
-                        </Button>
+                      </div>
+
+                      <div className="space-y-6">
+                        {ADMISSION_STEPS.map(step => renderStep(step))}
                       </div>
                     </div>
                   )}
                 </>
-              ) : (
-                <ReservationComplete onClose={handleCloseSidebar} />
               )}
             </div>
           </div>
