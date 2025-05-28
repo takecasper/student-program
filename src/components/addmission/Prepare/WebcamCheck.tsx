@@ -3,7 +3,11 @@
 import { useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 
-const WebcamCheck = () => {
+interface WebcamCheckProps {
+  onComplete: () => void;
+}
+
+const WebcamCheck = ({ onComplete }: WebcamCheckProps) => {
   const [isReady, setIsReady] = useState<boolean>(false);
   const [start, setStart] = useState<boolean>(false);
   const webcamRef = useRef<Webcam>(null);
@@ -12,7 +16,11 @@ const WebcamCheck = () => {
   const capture = () => {
     if (webcamRef.current) {
       const imageSrc = webcamRef.current.getScreenshot();
-      if (imageSrc) setCapturedImage(imageSrc);
+      if (imageSrc) {
+        setCapturedImage(imageSrc);
+        // Call onComplete when photo is taken
+        onComplete();
+      }
     }
   };
 
@@ -96,7 +104,7 @@ const WebcamCheck = () => {
         </p>
         <p>
           <span className="font-bold">Note:</span> The next page may prompt you for webcam access.
-          Click ‘ALLOW’ to proceed.
+          Click &apos;ALLOW&apos; to proceed.
         </p>
       </div>
       <div className="flex justify-end gap-6 w-full">

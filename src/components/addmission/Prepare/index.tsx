@@ -4,6 +4,9 @@ import Image from 'next/image';
 import { useState } from 'react';
 import CheckTab from './CheckTab';
 import WebcamCheck from './WebcamCheck';
+import MicrophoneCheck from './MicrophoneCheck';
+import VideoPlayerCheck from './VideoPlayerCheck';
+import VideoRecordingCheck from './VideoRecordingCheck';
 import CasperTestInterface from './CasperTestInterface';
 
 export default function CasperPrepare() {
@@ -44,6 +47,14 @@ export default function CasperPrepare() {
   const [showCheckTab, setShowCheckTab] = useState<boolean>(false);
   const [showTestInterface, setShowTestInterface] = useState<boolean>(false);
 
+  const [completedChecks, setCompletedChecks] = useState<(boolean | string)[]>([
+    false, // Browser & Internet Speed Test
+    false, // Webcam Check
+    false, // Microphone Check
+    false, // Video Player Check
+    false, // Video Recording Check
+  ]);
+
   const checkSteps = [
     'Browser & Internet Speed Test',
     'Webcam Check',
@@ -51,7 +62,6 @@ export default function CasperPrepare() {
     'Video Player Check',
     'Video Recording Check',
   ];
-  const [checkStage, setCheckStage] = useState<number>(1);
 
   // If showing test interface, render it instead
   if (showTestInterface) {
@@ -193,49 +203,112 @@ export default function CasperPrepare() {
         (showCheckTab ? (
           <>
             <div className="relative">
-              {checkSteps.map((title, i) => {
-                const isCompleted = i + 1 <= checkStage; // mark only first step as completed
-                return (
-                  <div key={i} className="flex flex-col">
-                    <div className="flex gap-4.5 items-center">
-                      <div
-                        className={`shrink-0 w-6 h-6 rounded-full text-sm flex items-center justify-center font-normal ${
-                          isCompleted ? 'bg-[#22C55E] text-white' : 'bg-[#F5F5F5] text-[#22C55E]'
-                        }`}
-                      >
-                        {isCompleted ? '✔' : i + 1}
-                      </div>
-                      <span
-                        className="text-xl font-bold cursor-pointer"
-                        onClick={() => setCheckStage(i)}
-                      >
-                        {title}
-                      </span>
-                    </div>
+              {checkSteps.map((title, i) => (
+                <div key={i} className="flex flex-col">
+                  <div className="flex gap-4.5">
                     <div
-                      className={`pb-4 border-l-6 ml-[9px] my-2 pl-6.5 ${
-                        checkSteps.length === i + 1
-                          ? 'border-none'
-                          : isCompleted
-                            ? 'border-[#22C55E]'
-                            : 'border-[#F5F5F5]'
+                      className={`shrink-0 w-6 h-6 rounded-full text-sm flex items-center justify-center ${
+                        completedChecks[i] === true
+                          ? 'bg-[#22C55E] text-white'
+                          : 'bg-[#F5F5F5] text-[#22C55E]'
                       }`}
                     >
-                      {i === 0 && checkStage === 0 && <CheckTab />}
-
-                      {i === 0 && isCompleted && checkStage !== 0 && (
-                        <p className="text-[#33333399] text-xs">Download Bitrate Approved!</p>
-                      )}
-
-                      {i === 1 && checkStage === 1 && <WebcamCheck />}
-
-                      {i === 1 && isCompleted && checkStage !== 1 && (
-                        <p className="text-[#33333399] text-xs">Download Bitrate Approved!</p>
-                      )}
+                      {completedChecks[i] === true ? '✓' : i + 1}
                     </div>
+                    <span className="text-xl font-bold">{title}</span>
                   </div>
-                );
-              })}
+                  <div
+                    className={`pb-4 border-l-6 ml-[9px] my-2 pl-6.5 ${
+                      checkSteps.length === i + 1
+                        ? 'border-none'
+                        : completedChecks[i] === true
+                          ? 'border-[#22C55E]'
+                          : 'border-[#F5F5F5]'
+                    }`}
+                  >
+                    {i === 0 && <CheckTab />}
+
+                    {i === 1 && (
+                      <div className="space-y-4">
+                        {completedChecks[1] ? (
+                          <div className="flex items-center gap-2 text-green-600">
+                            <span>✅</span>
+                            <span className="text-sm">Webcam check completed successfully</span>
+                          </div>
+                        ) : (
+                          <WebcamCheck
+                            onComplete={() => {
+                              const newChecks = [...completedChecks];
+                              newChecks[1] = true;
+                              setCompletedChecks(newChecks);
+                            }}
+                          />
+                        )}
+                      </div>
+                    )}
+
+                    {i === 2 && (
+                      <div className="space-y-4">
+                        {completedChecks[2] ? (
+                          <div className="flex items-center gap-2 text-green-600">
+                            <span>✅</span>
+                            <span className="text-sm">Microphone is functioning properly</span>
+                          </div>
+                        ) : (
+                          <MicrophoneCheck
+                            onComplete={() => {
+                              const newChecks = [...completedChecks];
+                              newChecks[2] = true;
+                              setCompletedChecks(newChecks);
+                            }}
+                          />
+                        )}
+                      </div>
+                    )}
+
+                    {i === 3 && (
+                      <div className="space-y-4">
+                        {completedChecks[3] === true ? (
+                          <div className="flex items-center gap-2 text-green-600">
+                            <span>✅</span>
+                            <span className="text-sm">Video player is working perfectly</span>
+                          </div>
+                        ) : (
+                          <VideoPlayerCheck
+                            onComplete={() => {
+                              const newChecks = [...completedChecks];
+                              newChecks[3] = true;
+                              setCompletedChecks(newChecks);
+                            }}
+                          />
+                        )}
+                      </div>
+                    )}
+
+                    {i === 4 && (
+                      <div className="space-y-4">
+                        {completedChecks[4] === true ? (
+                          <div className="flex items-center gap-2 text-green-600">
+                            <span>✅</span>
+                            <span className="text-sm">Great! You look and sound clearly</span>
+                          </div>
+                        ) : (
+                          <VideoRecordingCheck
+                            onComplete={() => {
+                              const newChecks = [...completedChecks];
+                              newChecks[4] = true;
+                              setCompletedChecks(newChecks);
+                            }}
+                            onRecordAgain={() => {
+                              // Reset to initial state if needed
+                            }}
+                          />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           </>
         ) : (
