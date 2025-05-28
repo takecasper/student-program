@@ -324,7 +324,7 @@ export default function AddNewForm() {
             onClick={handleNext}
             disabled={currentStep === steps.length - 1}
           >
-            Next
+            Submit
           </Button>
         </div>
       </div>
