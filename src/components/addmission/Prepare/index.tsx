@@ -6,6 +6,9 @@ import CheckTab from './CheckTab';
 import WebcamCheck from './WebcamCheck';
 import CasperTestInterface from './CasperTestInterface';
 
+import GolfCourseIcon from '../../../../public/svgs/golf_course.svg';
+
+
 export default function CasperPrepare() {
   const steps = [
     {
@@ -140,7 +143,7 @@ export default function CasperPrepare() {
                 (state === 'prepare' ? ' bg-[#364699] text-white' : ' bg-white text-[#333333DE]')
               }
             >
-              <span>📘</span> HOW TO PREPARE
+              <GolfCourseIcon className={`w-[15px] h-[15px] fill-current ${state === 'prepare' ? 'text-white' : 'text-[#333333DE]'}`} /> HOW TO PREPARE
             </button>
 
             <button
@@ -150,7 +153,7 @@ export default function CasperPrepare() {
                 (state === 'prepare' ? ' text-[#333333DE] bg-white' : ' bg-[#364699] text-white')
               }
             >
-              <span>🖥️</span> SYSTEM CHECK
+              <GolfCourseIcon className={`w-[15px] h-[15px] fill-current ${state === 'prepare' ? 'text-[#333333DE]' : 'text-white'}`} /> SYSTEM CHECK
             </button>
           </div>
 
