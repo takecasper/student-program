@@ -101,7 +101,7 @@ const AdmissionCycleStep: React.FC<StepProps> = ({ formData, onChange }) => {
               }`}
             >
               {formData.admissionCycle === cycle && (
-                <div className="w-2 h-2 rounded-full bg-white" />
+                <Check className="h-3 w-3 text-white" />
               )}
             </div>
             <Label className="cursor-pointer select-none">{cycle}</Label>
@@ -140,7 +140,7 @@ const ProgramOption: React.FC<ProgramOptionProps> = ({ id, label, selected, onSe
             selected ? 'border-[#00a59b] bg-[#00a59b]' : 'border-gray-300'
           }`}
         >
-          {selected && <div className="w-2 h-2 rounded-full bg-white" />}
+          {selected && <Check className="h-3 w-3 text-white" />}
         </div>
         <Label className="cursor-pointer select-none">{label}</Label>
       </div>
