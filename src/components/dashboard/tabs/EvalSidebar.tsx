@@ -79,7 +79,12 @@ const EvalSidebar = ({ setShowEvalPanel }: { setShowEvalPanel: Function }) => {
   };
 
   const nextStep = () => {
-    setStep(step + 1);
+    if (step === 2) {
+      // Submit and close the panel
+      setShowEvalPanel(false);
+    } else {
+      setStep(step + 1);
+    }
   };
 
   // Prevent event propagation to avoid click outside handler conflicts
@@ -370,7 +375,7 @@ const EvalSidebar = ({ setShowEvalPanel }: { setShowEvalPanel: Function }) => {
           onClick={() => nextStep()}
           className="bg-[#364699] text-white text-[12px] font-medium py-2 px-7 rounded-full hover:bg-blue-700 transition cursor-pointer"
         >
-          Next
+          {step === 2 ? 'Submit' : 'Next'}
         </button>
       </div>
     </div>

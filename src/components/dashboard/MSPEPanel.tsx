@@ -98,7 +98,7 @@ const EvalSidebar = ({ setShowPanel }: { setShowPanel: Function }) => {
         className={`${showComments ? 'w-1/3' : 'hidden'} flex flex-col items-center justify-between border-l border-[#D9D9D9] h-full relative px-6 pt-14`}
       >
         {/* Header */}
-        <div className='h-auto'>
+        <div className="h-auto">
           <div className="flex justify-between items-start">
             <div>
               <h2 className="text-[20px] text-[#333333DE] font-semibold mb-1">
@@ -231,12 +231,15 @@ const EvalSidebar = ({ setShowPanel }: { setShowPanel: Function }) => {
       </div> */}
 
       {/* Sticky Footer */}
-      <div className="absolute bottom-0 left-0 w-full px-8 py-4 bg-white border-t border-gray-200 flex justify-end rounded-br-2xl">
+      <div className="absolute bottom-0 left-0 w-full px-8 py-4 bg-white border-t border-gray-200 flex justify-end gap-3 rounded-br-2xl">
         <button
-          // onClick={() => setShowFullPage(acknowledged)}
-          className="bg-[#364699] text-white text-[12px] font-medium py-3 px-7 rounded-full hover:bg-blue-700 transition cursor-pointer"
+          onClick={() => setShowFullPage(true)}
+          className="bg-white border border-[#364699] text-[#333333DE] text-[12px] font-medium py-3 px-7 rounded-full hover:bg-gray-100 transition cursor-pointer"
         >
-          Review
+          Review & Comment
+        </button>
+        <button className="bg-[#364699] text-white text-[12px] font-medium py-3 px-7 rounded-full hover:bg-blue-700 transition cursor-pointer">
+          Accept
         </button>
       </div>
     </div>
