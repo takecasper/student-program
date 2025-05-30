@@ -8,6 +8,7 @@ import {
   startOfMonth,
   startOfWeek,
   format,
+  isSameWeek,
 } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 import { DAYS_IN_WEEK, TWELVE_HOUR, ZERO } from './const';
@@ -115,4 +116,37 @@ export const getEventsForDay = (events: CalendarEventType[], day: Date, allDay =
   return events.filter((event: CalendarEventType) => {
     return isSameDay(event.startDate, day) && event.isAllDay === allDay;
   });
+};
+
+export const getOverlappingWeekCount = (
+  weeks: Date[][],
+  startDate: string | Date,
+  endDate: string | Date,
+) => {
+  const rangeStart = new Date(startDate);
+  const rangeEnd = new Date(endDate);
+  return weeks
+    .map((week, index) => {
+      const weekStart = week[0];
+      const weekEnd = week[6];
+
+      const overlaps = weekStart <= rangeEnd && weekEnd >= rangeStart;
+
+      return overlaps ? index : null;
+    })
+    .filter(index => index !== null);
+};
+
+export const getEventsForWeek = (
+  events: CalendarEventType[],
+  starDate: Date | string,
+  endDate: Date | string,
+  allDay = false,
+) => {
+  return events.filter(
+    event =>
+      starDate <= new Date(event.endDate) &&
+      endDate >= new Date(event.startDate) &&
+      event.isAllDay === allDay,
+  );
 };

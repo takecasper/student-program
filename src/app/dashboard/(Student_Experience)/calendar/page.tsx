@@ -18,7 +18,7 @@ import Week from '@/components/dashboard/calendar/Week';
 import Day from '@/components/dashboard/calendar/Day';
 import Month from '@/components/dashboard/calendar/Month';
 
-import { initialData } from './data';
+import { initialData, initialWeekData } from './data';
 import {
   getCalendarGridDates,
   getCalendarGridDatesWeek,
@@ -118,8 +118,8 @@ export default function CalendarViewWithRealDates() {
 
   const daysOfWeek = getDaysOfWeek(currentDate);
   const timeSlots = getTimeSlots(START_TIME_OF_DAY, END_TIME_OF_DAY);
-  const weeksOfMonth = getCalendarGridDatesWeek(currentDate);
-  const month = format(currentDate, 'MMM');
+  const weeksOfMonth = getCalendarGridDates(currentDate);
+  const DaysofWeeks = getCalendarGridDatesWeek(currentDate);
 
   return (
     <div className="p-6">
@@ -198,7 +198,7 @@ export default function CalendarViewWithRealDates() {
         />
       )}
       {viewMode === 'week' && (
-        <Week daysOfWeek={daysOfWeek} events={events} timeSlots={timeSlots} />
+        <Week daysOfWeek={DaysofWeeks} events={initialWeekData} timeSlots={timeSlots} />
       )}
       {viewMode === 'month' && (
         <Month

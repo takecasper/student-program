@@ -89,3 +89,41 @@ export const initialData = [
     isAllDay: true,
   },
 ];
+
+export const initialWeekData = [
+  {
+    id: '1',
+    title: 'FP-AddicMed',
+    startDate: new Date(2025, 5, 15), // Using current month for visibility
+    endDate: new Date(2025, 6, 7),
+    color: '#70c0b8', // bar color
+    location: 'H & S 403',
+    teacher: 'DR. Geoffrey Blair',
+    isAllDay: true,
+    status: {
+      text: 'Approved',
+      color: '#8eeee4',
+      dotColor: '#00a59b',
+      icon: 'icon',
+    },
+    description: 'This is test!. This is test',
+  },
+
+  {
+    id: '2',
+    title: 'FP-AddicMed',
+    startDate: new Date(2025, 5, 28), // Using current month for visibility
+    endDate: new Date(2025, 5, 29),
+    color: '#70c0b8', // bar color
+    location: 'H & S 403',
+    teacher: 'DR. Geoffrey Blair',
+    isAllDay: true,
+    status: {
+      text: 'Approved',
+      color: '#8eeee4',
+      dotColor: '#00a59b',
+      icon: 'icon',
+    },
+    description: 'This is test!. This is test',
+  },
+];

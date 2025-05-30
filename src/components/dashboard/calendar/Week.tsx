@@ -1,10 +1,9 @@
 'use client';
 import React from 'react';
-import CalendarEvent from '@/components/CalendarEvent';
 import { isSameDay } from 'date-fns';
-import { getWeeksShortenTitle } from '@/lib/utils';
+import { getEventsForWeek, getWeeksShortenTitle } from '@/lib/utils';
+import WeekEvent from './event/WeekEvent';
 
-// Define the event type interface
 interface CalendarEventType {
   id: string;
   title: string;
@@ -23,63 +22,60 @@ interface CalendarEventType {
 }
 
 interface WeekProps {
-  daysOfWeek: Date[];
+  daysOfWeek: Date[][];
   events: CalendarEventType[];
-  timeSlots: number[];
+  timeSlots: number[]; // e.g., [8, 9, 10, ...]
 }
 
 const Week = ({ daysOfWeek, events, timeSlots }: WeekProps) => {
-  // Get events for a specific day
-  const getEventsForDay = (day: Date, allDay = false) => {
-    return events.filter((event: CalendarEventType) => {
-      return isSameDay(event.startDate, day) && event.isAllDay === allDay;
-    });
-  };
-
-  // Get events for a specific time slot
   const getEventsForTimeSlot = (day: Date, hour: number) => {
-    return events.filter((event: CalendarEventType) => {
-      if (event.isAllDay) return false;
-      if (!isSameDay(event.startDate, day)) return false;
-
-      // Check if the event starts at this hour
+    return events.filter(event => {
+      if (event.isAllDay || !isSameDay(event.startDate, day)) return false;
       if (event.startTime) {
         const eventHour = Number.parseInt(event.startTime.split(' ')[0]);
         const isPM = event.startTime.includes('PM');
-        const hour24 = isPM && eventHour !== 12 ? eventHour + 12 : eventHour;
+        const hour24 =
+          isPM && eventHour !== 12 ? eventHour + 12 : eventHour === 12 && !isPM ? 0 : eventHour;
         return hour === hour24;
       }
-
       return false;
     });
   };
 
   const weekTitles: string[] = getWeeksShortenTitle(new Date());
 
+  const resutl = getEventsForWeek(events, daysOfWeek[1][0], daysOfWeek[2][6], true);
+
+  console.log('Sirius:', resutl);
+
   return (
     <>
       {/* Calendar Grid */}
-      <div className="border border-[#f5f5f5] rounded-md overflow-hidden">
-        {/* Days Header */}
-        <div className="grid grid-cols-[100px_repeat(7,1fr)] border-b border-[#f5f5f5]">
-          <div className="p-3 text-center border-l border-[#f5f5f5]"></div>
+      <div className="rounded-md overflow-hidden">
+        {/* Header Row */}
+        <div className="grid grid-cols-[70px_repeat(7,1fr)] bg-white">
+          <div className="p-3"></div>
           {weekTitles.map((title, i) => (
-            <div key={i} className="p-3 text-center border-l border-[#f5f5f5]">
+            <div
+              key={i}
+              className={`${i === 0 ? 'rounded-tl-4xl' : ''} p-3 text-center border border-[#e5e5e5]`}
+            >
               <span className="font-bold text-[#444]">{`WEEK ${i + 1}`}</span>
               <span className="text-[#999] uppercase text-sm ml-1">{`, ${title}`}</span>
             </div>
           ))}
         </div>
 
-        {/* All-day Events */}
-        <div className="grid grid-cols-[100px_repeat(7,1fr)] border-b border-[#f5f5f5]">
-          <div className="p-3 text-[#6c6c6c] text-sm">all-day</div>
-
-          {daysOfWeek.map((day: Date, index: React.Key | null | undefined) => (
-            <div key={index} className="p-2 border-l border-[#f5f5f5]">
-              {getEventsForDay(day, true).map((event: CalendarEventType) => (
+        {/* All Day Row */}
+        <div className="grid grid-cols-[70px_repeat(7,1fr)]">
+          <div className="flex items-center justify-end pr-3 text-[#444] text-sm font-semibold relative">
+            <span className="absolute top-[-12px]">All Day</span>
+          </div>
+          {daysOfWeek.map((day, index) => (
+            <div key={index} className="p-2 border border-[#e5e5e5] h-[72px]">
+              {/* {getEventsForWeek(day, true).map(event => (
                 <div key={event.id} className="mb-2">
-                  <CalendarEvent
+                  <WeekEvent
                     event={event}
                     title={event.title}
                     startTime={event.startTime || ''}
@@ -90,30 +86,32 @@ const Week = ({ daysOfWeek, events, timeSlots }: WeekProps) => {
                     isAllDay={true}
                   />
                 </div>
-              ))}
+              ))} */}
             </div>
           ))}
         </div>
 
-        {/* Time Slots */}
-        <div className="grid grid-cols-[100px_repeat(7,1fr)]">
+        {/* Hourly Rows */}
+        <div className="grid grid-cols-[70px_repeat(7,1fr)]">
           {timeSlots.map((hour: number) => {
-            const displayHour = hour > 12 ? hour - 12 : hour;
+            const displayHour = hour % 12 === 0 ? 12 : hour % 12;
             const isPM = hour >= 12;
 
             return (
               <React.Fragment key={hour}>
-                <div className="border-b border-[#f5f5f5] p-2 text-right pr-3 h-20">
-                  <span className="text-[#6c6c6c] text-sm">
-                    {displayHour} <span className="text-xs">{isPM ? 'PM' : 'AM'}</span>
+                {/* Left Time Label Column (Red Box Area) */}
+                <div className="h-[144px] flex justify-end items-start pr-3 pt-1 relative">
+                  <span className="text-[#6c6c6c] text-xs absolute top-[-10px]">
+                    <span className="font-bold">{displayHour}:00</span> {isPM ? 'PM' : 'AM'}
                   </span>
                 </div>
 
-                {daysOfWeek.map((day: Date, dayIndex: React.Key | null | undefined) => (
-                  <div key={dayIndex} className="border-l border-b border-[#f5f5f5] relative h-20">
-                    {getEventsForTimeSlot(day, hour).map((event: CalendarEventType) => (
+                {/* Cells for Each Day */}
+                {daysOfWeek.map((day, dayIndex) => (
+                  <div key={dayIndex} className="border border-[#e5e5e5] relative h-[144px]">
+                    {/* {getEventsForTimeSlot(day, hour).map(event => (
                       <div key={event.id} className="absolute top-1 left-2 right-2 z-10">
-                        <CalendarEvent
+                        <WeekEvent
                           event={event}
                           title={event.title}
                           startTime={event.startTime || ''}
@@ -123,7 +121,7 @@ const Week = ({ daysOfWeek, events, timeSlots }: WeekProps) => {
                           status={event.status}
                         />
                       </div>
-                    ))}
+                    ))} */}
                   </div>
                 ))}
               </React.Fragment>
