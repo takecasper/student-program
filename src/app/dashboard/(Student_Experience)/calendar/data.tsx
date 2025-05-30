@@ -71,25 +71,6 @@ export const initialData = [
     description: 'This is test!. This is test',
   },
   {
-    id: '7',
-    title: 'Vacation Leave2',
-    startDate: new Date(2025, 4, 30), // Using current month for visibility
-    endDate: new Date(2025, 6, 17),
-    startTime: '7 AM',
-    endTime: '8 PM',
-    color: '#70c0b8', // bar color
-    location: 'H & S 403',
-    teacher: 'DR. Geoffrey Blair',
-    isAllDay: false,
-    status: {
-      text: 'Approved',
-      color: '#8eeee4',
-      dotColor: '#00a59b',
-      icon: 'icon',
-    },
-    description: 'This is test!. This is test',
-  },
-  {
     id: '9',
     title: 'Academic Session',
     startDate: new Date(2025, 4, 30), // Using current month for visibility

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Plus } from 'lucide-react';
+import { CalendarDays, Pencil, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AddCalendarEventModal from '@/components/AddEvent';
 import {
@@ -19,7 +19,12 @@ import Day from '@/components/dashboard/calendar/Day';
 import Month from '@/components/dashboard/calendar/Month';
 
 import { initialData } from './data';
-import { getCalendarGridDates, getDaysOfWeek, getTimeSlots } from '@/lib/utils';
+import {
+  getCalendarGridDates,
+  getCalendarGridDatesWeek,
+  getDaysOfWeek,
+  getTimeSlots,
+} from '@/lib/utils';
 import {
   DAYS_IN_DAY,
   DAYS_IN_MONTH,
@@ -113,31 +118,47 @@ export default function CalendarViewWithRealDates() {
 
   const daysOfWeek = getDaysOfWeek(currentDate);
   const timeSlots = getTimeSlots(START_TIME_OF_DAY, END_TIME_OF_DAY);
-  const weeksOfMonth = getCalendarGridDates(currentDate);
+  const weeksOfMonth = getCalendarGridDatesWeek(currentDate);
+  const month = format(currentDate, 'MMM');
 
   return (
     <div className="p-6">
       {/* Calendar Header */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-4">
-          <h1 className="text-xl font-medium text-[#333333]">{format(currentDate, 'MMMM yyyy')}</h1>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={navigatePrevious} className="h-8 px-2">
+          <h1 className="text-xl font-medium text-[#333333]">
+            {format(startOfWeek(currentDate), 'MMMM d, yyyy')}-
+            {format(endOfWeek(currentDate), 'MMMM d, yyyy')}
+          </h1>
+          {/* <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={navigatePrevious}
+              className="h-6 w-6 text-[#555]"
+            >
               &lt;
             </Button>
-            <Button variant="outline" size="sm" onClick={navigateToday} className="h-8">
+            <Button variant="ghost" size="icon" onClick={navigateToday} className="">
               Today
             </Button>
-            <Button variant="outline" size="sm" onClick={navigateNext} className="h-8 px-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={navigateNext}
+              className="h-6 w-6 text-[#555]"
+            >
               &gt;
             </Button>
-          </div>
+          </div> */}
           <Button
-            className="bg-[#364699] rounded-full hover:bg-[#253170] text-white gap-1"
+            className="bg-white border rounded-md p-2 hover:bg-gray-50"
             onClick={() => setIsAddModalOpen(true)}
           >
-            <Plus className="h-4 w-4" />
-            Add
+            <div className="relative w-5 h-5">
+              <CalendarDays className="w-5 h-5 text-[#666]" />
+              <Pencil className="w-3 h-3 absolute bottom-0 right-0 text-[#666]" />
+            </div>
           </Button>
         </div>
 

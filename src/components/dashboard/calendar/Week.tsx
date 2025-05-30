@@ -1,7 +1,8 @@
-'use client'
+'use client';
 import React from 'react';
 import CalendarEvent from '@/components/CalendarEvent';
-import { format, isToday, isSameDay } from 'date-fns';
+import { isSameDay } from 'date-fns';
+import { getWeeksShortenTitle } from '@/lib/utils';
 
 // Define the event type interface
 interface CalendarEventType {
@@ -53,90 +54,85 @@ const Week = ({ daysOfWeek, events, timeSlots }: WeekProps) => {
     });
   };
 
-	return (
-		<>
-			{/* Calendar Grid */}
-			<div className="border border-[#f5f5f5] rounded-md overflow-hidden">
-				{/* Days Header */}
-				<div className="grid grid-cols-[100px_repeat(7,1fr)] border-b border-[#f5f5f5]">
-					<div className="p-3 text-center text-[#6c6c6c] text-sm font-medium"></div>
-					{daysOfWeek.map((day: Date, index: React.Key | null | undefined) => (
-						<div
-							key={index}
-							className={`p-3 text-center border-l border-[#f5f5f5] ${isToday(day) ? 'bg-[#f5f5f5]' : ''}`}
-						>
-							<div className="text-[#6c6c6c] text-sm font-medium">
-								{format(day, 'EEE').toUpperCase()}
-							</div>
-							<div className={`${isToday(day) ? 'text-[#364699]' : 'text-[#333333]'} font-bold`}>
-								{format(day, 'd')}
-							</div>
-						</div>
-					))}
-				</div>
+  const weekTitles: string[] = getWeeksShortenTitle(new Date());
 
-				{/* All-day Events */}
-				<div className="grid grid-cols-[100px_repeat(7,1fr)] border-b border-[#f5f5f5]">
-					<div className="p-3 text-[#6c6c6c] text-sm">all-day</div>
+  return (
+    <>
+      {/* Calendar Grid */}
+      <div className="border border-[#f5f5f5] rounded-md overflow-hidden">
+        {/* Days Header */}
+        <div className="grid grid-cols-[100px_repeat(7,1fr)] border-b border-[#f5f5f5]">
+          <div className="p-3 text-center border-l border-[#f5f5f5]"></div>
+          {weekTitles.map((title, i) => (
+            <div key={i} className="p-3 text-center border-l border-[#f5f5f5]">
+              <span className="font-bold text-[#444]">{`WEEK ${i + 1}`}</span>
+              <span className="text-[#999] uppercase text-sm ml-1">{`, ${title}`}</span>
+            </div>
+          ))}
+        </div>
 
-					{daysOfWeek.map((day: Date, index: React.Key | null | undefined) => (
-						<div key={index} className="p-2 border-l border-[#f5f5f5]">
-							{getEventsForDay(day, true).map((event: CalendarEventType) => (
-								<div key={event.id} className="mb-2">
-									<CalendarEvent
-										event={event}
-										title={event.title}
-										startTime={event.startTime || ''}
-										endTime={event.endTime || ''}
-										location={event.location}
-										color={event.color}
-										status={event.status}
-										isAllDay={true}
-									/>
-								</div>
-							))}
-						</div>
-					))}
-				</div>
+        {/* All-day Events */}
+        <div className="grid grid-cols-[100px_repeat(7,1fr)] border-b border-[#f5f5f5]">
+          <div className="p-3 text-[#6c6c6c] text-sm">all-day</div>
 
-				{/* Time Slots */}
-				<div className="grid grid-cols-[100px_repeat(7,1fr)]">
-					{timeSlots.map((hour: number) => {
-						const displayHour = hour > 12 ? hour - 12 : hour;
-						const isPM = hour >= 12;
+          {daysOfWeek.map((day: Date, index: React.Key | null | undefined) => (
+            <div key={index} className="p-2 border-l border-[#f5f5f5]">
+              {getEventsForDay(day, true).map((event: CalendarEventType) => (
+                <div key={event.id} className="mb-2">
+                  <CalendarEvent
+                    event={event}
+                    title={event.title}
+                    startTime={event.startTime || ''}
+                    endTime={event.endTime || ''}
+                    location={event.location}
+                    color={event.color}
+                    status={event.status}
+                    isAllDay={true}
+                  />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
 
-						return (
-							<React.Fragment key={hour}>
-								<div className="border-b border-[#f5f5f5] p-2 text-right pr-3 h-20">
-									<span className="text-[#6c6c6c] text-sm">
-										{displayHour} <span className="text-xs">{isPM ? 'PM' : 'AM'}</span>
-									</span>
-								</div>
+        {/* Time Slots */}
+        <div className="grid grid-cols-[100px_repeat(7,1fr)]">
+          {timeSlots.map((hour: number) => {
+            const displayHour = hour > 12 ? hour - 12 : hour;
+            const isPM = hour >= 12;
 
-								{daysOfWeek.map((day: Date, dayIndex: React.Key | null | undefined) => (
-									<div key={dayIndex} className="border-l border-b border-[#f5f5f5] relative h-20">
-										{getEventsForTimeSlot(day, hour).map((event: CalendarEventType) => (
-											<div key={event.id} className="absolute top-1 left-2 right-2 z-10">
-												<CalendarEvent
-													event={event}
-													title={event.title}
-													startTime={event.startTime || ''}
-													endTime={event.endTime || ''}
-													location={event.location}
-													color={event.color}
-													status={event.status}
-												/>
-											</div>
-										))}
-									</div>
-								))}
-							</React.Fragment>
-						);
-					})}
-				</div>
-			</div>
-		</>
-	)
-}
+            return (
+              <React.Fragment key={hour}>
+                <div className="border-b border-[#f5f5f5] p-2 text-right pr-3 h-20">
+                  <span className="text-[#6c6c6c] text-sm">
+                    {displayHour} <span className="text-xs">{isPM ? 'PM' : 'AM'}</span>
+                  </span>
+                </div>
 
-export default Week
+                {daysOfWeek.map((day: Date, dayIndex: React.Key | null | undefined) => (
+                  <div key={dayIndex} className="border-l border-b border-[#f5f5f5] relative h-20">
+                    {getEventsForTimeSlot(day, hour).map((event: CalendarEventType) => (
+                      <div key={event.id} className="absolute top-1 left-2 right-2 z-10">
+                        <CalendarEvent
+                          event={event}
+                          title={event.title}
+                          startTime={event.startTime || ''}
+                          endTime={event.endTime || ''}
+                          location={event.location}
+                          color={event.color}
+                          status={event.status}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </React.Fragment>
+            );
+          })}
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Week;

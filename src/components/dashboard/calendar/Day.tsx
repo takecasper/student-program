@@ -48,20 +48,30 @@ const Day = ({ events, timeSlots, currentDate, setCurrentDate }: DayProps) => {
       {/* Calendar Grid */}
       <div className="border border-[#f5f5f5] rounded-4xl overflow-hidden">
         {/* Days Header */}
-        <div className="flex justify-center p-2 border-b border-[#f5f5f5]">
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={navigatePrevious} className="h-8 px-2">
+        <div className="flex justify-center items-center border-b border-[#f5f5f5] py-2">
+          <div className="flex items-center gap-4 text-sm text-[#555] font-medium tracking-wide">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={navigatePrevious}
+              className="h-6 w-6 text-[#555]"
+            >
               &lt;
             </Button>
-            {format(currentDate, 'EEEE MMMM yyyy')}
-            <Button variant="outline" size="sm" onClick={navigateNext} className="h-8 px-2">
+            <span className="uppercase">{format(currentDate, 'EEEE, MMMM d')}</span>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={navigateNext}
+              className="h-6 w-6 text-[#555]"
+            >
               &gt;
             </Button>
           </div>
         </div>
 
         {/* All-day Events */}
-        <div className="grid grid-cols-[120px_repeat(1,1fr)] border-b border-[#f5f5f5]">
+        <div className="grid grid-cols-[144px_repeat(1,1fr)] border-b border-[#f5f5f5]">
           <div className="p-3 text-[#6c6c6c] text-sm">all-day</div>
 
           <div className="border-l border-[#f5f5f5]">
@@ -87,20 +97,20 @@ const Day = ({ events, timeSlots, currentDate, setCurrentDate }: DayProps) => {
         </div>
 
         {/* Time Slots */}
-        <div className="grid grid-cols-[120px_repeat(1,1fr)]">
+        <div className="grid grid-cols-[144px_repeat(1,1fr)]">
           {timeSlots.map((hour: number) => {
             const displayHour = hour > TWELVE_HOUR ? hour - TWELVE_HOUR : hour;
             const isPM = hour >= TWELVE_HOUR;
 
             return (
               <React.Fragment key={hour}>
-                <div className="border-b border-[#f5f5f5] p-2 text-right pr-3 min-h-[120px]">
+                <div className="border-b border-[#f5f5f5] p-2 text-right pr-3 min-h-[144px]">
                   <span className="text-[#6c6c6c] text-sm">
                     {displayHour} <span className="text-xs">{isPM ? 'PM' : 'AM'}</span>
                   </span>
                 </div>
 
-                <div className="border-l border-b border-[#f5f5f5] relative min-h-[120px]">
+                <div className="border-l border-b border-[#f5f5f5] relative min-h-[144px]">
                   {getEventsForTimeSlot(events, currentDate, hour).map(
                     (event: CalendarEventType, id, events) => (
                       <div key={event.id} className="group relative">

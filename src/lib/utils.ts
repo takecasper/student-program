@@ -7,6 +7,7 @@ import {
   isSameDay,
   startOfMonth,
   startOfWeek,
+  format,
 } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 import { DAYS_IN_WEEK, TWELVE_HOUR, ZERO } from './const';
@@ -57,6 +58,38 @@ export const getCalendarGridDates = (currentDate: Date) => {
   }
 
   return weeks;
+};
+
+//get Dates of weeks in current month
+export const getCalendarGridDatesWeek = (currentDate: Date) => {
+  const month = currentDate.getMonth();
+  const year = currentDate.getFullYear();
+  const startDay = startOfWeek(currentDate);
+  const endDay = addDays(startDay, DAYS_IN_WEEK * DAYS_IN_WEEK - 1);
+  const allDays = eachDayOfInterval({ start: startDay, end: endDay });
+
+  const weeks = [];
+  for (let i = ZERO; i < allDays.length; i += DAYS_IN_WEEK) {
+    weeks.push(allDays.slice(i, i + DAYS_IN_WEEK));
+  }
+
+  return weeks;
+};
+
+//get Seven Weeks Shorten title
+export const getWeeksShortenTitle = (currentDate: Date, num: number = 7) => {
+  const startDay = startOfWeek(currentDate);
+  const endDay = addDays(startDay, num - 1);
+  const title: string[] = [];
+  for (let i = ZERO; i < num; i++) {
+    const startDate = addDays(currentDate, DAYS_IN_WEEK * i);
+    const endDate = addDays(startDate, DAYS_IN_WEEK - 1);
+    const month = format(startDate, 'MMM');
+    const weekStr = `${month} ${startDate.getDate()}-${endDate.getDate()}`;
+    title.push(weekStr);
+  }
+
+  return title;
 };
 
 // Get events for a specific time slot

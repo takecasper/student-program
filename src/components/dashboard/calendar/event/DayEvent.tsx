@@ -70,145 +70,24 @@ export default function DayEvent({
 
   return (
     <>
-      <div className="flex">
-        <div
-          onClick={() => setShowModal(true)}
-          className={`bg-white rounded-r-[8px] border border-[#D9D9D9] flex-1 shadow-lg cursor-pointer ${
-            size > 1 ? 'w-full p-1' : 'p-2'
-          }`}
-          style={{
-            borderLeft: `4px solid ${color}`,
-            minHeight: minHeight,
-          }}
-        >
-          <div className="h-full flex flex-col justify-center">
-            <div className="flex gap-2 justify-between items-center">
-              <p className="text-sm font-medium">{title}</p>
-              {status && (
-                <span
-                  className="ml-auto text-[#364699] text-xs py-1 px-2 rounded-full flex items-center gap-1"
-                  style={{ backgroundColor: status.color }}
-                >
-                  <div
-                    className="w-2 h-2 rounded-full"
-                    style={{ backgroundColor: status.dotColor || color }}
-                  ></div>
-                  {status.text}
-                </span>
-              )}
-            </div>
-
-            {/* Detail section shown only on hover */}
-            <div className={`${size > 1 ? '' : ''}`}>
-              <div className="flex flex-col sm:flex-row pb-2">
-                <div className="w-full flex items-center gap-1">
-                  <Clock className="h-3 w-3 text-[#6c6c6c]" />
-                  <span className="text-xs text-[#6c6c6c]">
-                    {startTime} - {endTime}
-                  </span>
-                </div>
-                {location && (
-                  <div className="w-full flex items-center gap-1">
-                    <MapPin className="h-3 w-3 text-[#6c6c6c]" />
-                    <span className="text-xs text-[#6c6c6c]">{location}</span>
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col sm:flex-row">
-                {teacher && (
-                  <div className="w-full flex items-center gap-1">
-                    <User className="h-3 w-3 text-[#6c6c6c]" />
-                    <span className="text-xs text-[#6c6c6c]">{teacher}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {showModal ? (
-          <div ref={wrapperRef} className="absolute z-50">
-            <div className="bg-white p-6 rounded-lg w-full max-w-[296px] relative shadow-lg border border-[#CCCCCC]">
-              <button
-                onClick={() => setShowModal(false)}
-                className="absolute top-3 right-4 hover:text-black cursor-pointer"
-              >
-                ✕
-              </button>
-
-              <h2 className="text-sm font-semibold mb-[19px] text-[#333333DE]">Type of Booking</h2>
-
-              <div className="flex gap-2 mb-4">
-                <button className="w-18 py-1 text-xs bg-[#364699] text-white rounded-full">
-                  Vacation
-                </button>
-                <button className="w-18 py-1 text-xs border-[1.4px] border-[#CCCCCC] rounded-full">
-                  Duty Hour
-                </button>
-                <button className="w-18 py-1 text-xs border-[1.4px] border-[#CCCCCC] rounded-full">
-                  Event
-                </button>
-              </div>
-
-              <div className="flex mb-4">
-                {/* Start time */}
-                <div className="flex flex-col">
-                  <label className="text-xs text-[#33333399] font-medium mb-[2px]">
-                    Start time
-                  </label>
-                  <span className="text-sm whitespace-nowrap border-b-2 text-[#333333DE] border-[#333333DE] pb-[1px]">
-                    {format(event.startDate, 'MMMM d, yyyy')}
-                  </span>
-                </div>
-
-                <span className="mx-2 mt-4 text-[#333333DE]">–</span>
-
-                {/* End time */}
-                <div className="flex flex-col">
-                  <label className="text-xs text-[#33333399] font-medium mb-[2px]">End time</label>
-                  <span className="text-sm whitespace-nowrap border-b-2 text-[#333333DE] border-[#333333DE] pb-[1px]">
-                    {format(event.endDate, 'MMMM d, yyyy')}
-                  </span>
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Description</label>
-                <textarea className="border p-2 w-full rounded" rows={5}></textarea>
-              </div>
-
-              <div className="w-full flex justify-end">
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="bg-[#364699] text-xs text-white px-4 py-[15px] rounded-full hover:bg-[#1e3088] cursor-pointer"
-                >
-                  Request Leave
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <></>
-        )}
-      </div>
-      <div className="absolute top-0 hidden group-hover:block z-50 w-full">
+      {size === 1 ? (
         <div className="flex">
           <div
-            onClick={() => setShowModal(true)}
-            className={`bg-white rounded-r-[8px] border border-[#D9D9D9] flex-1 shadow-lg cursor-pointer h-[144px] ${
-              size > 1 ? 'w-full p-1' : 'p-2'
+            className={`bg-white rounded-r-[8px] border border-[#D9D9D9] flex-1 shadow-lg cursor-pointer w-full px-2 py-4 ${
+              showModal ? 'absolute top-0' : 'p-2'
             }`}
             style={{
               borderLeft: `4px solid ${color}`,
             }}
           >
-            <div className="h-full flex flex-col justify-center">
-              <div className="flex gap-2 justify-between items-center">
-                <p className="text-sm font-medium">{title}</p>
+            <div className="flex flex-col h-[110px]">
+              <div className="flex gap-2 justify-between pb-3">
+                <p className="text-lg font-medium">{title}</p>
                 {status && (
                   <span
-                    className="ml-auto text-[#364699] text-xs py-1 px-2 rounded-full flex items-center gap-1"
+                    className="ml-auto text-[#364699] text-md py-1 px-2 rounded-full flex items-center gap-1"
                     style={{ backgroundColor: status.color }}
+                    onClick={() => setShowModal(!showModal)}
                   >
                     <div
                       className="w-2 h-2 rounded-full"
@@ -219,104 +98,181 @@ export default function DayEvent({
                 )}
               </div>
 
-              {/* Detail section shown only on hover */}
-              <div className={`${size > 1 ? '' : ''}`}>
-                <div className="flex flex-col sm:flex-row pb-2">
+              <div>
+                <div className="flex flex-col sm:flex-row pb-3">
                   <div className="w-full flex items-center gap-1">
-                    <Clock className="h-3 w-3 text-[#6c6c6c]" />
-                    <span className="text-xs text-[#6c6c6c]">
+                    <Clock className="h-4 w-4 text-[#6c6c6c]" />
+                    <span className="text-md text-[#6c6c6c]">
                       {startTime} - {endTime}
                     </span>
                   </div>
                   {location && (
                     <div className="w-full flex items-center gap-1">
-                      <MapPin className="h-3 w-3 text-[#6c6c6c]" />
-                      <span className="text-xs text-[#6c6c6c]">{location}</span>
+                      <MapPin className="h-4 w-4 text-[#6c6c6c]" />
+                      <span className="text-md text-[#6c6c6c]">{location}</span>
                     </div>
                   )}
                 </div>
                 <div className="flex flex-col sm:flex-row">
                   {teacher && (
                     <div className="w-full flex items-center gap-1">
-                      <User className="h-3 w-3 text-[#6c6c6c]" />
-                      <span className="text-xs text-[#6c6c6c]">{teacher}</span>
+                      <User className="h-4 w-4 text-[#6c6c6c]" />
+                      <span className="text-md text-[#6c6c6c]">{teacher}</span>
                     </div>
                   )}
                 </div>
               </div>
             </div>
+            {showModal ? (
+              <div className="border-t-2">
+                <div className="text-sm text-[#333] space-y-4">
+                  <h2 className="text-base font-semibold">Elective Details</h2>
+                  <p>
+                    The FP-AddicMed-Victoria-RJH rotation (South Vancouver Island) offers Family
+                    medicine training in Victoria, BC (RJH, VicGH, RAAC, community) for Canadian
+                    students, with flexible lengths (8-week max).
+                  </p>
+
+                  <h2 className="text-base font-semibold">Key Details</h2>
+
+                  <div>
+                    <p className="font-semibold text-sm">Clinical Locations:</p>
+                    <ul className="list-disc list-inside text-sm text-[#555] space-y-1 mt-1">
+                      <li>Royal Jubilee Hospital (1952 Bay St)</li>
+                      <li>Victoria General Hospital (1 Hospital Way)</li>
+                      <li>Rapid Access Addiction Clinic (RAAC, 1119 Pembroke St)</li>
+                      <li>Various community settings</li>
+                    </ul>
+                  </div>
+
+                  <p className="font-semibold text-sm mt-4">Focus Areas:</p>
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
-
-          {showModal ? (
-            <div ref={wrapperRef} className="absolute z-50">
-              <div className="bg-white p-6 rounded-lg w-full max-w-[296px] relative shadow-lg border border-[#CCCCCC]">
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="absolute top-3 right-4 hover:text-black cursor-pointer"
-                >
-                  ✕
-                </button>
-
-                <h2 className="text-sm font-semibold mb-[19px] text-[#333333DE]">
-                  Type of Booking
-                </h2>
-
-                <div className="flex gap-2 mb-4">
-                  <button className="w-18 py-1 text-xs bg-[#364699] text-white rounded-full">
-                    Vacation
-                  </button>
-                  <button className="w-18 py-1 text-xs border-[1.4px] border-[#CCCCCC] rounded-full">
-                    Duty Hour
-                  </button>
-                  <button className="w-18 py-1 text-xs border-[1.4px] border-[#CCCCCC] rounded-full">
-                    Event
-                  </button>
-                </div>
-
-                <div className="flex mb-4">
-                  {/* Start time */}
-                  <div className="flex flex-col">
-                    <label className="text-xs text-[#33333399] font-medium mb-[2px]">
-                      Start time
-                    </label>
-                    <span className="text-sm whitespace-nowrap border-b-2 text-[#333333DE] border-[#333333DE] pb-[1px]">
-                      {format(event.startDate, 'MMMM d, yyyy')}
+        </div>
+      ) : (
+        <>
+          <div className="flex">
+            <div
+              onClick={() => setShowModal(true)}
+              className={`bg-white rounded-r-[8px] border border-[#D9D9D9] flex-1 shadow-lg cursor-pointer ${
+                size > 1 ? 'w-full p-1' : 'p-2'
+              }`}
+              style={{
+                borderLeft: `4px solid ${color}`,
+                minHeight: minHeight,
+              }}
+            >
+              <div className="h-full flex flex-col justify-center">
+                <div className="flex gap-2 justify-between items-center">
+                  <p className="text-sm font-medium">{title}</p>
+                  {status && (
+                    <span
+                      className="ml-auto text-[#364699] text-xs py-1 px-2 rounded-full flex items-center gap-1"
+                      style={{ backgroundColor: status.color }}
+                    >
+                      <div
+                        className="w-2 h-2 rounded-full"
+                        style={{ backgroundColor: status.dotColor || color }}
+                      ></div>
+                      {status.text}
                     </span>
-                  </div>
-
-                  <span className="mx-2 mt-4 text-[#333333DE]">–</span>
-
-                  {/* End time */}
-                  <div className="flex flex-col">
-                    <label className="text-xs text-[#33333399] font-medium mb-[2px]">
-                      End time
-                    </label>
-                    <span className="text-sm whitespace-nowrap border-b-2 text-[#333333DE] border-[#333333DE] pb-[1px]">
-                      {format(event.endDate, 'MMMM d, yyyy')}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="mb-4">
-                  <label className="block text-sm font-medium mb-1">Description</label>
-                  <textarea className="border p-2 w-full rounded" rows={5}></textarea>
-                </div>
-
-                <div className="w-full flex justify-end">
-                  <button
-                    onClick={() => setShowModal(false)}
-                    className="bg-[#364699] text-xs text-white px-4 py-[15px] rounded-full hover:bg-[#1e3088] cursor-pointer"
-                  >
-                    Request Leave
-                  </button>
+                  )}
                 </div>
               </div>
             </div>
-          ) : (
-            <></>
+          </div>
+          {!isAllDay && (
+            <div className="absolute hidden top-0  group-hover:block z-50 w-full">
+              <div className="flex">
+                <div
+                  className={`bg-white rounded-r-[8px] border border-[#D9D9D9] flex-1 shadow-lg cursor-pointer ${
+                    size > 1 ? 'w-full px-2 py-4' : 'p-2'
+                  }`}
+                  style={{
+                    borderLeft: `4px solid ${color}`,
+                  }}
+                >
+                  <div className="flex flex-col h-[110px]">
+                    <div className="flex gap-2 justify-between pb-3">
+                      <p className="text-lg font-medium">{title}</p>
+                      {status && (
+                        <span
+                          className="ml-auto text-[#364699] text-md py-1 px-2 rounded-full flex items-center gap-1"
+                          style={{ backgroundColor: status.color }}
+                          onClick={() => setShowModal(!showModal)}
+                        >
+                          <div
+                            className="w-2 h-2 rounded-full"
+                            style={{ backgroundColor: status.dotColor || color }}
+                          ></div>
+                          {status.text}
+                        </span>
+                      )}
+                    </div>
+
+                    <div>
+                      <div className="flex flex-col sm:flex-row pb-3">
+                        <div className="w-full flex items-center gap-1">
+                          <Clock className="h-4 w-4 text-[#6c6c6c]" />
+                          <span className="text-md text-[#6c6c6c]">
+                            {startTime} - {endTime}
+                          </span>
+                        </div>
+                        {location && (
+                          <div className="w-full flex items-center gap-1">
+                            <MapPin className="h-4 w-4 text-[#6c6c6c]" />
+                            <span className="text-md text-[#6c6c6c]">{location}</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-col sm:flex-row">
+                        {teacher && (
+                          <div className="w-full flex items-center gap-1">
+                            <User className="h-4 w-4 text-[#6c6c6c]" />
+                            <span className="text-md text-[#6c6c6c]">{teacher}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  {showModal ? (
+                    <div className="border-t-2">
+                      <div className="text-sm text-[#333] space-y-4">
+                        <h2 className="text-base font-semibold">Elective Details</h2>
+                        <p>
+                          The FP-AddicMed-Victoria-RJH rotation (South Vancouver Island) offers
+                          Family medicine training in Victoria, BC (RJH, VicGH, RAAC, community) for
+                          Canadian students, with flexible lengths (8-week max).
+                        </p>
+
+                        <h2 className="text-base font-semibold">Key Details</h2>
+
+                        <div>
+                          <p className="font-semibold text-sm">Clinical Locations:</p>
+                          <ul className="list-disc list-inside text-sm text-[#555] space-y-1 mt-1">
+                            <li>Royal Jubilee Hospital (1952 Bay St)</li>
+                            <li>Victoria General Hospital (1 Hospital Way)</li>
+                            <li>Rapid Access Addiction Clinic (RAAC, 1119 Pembroke St)</li>
+                            <li>Various community settings</li>
+                          </ul>
+                        </div>
+
+                        <p className="font-semibold text-sm mt-4">Focus Areas:</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </div>
+            </div>
           )}
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 }
