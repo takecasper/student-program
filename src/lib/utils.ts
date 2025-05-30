@@ -1,6 +1,84 @@
 import { clsx, type ClassValue } from 'clsx';
+import {
+  addDays,
+  eachDayOfInterval,
+  endOfMonth,
+  endOfWeek,
+  isSameDay,
+  startOfMonth,
+  startOfWeek,
+} from 'date-fns';
 import { twMerge } from 'tailwind-merge';
+import { DAYS_IN_WEEK, TWELVE_HOUR, ZERO } from './const';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+// Get days of the week based on current date
+export const getDaysOfWeek = (currentDate: Date): Date[] => {
+  const days: Date[] = [];
+  const start = startOfWeek(currentDate, { weekStartsOn: 1 }); // Start on Monday
+
+  for (let i = 0; i < 7; i++) {
+    days.push(addDays(start, i));
+  }
+
+  return days;
+};
+
+// Get time slots for the day
+export const getTimeSlots = (startTime: number, endTime: number) => {
+  const slots = [];
+  for (let i = startTime; i < endTime; i++) {
+    // startTime AM to endTime PM
+    slots.push(i);
+  }
+  return slots;
+};
+
+//get Dates of weeks in current month
+export const getCalendarGridDates = (currentDate: Date) => {
+  const month = currentDate.getMonth();
+  const year = currentDate.getFullYear();
+  const firstDayOfMonth = startOfMonth(new Date(year, month));
+  const lastDayOfMonth = endOfMonth(firstDayOfMonth);
+
+  const calendarStart = startOfWeek(firstDayOfMonth, { weekStartsOn: 1 }); // Monday
+  const calendarEnd = endOfWeek(lastDayOfMonth, { weekStartsOn: 1 });
+
+  const allDays = eachDayOfInterval({ start: calendarStart, end: calendarEnd });
+
+  // Group into weeks
+  const weeks = [];
+  for (let i = ZERO; i < allDays.length; i += DAYS_IN_WEEK) {
+    weeks.push(allDays.slice(i, i + DAYS_IN_WEEK));
+  }
+
+  return weeks;
+};
+
+// Get events for a specific time slot
+export const getEventsForTimeSlot = (events: CalendarEventType[], day: Date, hour: number) => {
+  return events.filter((event: CalendarEventType) => {
+    if (event.isAllDay) return false;
+    if (!isSameDay(event.startDate, day)) return false;
+
+    // Check if the event starts at this hour
+    if (event.startTime) {
+      const eventHour = Number.parseInt(event.startTime.split(' ')[0]);
+      const isPM = event.startTime.includes('PM');
+      const hour24 = isPM && eventHour !== TWELVE_HOUR ? eventHour + TWELVE_HOUR : eventHour;
+      return hour === hour24;
+    }
+
+    return false;
+  });
+};
+
+// Get events for a specific day
+export const getEventsForDay = (events: CalendarEventType[], day: Date, allDay = false) => {
+  return events.filter((event: CalendarEventType) => {
+    return isSameDay(event.startDate, day) && event.isAllDay === allDay;
+  });
+};
