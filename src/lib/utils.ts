@@ -10,6 +10,7 @@ import {
 } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 import { DAYS_IN_WEEK, TWELVE_HOUR, ZERO } from './const';
+import { CalendarEventType } from '@/types/calendar';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

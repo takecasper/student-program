@@ -47,18 +47,20 @@ export const initialData = [
     startTime: '8 AM',
     endTime: '9:30 AM',
     location: 'H & S 403',
+    teacher: 'DR. Geoffrey Blair',
     color: '#70c0b8',
     isAllDay: false,
   },
   {
     id: '6',
-    title: 'Vacation Leave',
+    title: 'Vacation Leave1',
     startDate: new Date(2025, 4, 30), // Using current month for visibility
     endDate: new Date(2025, 6, 17),
     startTime: '7 AM',
     endTime: '8 PM',
     color: '#70c0b8', // bar color
     location: 'H & S 403',
+    teacher: 'DR. Geoffrey Blair',
     isAllDay: false,
     status: {
       text: 'Approved',
@@ -69,7 +71,26 @@ export const initialData = [
     description: 'This is test!. This is test',
   },
   {
-    id: '8',
+    id: '7',
+    title: 'Vacation Leave2',
+    startDate: new Date(2025, 4, 30), // Using current month for visibility
+    endDate: new Date(2025, 6, 17),
+    startTime: '7 AM',
+    endTime: '8 PM',
+    color: '#70c0b8', // bar color
+    location: 'H & S 403',
+    teacher: 'DR. Geoffrey Blair',
+    isAllDay: false,
+    status: {
+      text: 'Approved',
+      color: '#8eeee4',
+      dotColor: '#00a59b',
+      icon: 'icon',
+    },
+    description: 'This is test!. This is test',
+  },
+  {
+    id: '9',
     title: 'Academic Session',
     startDate: new Date(2025, 4, 30), // Using current month for visibility
     endDate: new Date(2025, 4, 30),
@@ -78,7 +99,7 @@ export const initialData = [
     isAllDay: true,
   },
   {
-    id: '9',
+    id: '10',
     title: 'Academic Session',
     startDate: new Date(2025, 4, 30), // Using current month for visibility
     endDate: new Date(2025, 4, 30),

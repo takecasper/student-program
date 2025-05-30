@@ -18,6 +18,7 @@ interface CalendarEventType {
   color: string;
   isAllDay: boolean;
   location?: string;
+  teacher?: string;
   status?: {
     text: string;
     color: string;
@@ -45,7 +46,7 @@ const Day = ({ events, timeSlots, currentDate, setCurrentDate }: DayProps) => {
   return (
     <>
       {/* Calendar Grid */}
-      <div className="border border-[#f5f5f5] rounded-md overflow-hidden">
+      <div className="border border-[#f5f5f5] rounded-4xl overflow-hidden">
         {/* Days Header */}
         <div className="flex justify-center p-2 border-b border-[#f5f5f5]">
           <div className="flex items-center gap-2">
@@ -63,22 +64,25 @@ const Day = ({ events, timeSlots, currentDate, setCurrentDate }: DayProps) => {
         <div className="grid grid-cols-[120px_repeat(1,1fr)] border-b border-[#f5f5f5]">
           <div className="p-3 text-[#6c6c6c] text-sm">all-day</div>
 
-          <div className="p-2 border-l border-[#f5f5f5]">
-            {getEventsForDay(events, currentDate, true).map((event: CalendarEventType) => (
-              <div key={event.id} className="mb-2">
-                <DayEvent
-                  event={event}
-                  title={event.title}
-                  startTime={event.startTime || ''}
-                  endTime={event.endTime || ''}
-                  location={event.location}
-                  color={event.color}
-                  status={event.status}
-                  isAllDay={true}
-                  description={event.description}
-                />
-              </div>
-            ))}
+          <div className="border-l border-[#f5f5f5]">
+            {getEventsForDay(events, currentDate, true).map(
+              (event: CalendarEventType, index, events) => (
+                <div key={event.id}>
+                  <DayEvent
+                    event={event}
+                    title={event.title}
+                    startTime={event.startTime || ''}
+                    endTime={event.endTime || ''}
+                    location={event.location}
+                    color={event.color}
+                    status={event.status}
+                    isAllDay={true}
+                    description={event.description}
+                    size={events.length}
+                  />
+                </div>
+              ),
+            )}
           </div>
         </div>
 
@@ -98,17 +102,19 @@ const Day = ({ events, timeSlots, currentDate, setCurrentDate }: DayProps) => {
 
                 <div className="border-l border-b border-[#f5f5f5] relative min-h-[120px]">
                   {getEventsForTimeSlot(events, currentDate, hour).map(
-                    (event: CalendarEventType) => (
-                      <div key={event.id}>
+                    (event: CalendarEventType, id, events) => (
+                      <div key={event.id} className="group relative">
                         <DayEvent
                           event={event}
                           title={event.title}
                           startTime={event.startTime || ''}
                           endTime={event.endTime || ''}
                           location={event.location}
+                          teacher={event.teacher}
                           color={event.color}
                           status={event.status}
                           description={event.description}
+                          size={events.length}
                         />
                       </div>
                     ),

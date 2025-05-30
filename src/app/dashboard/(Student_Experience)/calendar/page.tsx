@@ -28,6 +28,7 @@ import {
   EVENT_COLORS,
   START_TIME_OF_DAY,
 } from '@/lib/const';
+import { CalendarEventType } from '@/types/calendar';
 
 // Navigation mapping for different view modes
 const NAVIGATION_DAYS = {
