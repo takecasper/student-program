@@ -8,9 +8,10 @@ interface VideoRecordingCheckProps {
 
 export default function VideoRecordingCheck({
   onComplete,
-  onRecordAgain,
+  // onRecordAgain,
 }: VideoRecordingCheckProps) {
   const [hasRecorded, setHasRecorded] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const { status, startRecording, stopRecording, mediaBlobUrl, previewStream } =
     useReactMediaRecorder({
       video: true,
@@ -21,6 +22,13 @@ export default function VideoRecordingCheck({
   const handleStopRecording = () => {
     stopRecording();
     setHasRecorded(true);
+  };
+
+  const handleSubmitRecording = () => {
+    setIsSubmitted(true);
+
+    // Immediately complete the check
+    onComplete();
   };
 
   return (
@@ -78,13 +86,12 @@ export default function VideoRecordingCheck({
             </div>
           </div>
 
-          <div className="flex justify-center gap-4">
+          <div className="flex items-end justify-end gap-4">
             <button
               onClick={handleStopRecording}
-              className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white rounded-full hover:bg-red-700 transition"
+              className="flex items-center gap-2 px-6 py-3 bg-[#364699] text-white rounded-[20px] hover:bg-red-700 transition"
             >
-              <div className="w-3 h-3 bg-white rounded-sm"></div>
-              Stop Recording
+              Record
             </button>
           </div>
 
@@ -121,17 +128,17 @@ export default function VideoRecordingCheck({
                     }
                   }
                 }}
-                className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition shadow-lg"
+                className="w-16 h-16 bg-white/90 rounded-lg flex items-center justify-center hover:bg-white transition shadow-lg"
               >
-                <svg className="w-6 h-6 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z" />
                 </svg>
               </button>
             </div>
           </div>
 
-          <div className="flex gap-3">
-            <button
+          <div className="flex items-end justify-end gap-4">
+            {/* <button
               onClick={() => {
                 setHasRecorded(false);
                 onRecordAgain();
@@ -139,14 +146,27 @@ export default function VideoRecordingCheck({
               className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md text-sm hover:bg-gray-50"
             >
               Record Again
-            </button>
+            </button> */}
             <button
-              onClick={onComplete}
-              className="bg-[#364699] text-white py-3 px-8 rounded-full text-sm font-medium hover:bg-[#2538A8] transition cursor-pointer"
+              onClick={handleSubmitRecording}
+              className="bg-[#364699] text-white py-3 px-8 rounded-[20px] text-sm font-medium hover:bg-[#2538A8] transition cursor-pointer"
             >
               Submit Video
             </button>
           </div>
+        </div>
+      )}
+
+      {isSubmitted && (
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 text-green-600">
+            <span>✅</span>
+            <span className="text-sm">Recording submitted successfully!</span>
+          </div>
+          <p className="text-sm text-gray-600">
+            Great! Your video and audio are working perfectly. The system check will complete
+            automatically.
+          </p>
         </div>
       )}
     </div>

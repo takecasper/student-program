@@ -8,9 +8,9 @@ import MicrophoneCheck from './MicrophoneCheck';
 import VideoPlayerCheck from './VideoPlayerCheck';
 import VideoRecordingCheck from './VideoRecordingCheck';
 import CasperTestInterface from './CasperTestInterface';
+import CongratulationsScreen from './CongratulationsScreen';
 
 import GolfCourseIcon from '../../../../public/svgs/golf_course.svg';
-
 
 export default function CasperPrepare() {
   const steps = [
@@ -49,6 +49,7 @@ export default function CasperPrepare() {
   const [state, setState] = useState<string>('prepare');
   const [showCheckTab, setShowCheckTab] = useState<boolean>(false);
   const [showTestInterface, setShowTestInterface] = useState<boolean>(false);
+  const [showCongratulations, setShowCongratulations] = useState(false);
 
   const [completedChecks, setCompletedChecks] = useState<(boolean | string)[]>([
     false, // Browser & Internet Speed Test
@@ -69,6 +70,84 @@ export default function CasperPrepare() {
   // If showing test interface, render it instead
   if (showTestInterface) {
     return <CasperTestInterface onBack={() => setShowTestInterface(false)} />;
+  }
+
+  // If showing congratulations, show only that screen
+  if (showCongratulations) {
+    return (
+      <div className="bg-white py-6 px-16 md:px-26 md:py-10 text-gray-800 flex flex-col md:flex-row gap-10">
+        {/* Left Section - Same as main layout */}
+        <div className="md:w-2/3 space-y-6 pr-[11.5rem] border-r border-[#CCCCCC]">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
+              <img
+                alt="clinical"
+                loading="lazy"
+                width="16"
+                height="16"
+                decoding="async"
+                data-nimg="1"
+                src="/svgs/stars.svg"
+                className=" text-transparent"
+              />
+            </div>
+            <div className=" flex flex-col">
+              <span className="text-sm text-gray-500 font-medium">Recommended</span>
+              <h1 className="text-2xl font-semibold">Casper Practice Test</h1>
+            </div>
+          </div>
+
+          <div className="w-full">
+            <Image
+              src="/category1.png"
+              alt="Casper Thumbnail"
+              width={800}
+              height={200}
+              className="rounded-lg object-cover w-full h-48"
+            />
+          </div>
+
+          <p className="text-sm text-gray-600">
+            Applicants who complete the practice test generally perform better on Casper. The
+            practice test can take 1 hour+ to complete. If your test is within this time frame,
+            please proceed directly to your test instead.
+          </p>
+
+          <div className="border rounded-xl pl-12 pr-10 pt-6 pb-8 space-y-4">
+            <h2 className="text-sm font-semibold text-[#333333DE] uppercase">Practice Tests</h2>
+            <p className="text-sm text-gray-600">
+              Try out our currently available Casper test formats.
+            </p>
+
+            <div className="flex flex-col gap-4">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-800 font-medium">2024/25 Cycle</span>
+                <button
+                  onClick={() => setShowTestInterface(true)}
+                  className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm text-nowrap cursor-pointer"
+                >
+                  Start Test
+                </button>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-800 font-medium">
+                  AUS Teachers Education <br /> (2024 - 2025 Cycle)
+                </span>
+                <button
+                  onClick={() => setShowTestInterface(true)}
+                  className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm text-nowrap cursor-pointer"
+                >
+                  Start Test
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Section - Congratulations */}
+        <CongratulationsScreen onStartTest={() => setShowTestInterface(true)} />
+      </div>
+    );
   }
 
   return (
@@ -153,7 +232,10 @@ export default function CasperPrepare() {
                 (state === 'prepare' ? ' bg-[#364699] text-white' : ' bg-white text-[#333333DE]')
               }
             >
-              <GolfCourseIcon className={`w-[15px] h-[15px] fill-current ${state === 'prepare' ? 'text-white' : 'text-[#333333DE]'}`} /> HOW TO PREPARE
+              <GolfCourseIcon
+                className={`w-[15px] h-[15px] fill-current ${state === 'prepare' ? 'text-white' : 'text-[#333333DE]'}`}
+              />{' '}
+              HOW TO PREPARE
             </button>
 
             <button
@@ -163,7 +245,10 @@ export default function CasperPrepare() {
                 (state === 'prepare' ? ' text-[#333333DE] bg-white' : ' bg-[#364699] text-white')
               }
             >
-              <GolfCourseIcon className={`w-[15px] h-[15px] fill-current ${state === 'prepare' ? 'text-[#333333DE]' : 'text-white'}`} /> SYSTEM CHECK
+              <GolfCourseIcon
+                className={`w-[15px] h-[15px] fill-current ${state === 'prepare' ? 'text-[#333333DE]' : 'text-white'}`}
+              />{' '}
+              SYSTEM CHECK
             </button>
           </div>
 
@@ -301,6 +386,8 @@ export default function CasperPrepare() {
                               const newChecks = [...completedChecks];
                               newChecks[4] = true;
                               setCompletedChecks(newChecks);
+                              // Show congratulations screen immediately
+                              setShowCongratulations(true);
                             }}
                             onRecordAgain={() => {
                               // Reset to initial state if needed
