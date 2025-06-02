@@ -1,23 +1,5 @@
 import { Clock, MapPin, User } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
-import { format } from 'date-fns';
-
-interface EventType {
-  id: string;
-  title: string;
-  startDate: Date;
-  endDate: Date;
-  startTime?: string;
-  endTime?: string;
-  color: string;
-  isAllDay: boolean;
-  location?: string;
-  status?: {
-    text: string;
-    color: string;
-    dotColor: string;
-  };
-}
 
 interface DayEventProps {
   title: string;
@@ -34,12 +16,10 @@ interface DayEventProps {
   };
   isAllDay?: boolean;
   description?: string;
-  event: EventType;
   size: number;
 }
 
 export default function DayEvent({
-  event,
   title,
   startTime,
   endTime,

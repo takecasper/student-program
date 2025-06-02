@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import Webcam from 'react-webcam';
+import Image from 'next/image';
 
 interface WebcamCheckProps {
   onComplete: () => void;
@@ -45,10 +46,13 @@ const WebcamCheck = ({ onComplete }: WebcamCheckProps) => {
             videoConstraints={{ facingMode: 'user' }}
           />
         ) : (
-          <img
+          <Image
             src={capturedImage}
-            className="w-[400px] h-[280px] rounded-lg object-cover"
+            width={400}
+            height={280}
+            className="rounded-lg object-cover"
             alt="Captured"
+            unoptimized
           />
         )}
 

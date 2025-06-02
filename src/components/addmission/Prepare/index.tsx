@@ -84,15 +84,12 @@ export default function CasperPrepare() {
         <div className="md:w-2/3 space-y-6 pr-[11.5rem] border-r border-[#CCCCCC]">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
-              <img
-                alt="clinical"
-                loading="lazy"
-                width="16"
-                height="16"
-                decoding="async"
-                data-nimg="1"
+              <Image
                 src="/svgs/stars.svg"
-                className=" text-transparent"
+                alt="clinical"
+                width={16}
+                height={16}
+                className="text-transparent"
               />
             </div>
             <div className=" flex flex-col">
@@ -160,18 +157,15 @@ export default function CasperPrepare() {
       <div className="md:w-2/3 space-y-6 pr-[11.5rem] border-r border-[#CCCCCC]">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
-            <img
-              alt="clinical"
-              loading="lazy"
-              width="16"
-              height="16"
-              decoding="async"
-              data-nimg="1"
+            <Image
               src="/svgs/stars.svg"
-              className=" text-transparent"
+              alt="clinical"
+              width={16}
+              height={16}
+              className="text-transparent"
             />
           </div>
-          <div className=" flex flex-col">
+          <div className="flex flex-col">
             <span className="text-sm text-gray-500 font-medium">Recommended</span>
             <h1 className="text-2xl font-semibold">Casper Practice Test</h1>
           </div>

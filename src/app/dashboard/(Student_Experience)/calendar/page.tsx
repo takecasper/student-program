@@ -4,27 +4,25 @@ import React, { useState } from 'react';
 import { CalendarDays, Pencil, AlertTriangle, Hourglass, Stamp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AddCalendarEventModal from '@/components/AddEvent';
-import { format, startOfWeek, endOfWeek, addDays, parseISO } from 'date-fns';
+import { format, startOfWeek, endOfWeek, parseISO } from 'date-fns';
 import Week from '@/components/dashboard/calendar/Week';
 import Day from '@/components/dashboard/calendar/Day';
 import Month from '@/components/dashboard/calendar/Month';
 import { initialData, initialWeekData } from './data';
 import { getCalendarGridDates, getCalendarGridDatesWeek, getTimeSlots } from '@/lib/utils';
-import {
-  DAYS_IN_DAY,
-  DAYS_IN_WEEK,
-  DAYS_IN_MONTH,
-  START_TIME_OF_DAY,
-  END_TIME_OF_DAY,
-  EVENT_COLORS,
-} from '@/lib/const';
+import { START_TIME_OF_DAY, END_TIME_OF_DAY, EVENT_COLORS } from '@/lib/const';
 import { CalendarEventType } from '@/types/calendar';
 
-const NAVIGATION_DAYS = {
-  day: DAYS_IN_DAY,
-  week: DAYS_IN_WEEK,
-  month: DAYS_IN_MONTH,
-} as const;
+interface EventData {
+  startDate: string | Date;
+  endDate: string | Date;
+  type: string;
+  description?: string;
+  isAllDay: boolean;
+  location?: string;
+  startTime?: string;
+  endTime?: string;
+}
 
 export default function CalendarViewWithRealDates() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -32,21 +30,7 @@ export default function CalendarViewWithRealDates() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [events, setEvents] = useState<CalendarEventType[]>(initialData);
 
-  const navigatePrevious = () => {
-    const val = NAVIGATION_DAYS[viewMode as keyof typeof NAVIGATION_DAYS] || DAYS_IN_WEEK;
-    setCurrentDate(addDays(currentDate, -val));
-  };
-
-  const navigateNext = () => {
-    const val = NAVIGATION_DAYS[viewMode as keyof typeof NAVIGATION_DAYS] || DAYS_IN_WEEK;
-    setCurrentDate(addDays(currentDate, val));
-  };
-
-  const navigateToday = () => {
-    setCurrentDate(new Date());
-  };
-
-  const handleAddEvent = (eventData: any) => {
+  const handleAddEvent = (eventData: EventData) => {
     const startDate =
       typeof eventData.startDate === 'string' ? parseISO(eventData.startDate) : eventData.startDate;
     const endDate =

@@ -1,17 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import { useState, useRef, useEffect } from 'react';
 import { MessageSquare, ChevronsRightLeft } from 'lucide-react';
 
 import { Button } from '../ui/button';
 import { Avatar, AvatarImage } from '../ui/avatar';
 
-const EvalSidebar = ({ setShowPanel }: { setShowPanel: Function }) => {
+interface EvalSidebarProps {
+  setShowPanel: (show: boolean) => void;
+}
+
+const EvalSidebar = ({ setShowPanel }: EvalSidebarProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [showFullPage, setShowFullPage] = useState<boolean>(false);
-  const [acknowledged, setAcknowledged] = useState(false);
   const [showComments, setShowComments] = useState<boolean>(false);
 
   useEffect(() => {

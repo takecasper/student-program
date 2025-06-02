@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import { isSameDay } from 'date-fns';
 import { getEventsForWeekStart, getOverlappingWeekCount, getWeeksShortenTitle } from '@/lib/utils';
 import WeekEvent from './event/WeekEvent';
 import { CalendarEventType } from '@/types/calendar';
@@ -9,7 +8,7 @@ interface WeekProps {
   daysOfWeek: Date[][];
   events: CalendarEventType[];
   timeSlots: number[]; // e.g., [8, 9, 10, ...]
-  setIsAddModalOpen: Function;
+  setIsAddModalOpen: () => void;
 }
 
 const Week = ({ daysOfWeek, events, timeSlots, setIsAddModalOpen }: WeekProps) => {
@@ -60,7 +59,6 @@ const Week = ({ daysOfWeek, events, timeSlots, setIsAddModalOpen }: WeekProps) =
                   return (
                     <WeekEvent
                       key={event.id}
-                      event={event}
                       title={event.title}
                       startTime={event.startTime || ''}
                       endTime={event.endTime || ''}
@@ -107,7 +105,6 @@ const Week = ({ daysOfWeek, events, timeSlots, setIsAddModalOpen }: WeekProps) =
                       return (
                         <div key={event.id} className="group relative">
                           <WeekEvent
-                            event={event}
                             title={event.title}
                             startTime={event.startTime || ''}
                             endTime={event.endTime || ''}

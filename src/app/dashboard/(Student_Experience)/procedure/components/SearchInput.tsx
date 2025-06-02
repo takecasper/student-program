@@ -11,8 +11,8 @@ const options = [
 ];
 
 type SearchInputProps = {
-    setOpen: (open: boolean) => void;
-}
+  setOpen: (open: boolean) => void;
+};
 
 const SearchInput = ({ setOpen }: SearchInputProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -35,7 +35,7 @@ const SearchInput = ({ setOpen }: SearchInputProps) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [setOpen]);
 
   return (
     <div

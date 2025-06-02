@@ -8,7 +8,6 @@ import {
   startOfMonth,
   startOfWeek,
   format,
-  isSameWeek,
 } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 import { DAYS_IN_WEEK, TWELVE_HOUR, ZERO } from './const';
@@ -63,8 +62,6 @@ export const getCalendarGridDates = (currentDate: Date) => {
 
 //get Dates of weeks in current month
 export const getCalendarGridDatesWeek = (currentDate: Date) => {
-  const month = currentDate.getMonth();
-  const year = currentDate.getFullYear();
   const startDay = startOfWeek(currentDate);
   const endDay = addDays(startDay, DAYS_IN_WEEK * DAYS_IN_WEEK - 1);
   const allDays = eachDayOfInterval({ start: startDay, end: endDay });
@@ -79,8 +76,6 @@ export const getCalendarGridDatesWeek = (currentDate: Date) => {
 
 //get Seven Weeks Shorten title
 export const getWeeksShortenTitle = (currentDate: Date, num: number = 7) => {
-  const startDay = startOfWeek(currentDate);
-  const endDay = addDays(startDay, num - 1);
   const title: string[] = [];
   for (let i = ZERO; i < num; i++) {
     const startDate = addDays(currentDate, DAYS_IN_WEEK * i);
@@ -155,6 +150,7 @@ export const getEventsForWeekStart = (
   allDay = false,
 ) => {
   return events.filter(
-    event => startDate <= event.startDate && endDate >= event.startDate && event.isAllDay === allDay,
+    event =>
+      startDate <= event.startDate && endDate >= event.startDate && event.isAllDay === allDay,
   );
 };
