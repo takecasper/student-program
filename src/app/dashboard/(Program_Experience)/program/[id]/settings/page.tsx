@@ -39,14 +39,14 @@ export default function ProgramPage() {
   const menuItems = [
     {
       id: 0,
-      label: 'User & Role',
-      icon: <CircleUser color="#4e4e4e" width={16} height={16} />,
-    },
-    {
-      id: 1,
       label: 'Curriculum & Rotation',
       icon: <Image width={16} height={16} src="/svgs/golf_course.svg" alt="Golf Course" />,
       subMenus: programCards,
+    },
+    {
+      id: 1,
+      label: `Learner's List`,
+      icon: <CircleUser color="#4e4e4e" width={16} height={16} />,
     },
     {
       id: 2,
@@ -127,9 +127,7 @@ export default function ProgramPage() {
 
       {/* Content */}
       <div className={`${!showSideBar ? 'basis-5/5 ' : 'basis-4/5 '}`}>
-        {settingsView === 0 && <UserRole />}
-
-        {settingsView === 1 && (
+        {settingsView === 0 && (
           <CurriculumRotation
             isConfiguring={isConfiguring}
             setIsConfiguring={setIsConfiguring}
@@ -138,6 +136,8 @@ export default function ProgramPage() {
             setIsSettingUpRotation={setIsSettingUpRotation}
           />
         )}
+
+        {settingsView === 1 && <UserRole />}
 
         {settingsView === 2 && (
           <EvaluationForms

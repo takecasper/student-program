@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import Image from 'next/image';
 import { useState } from 'react';
 import { Plus, SendHorizontal } from 'lucide-react';
-import { Check, ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,8 @@ import {
   TableHead,
   TableHeader,
 } from '@/components/ui/table';
+
+import GroupStarsIcon from '../../../../../../../public/svgs/group-stars.svg';
 
 const womensHealthSessions = [
   {
@@ -94,8 +97,8 @@ const ViewCourse = ({ selectedCourse, setShowCourse, setSelectedCourse }: ViewCo
         </Button>
 
         <div className="flex gap-2">
-          <Button variant="outline" size="icon" className="h-9 w-9 border-[#d9d9d9] cursor-pointer">
-            <Image src={'/svgs/calendar_month.svg'} width={12} height={13} alt="calendar" />
+          <Button variant="outline" size="icon" className="h-9 w-9 p-0 border-[#d9d9d9] cursor-pointer">
+            <Image src={'/svgs/calendar_month.svg'} width={16} height={16} alt="calendar" />
           </Button>
         </div>
       </div>
@@ -117,13 +120,13 @@ const ViewCourse = ({ selectedCourse, setShowCourse, setSelectedCourse }: ViewCo
             <TableBody>
               <TableRow className="border-b border-[#f5f5f5] cursor-pointer hover:bg-gray-50">
                 <TableCell className="py-4">
-                  <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
-                    <Check className="h-4 w-4 text-[#00a59b]" />
+                  <div className="w-[50px] h-[50px] rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
+                    <GroupStarsIcon className="h-[50px] w-[50px]" />
                   </div>
                 </TableCell>
-                <TableCell className="font-medium">
+                <TableCell className="font-medium text-[#333333DE]">
                   Women&apos;s Health
-                  <div className="mt-2">
+                  <div className="mt-0">
                     <Button
                       variant="ghost"
                       size="sm"
@@ -142,6 +145,7 @@ const ViewCourse = ({ selectedCourse, setShowCourse, setSelectedCourse }: ViewCo
                     </Button>
                   </div>
                 </TableCell>
+                <TableCell></TableCell>
                 <TableCell>Jan 28, 2025</TableCell>
                 <TableCell>Feb 2, 2025</TableCell>
                 <TableCell>
@@ -154,9 +158,7 @@ const ViewCourse = ({ selectedCourse, setShowCourse, setSelectedCourse }: ViewCo
                     </div>
                     Form Name
                   </Button>
-                </TableCell>
-                <TableCell>
-                  <div className='flex gap-6 items-center'>
+                  {/* <div className="flex gap-6 items-center">
                     <Button
                       variant="ghost"
                       className="text-[#333333DE] p-0 h-auto hover:bg-transparent hover:underline"
@@ -176,31 +178,49 @@ const ViewCourse = ({ selectedCourse, setShowCourse, setSelectedCourse }: ViewCo
                         <Image width={11} height={11} src={'/svgs/edit.svg'} alt="edit" />
                       </Button>
                     </div>
-                  </div>
+                  </div> */}
                 </TableCell>
               </TableRow>
 
               {/* Sessions as separate rows */}
               {showSessions &&
                 womensHealthSessions.map((session, index) => (
-                  <TableRow key={index} className="border-b border-[#f5f5f5] bg-gray-50 ">
-                    <TableCell className="py-4 ">
-                      <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
-                        <Image src="/lecture.svg" alt="form" width={14} height={14} />
+                  <TableRow key={index} className="border-b border-[#f5f5f5] bg-white">
+                    <TableCell className="py-4 "></TableCell>
+                    <TableCell>
+                      <div className="flex flex-col gap-1 items-start">
+                        <span className="font-medium">{session.name}</span>
+
+                        <div className="flex px-2 py-1 items-center justify-center gap-1 bg-[#F5CA66] rounded-[20px]">
+                          <Image src="/svgs/books.svg" alt="form" width={10} height={10} />
+
+                          <span className="text-[#333333DE] text-[12px] font-medium">Lecture</span>
+                        </div>
                       </div>
                     </TableCell>
-                    <TableCell className="font-medium">{session.name}</TableCell>
                     <TableCell>{session.location}</TableCell>
-                    <TableCell>{session.date}</TableCell>
-                    <TableCell>{session.time}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-col gap-1 items-start">
+                        <span className="font-medium text-[#333333DE]">{session.date}</span>
+
+                        <span className="font-medium text-[#33333399]">{session.time}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col gap-1 items-start">
+                        <span className="font-medium text-[#333333DE]">{session.date}</span>
+
+                        <span className="font-medium text-[#33333399]">{session.time}</span>
+                      </div>
+                    </TableCell>
                     <TableCell></TableCell>
                   </TableRow>
                 ))}
 
               <TableRow className="border-b border-[#f5f5f5]">
                 <TableCell className="py-4">
-                  <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
-                    <Check className="h-4 w-4 text-[#00a59b]" />
+                  <div className="w-[50px] h-[50px] rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
+                    <GroupStarsIcon className="h-[50px] w-[50px]" />
                   </div>
                 </TableCell>
 
@@ -234,8 +254,8 @@ const ViewCourse = ({ selectedCourse, setShowCourse, setSelectedCourse }: ViewCo
 
               <TableRow className="border-b border-[#f5f5f5]">
                 <TableCell className="py-4">
-                  <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
-                    <Check className="h-4 w-4 text-[#00a59b]" />
+                  <div className="w-[50px] h-[50px] rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
+                    <GroupStarsIcon className="h-[50px] w-[50px]" />
                   </div>
                 </TableCell>
 
@@ -266,7 +286,7 @@ const ViewCourse = ({ selectedCourse, setShowCourse, setSelectedCourse }: ViewCo
                   </Button>
                 </TableCell>
               </TableRow>
-
+{/* 
               {isAdding ? (
                 <TableRow>
                   <TableCell
@@ -342,7 +362,7 @@ const ViewCourse = ({ selectedCourse, setShowCourse, setSelectedCourse }: ViewCo
                     </Button>
                   </TableCell>
                 </TableRow>
-              )}
+              )} */}
             </TableBody>
           </Table>
         </div>

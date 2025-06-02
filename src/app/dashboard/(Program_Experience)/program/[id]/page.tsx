@@ -14,6 +14,8 @@ import { useBreadcrumbStore } from '@/store/breadcrumbs';
 
 import { programCards } from '@/data/programCards';
 
+import CalendarSVG from '../../../../../../public/svgs/calendar_month.svg';
+
 type Course = {
   year: string;
   course: string;
@@ -56,12 +58,13 @@ export default function ProgramPage() {
 
             <div className="flex gap-2">
               <Button
-                onClick={handleSettingsRedirect}
-                variant="outline"
                 size="icon"
-                className="h-9 w-9 border-[#d9d9d9] cursor-pointer"
+                variant="outline"
+                onClick={handleSettingsRedirect}
+                className="group h-9 w-9 hover:w-auto hover:px-2 border-[#d9d9d9] cursor-pointer"
               >
                 <Settings className="h-4 w-4 text-[#6c6c6c]" />
+                <p className="group-hover:flex hidden text-[12px] text-[#858585]">Configure</p>
               </Button>
             </div>
           </div>
@@ -86,7 +89,7 @@ export default function ProgramPage() {
                   </div>
                 )}
 
-                <div className={index === 0 ? 'border-b-2 border-[#D9D9D9] rounded-[20px]' : ''}>
+                <div className={`relative ${index === 0 ? 'border-b-2 border-[#D9D9D9] rounded-[20px]' : ''}`}>
                   <Image
                     width={500}
                     height={300}
@@ -96,42 +99,50 @@ export default function ProgramPage() {
                     priority={index < 2}
                     className="w-full h-40 object-cover rounded-[2px]"
                   />
+
+                  <span className={`${card.status === 'CURRENT' ? 'text-[#00A59B]' : 'text-[#333333DE]'} font-bold block border border-[#D9D9D9] py-1 px-2 w-max text-[12px] rounded-[10px] bg-white absolute bottom-3 right-3`}>{card.status}</span>
                 </div>
 
                 <CardContent className="p-4 px-0 flex-grow">
-                  <h3 className="text-sm font-medium text-[#333333] mb-4">{card.year}</h3>
+                  <h3 className="text-sm font-medium text-[#333333DE] mb-4">{card.year}</h3>
 
-                  <div className="flex items-center gap-1 flex-wrap">
-                    {card.content.map((item, idx) => (
-                      <Button
-                        key={idx}
-                        size="sm"
-                        variant="outline"
-                        onClick={() => {
-                          setShowCourse(true);
-                          setSelectedCourse({
-                            year: card.year,
-                            course: item.name,
-                          });
-                        }}
-                        className={`${item.name === 'CLINICAL PHASE' ? 'px-0 border-none shadow-none' : 'px-3 border-[#d9d9d9]'} ${item.lock ? 'opacity-50 pointer-events-none' : 'cursor-pointer'} rounded-[10px] w-auto text-xs h-7  text-black font-bold`}
-                      >
-                        {item.name === 'CLINICAL PHASE' ? (
-                          <>
-                            <Image
-                              width={24}
-                              height={24}
-                              alt="clinical phase"
-                              className="object-fit"
-                              src="/svgs/Clinical Icon.svg"
-                            />
-                            CLINICAL PHASE
-                          </>
-                        ) : (
-                          item.name
-                        )}
-                      </Button>
-                    ))}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1 flex-wrap">
+                      {card.content.map((item, idx) => (
+                        <Button
+                          key={idx}
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            setShowCourse(true);
+                            setSelectedCourse({
+                              year: card.year,
+                              course: item.name,
+                            });
+                          }}
+                          className={`${item.name === 'CLINICAL PHASE' ? 'px-0 border-none shadow-none' : 'px-[6px] border-[#d9d9d9]'} ${item.lock ? 'opacity-50 pointer-events-none' : 'cursor-pointer'} rounded-[8px] w-auto text-xs h-6  text-black font-bold`}
+                        >
+                          {item.name === 'CLINICAL PHASE' ? (
+                            <>
+                              <Image
+                                width={24}
+                                height={24}
+                                alt="clinical phase"
+                                className="object-fit"
+                                src="/svgs/Clinical Icon.svg"
+                              />
+                              CLINICAL PHASE
+                            </>
+                          ) : (
+                            item.name
+                          )}
+                        </Button>
+                      ))}
+                    </div>
+
+                    <Button className="!p-0 !px-0 cursor-pointer bg-[#fff] hover:bg-gray-300 w-[30px] h-[30px] flex items-center justify-center rounded-[4px] border border-[#3333331A]">
+                      <CalendarSVG width={24} height={24} className='object-fit w-[24px] h-[24px]'/>
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
