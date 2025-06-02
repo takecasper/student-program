@@ -12,6 +12,7 @@ import SuggestedCourseCard from './SuggestedCourseCard';
 import { useState } from 'react';
 import * as Select from '@radix-ui/react-select';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
+import SummaryDropCard from './SummaryDropCard';
 
 const ratingOptions = [
   { label: 'Day View', value: 'day' },
@@ -31,6 +32,7 @@ export default function DashboardContent() {
           <div className="flex gap-4">
             <SummaryCard iconSrc="/golf_course.svg" title="Ongoing Course" value="1" />
             <SummaryCard iconSrc="hotel_class.svg" title="Upcoming Sessions" value="3" />
+            <SummaryDropCard iconSrc="hotel_class.svg" title="Add/Drop Schedu ling" />
           </div>
 
           <div className="space-y-4 flex flex-col w-[700px] ">
