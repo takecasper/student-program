@@ -2,7 +2,7 @@
 'use client';
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { format, addDays, isSameDay } from 'date-fns';
+import { format, addDays } from 'date-fns';
 import DayEvent from './event/DayEvent';
 import { getEventsForDay, getEventsForTimeSlot } from '@/lib/utils';
 import { TWELVE_HOUR } from '@/lib/const';
@@ -62,7 +62,6 @@ const Day = ({ events, timeSlots, currentDate, setCurrentDate }: DayProps) => {
               (event: CalendarEventType, index, events) => (
                 <div key={event.id}>
                   <DayEvent
-                    event={event}
                     title={event.title}
                     startTime={event.startTime || ''}
                     endTime={event.endTime || ''}
@@ -98,7 +97,6 @@ const Day = ({ events, timeSlots, currentDate, setCurrentDate }: DayProps) => {
                     (event: CalendarEventType, id, events) => (
                       <div key={event.id} className="group relative">
                         <DayEvent
-                          event={event}
                           title={event.title}
                           startTime={event.startTime || ''}
                           endTime={event.endTime || ''}
