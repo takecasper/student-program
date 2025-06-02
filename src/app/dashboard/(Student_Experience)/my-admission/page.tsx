@@ -100,9 +100,7 @@ const AdmissionCycleStep: React.FC<StepProps> = ({ formData, onChange }) => {
                   : 'border-gray-300'
               }`}
             >
-              {formData.admissionCycle === cycle && (
-                <Check className="h-3 w-3 text-white" />
-              )}
+              {formData.admissionCycle === cycle && <Check className="h-3 w-3 text-white" />}
             </div>
             <Label className="cursor-pointer select-none">{cycle}</Label>
           </div>
@@ -605,7 +603,8 @@ const PurchaseSuccessScreen: React.FC<{ onClose: () => void }> = ({ onClose }) =
 const ReservationComplete: React.FC<{
   onClose: () => void;
   onPurchase: () => void;
-}> = ({ onClose, onPurchase }) => {
+  onGoBack: () => void;
+}> = ({ onClose, onPurchase, onGoBack }) => {
   const handlePurchase = () => {
     onPurchase();
   };
@@ -724,7 +723,7 @@ const ReservationComplete: React.FC<{
           <Button
             variant="outline"
             className="flex-1 rounded-full border-gray-300"
-            onClick={onClose}
+            onClick={onGoBack}
           >
             Go Back
           </Button>
@@ -904,6 +903,8 @@ export default function AdmissionContent() {
     };
 
     const isNotLastStep = step.id < ADMISSION_STEPS.length;
+    const isCurrentStep = currentStep === step.id;
+    const isCompletedStep = currentStep > step.id;
 
     return (
       <div key={step.id} className="relative">
@@ -913,7 +914,7 @@ export default function AdmissionContent() {
             {/* Active line portion */}
             <div
               className={`w-full transition-all duration-300 ${
-                currentStep > step.id ? 'bg-[#00a59b] h-full' : 'bg-gray-200 h-0'
+                isCompletedStep ? 'bg-[#00a59b] h-full' : 'bg-gray-200 h-0'
               }`}
             />
           </div>
@@ -923,12 +924,14 @@ export default function AdmissionContent() {
           <div className="flex items-start gap-2">
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
-                currentStep >= step.id
+                isCompletedStep
                   ? 'bg-[#00a59b] text-white border-[#00a59b]'
-                  : 'bg-white text-[#6c6c6c] border-gray-200'
+                  : isCurrentStep
+                    ? 'bg-[#00a59b] text-white border-[#00a59b]'
+                    : 'bg-white text-[#6c6c6c] border-gray-200'
               }`}
             >
-              {currentStep > step.id ? <Check className="h-5 w-5" /> : <span>{step.id}</span>}
+              {isCompletedStep ? <Check className="h-5 w-5" /> : <span>{step.id}</span>}
             </div>
             <h3 className="text-lg font-medium">
               Step {step.id}: {step.title}
@@ -944,26 +947,34 @@ export default function AdmissionContent() {
             )}
           </div>
 
-          <div
-            className={`pt-4 ${currentStep === step.id ? 'border-[#00a59b]' : 'border-[#d9d9d9]'}`}
-          >
-            <StepComponent
-              formData={formData}
-              onChange={handleStepChange(fieldKey)}
-              currentStep={currentStep}
-            />
-          </div>
+          {/* Only show form content for current step */}
+          {isCurrentStep && (
+            <>
+              <div className={`pt-4 ${isCurrentStep ? 'border-[#00a59b]' : 'border-[#d9d9d9]'}`}>
+                <StepComponent
+                  formData={formData}
+                  onChange={handleStepChange(fieldKey)}
+                  currentStep={currentStep}
+                />
+              </div>
 
-          {/* Only show Next button if this is the current step */}
-          {currentStep === step.id && (
-            <div className="mt-6 mb-8">
-              <Button
-                className="rounded-full py-1 px-[23px] bg-[#364699] hover:bg-[#253170] disabled:opacity-50"
-                onClick={handleStepComplete}
-                disabled={!isStepValid()}
-              >
-                Next
-              </Button>
+              {/* Show Next button for current step */}
+              <div className="mt-6 mb-8">
+                <Button
+                  className="rounded-full py-1 px-[23px] bg-[#364699] hover:bg-[#253170] disabled:opacity-50"
+                  onClick={handleStepComplete}
+                  disabled={!isStepValid()}
+                >
+                  Next
+                </Button>
+              </div>
+            </>
+          )}
+
+          {/* Show completed step summary */}
+          {isCompletedStep && (
+            <div className="pt-2 pb-4">
+              <div className="text-xs text-[#00a59b] bg-[#00a59b]/5 p-2 rounded">✓ Completed</div>
             </div>
           )}
         </div>
@@ -984,10 +995,11 @@ export default function AdmissionContent() {
     };
   }, []);
 
-  // Add a function to handle purchase completion
-  // const handlePurchase = () => {
-  //   setShowSuccessScreen(true);
-  // };
+  const handleGoBackToPayment = () => {
+    setShowSuccessScreen(false);
+    setHideSteps(false);
+    setCurrentStep(6); // Go back to payment step
+  };
 
   return showPrepare ? (
     <CasperPrepare />
@@ -1073,8 +1085,8 @@ export default function AdmissionContent() {
 
       {/* Application Sidebar - Modified to show success screen */}
       {showSidebar && (
-        <div className="absolute top-0 right-0 bottom-0 z-40 flex justify-end h-screen">
-          <div className="bg-white w-full max-w-md h-full overflow-y-auto shadow-lg border-l border-[#f5f5f5] animate-in slide-in-from-right">
+        <div className="absolute top-0 right-0 bottom-0 z-40 flex justify-end">
+          <div className="bg-white w-[500px] h-[750px] overflow-y-auto shadow-lg border-l border-[#f5f5f5] animate-in slide-in-from-right">
             <div className="p-6">
               {showFinalSuccess ? (
                 <PurchaseSuccessScreen onClose={handleCloseSidebar} />
@@ -1082,6 +1094,7 @@ export default function AdmissionContent() {
                 <ReservationComplete
                   onClose={handleCloseSidebar}
                   onPurchase={() => setShowFinalSuccess(true)}
+                  onGoBack={handleGoBackToPayment}
                 />
               ) : (
                 <>

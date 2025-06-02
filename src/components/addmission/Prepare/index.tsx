@@ -3,12 +3,14 @@ import Image from 'next/image';
 import { useState } from 'react';
 import CheckTab from './CheckTab';
 import WebcamCheck from './WebcamCheck';
+import MicrophoneCheck from './MicrophoneCheck';
+import VideoPlayerCheck from './VideoPlayerCheck';
+import VideoRecordingCheck from './VideoRecordingCheck';
 import CasperTestInterface from './CasperTestInterface';
+import CongratulationsScreen from './CongratulationsScreen';
 
 import GolfCourseIcon from '../../../../public/svgs/golf_course.svg';
 import { Check } from 'lucide-react';
-
-type TabState = 'prepare' | 'check';
 
 export default function CasperPrepare() {
   const steps = [
@@ -44,9 +46,19 @@ export default function CasperPrepare() {
       description: 'Try the Casper Practice Test in your test format',
     },
   ];
-  const [state, setState] = useState<TabState>('prepare');
+  const [state, setState] = useState('prepare');
   const [showCheckTab, setShowCheckTab] = useState<boolean>(false);
   const [showTestInterface, setShowTestInterface] = useState<boolean>(false);
+  const [showCongratulations, setShowCongratulations] = useState(false);
+  const [checkStage, setCheckStage] = useState(2);
+
+  const [completedChecks, setCompletedChecks] = useState<(boolean | string)[]>([
+    false, // Browser & Internet Speed Test
+    false, // Webcam Check
+    false, // Microphone Check
+    false, // Video Player Check
+    false, // Video Recording Check
+  ]);
 
   const checkSteps = [
     'Browser & Internet Speed Test',
@@ -55,7 +67,6 @@ export default function CasperPrepare() {
     'Video Player Check',
     'Video Recording Check',
   ];
-  const [checkStage, setCheckStage] = useState<number>(1);
 
   const isPrepareTab = state === 'prepare';
   const isCheckTab = state === 'check';
@@ -63,6 +74,84 @@ export default function CasperPrepare() {
   // If showing test interface, render it instead
   if (showTestInterface) {
     return <CasperTestInterface onBack={() => setShowTestInterface(false)} />;
+  }
+
+  // If showing congratulations, show only that screen
+  if (showCongratulations) {
+    return (
+      <div className="bg-white py-6 px-16 md:px-26 md:py-10 text-gray-800 flex flex-col md:flex-row gap-10">
+        {/* Left Section - Same as main layout */}
+        <div className="md:w-2/3 space-y-6 pr-[11.5rem] border-r border-[#CCCCCC]">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
+              <img
+                alt="clinical"
+                loading="lazy"
+                width="16"
+                height="16"
+                decoding="async"
+                data-nimg="1"
+                src="/svgs/stars.svg"
+                className=" text-transparent"
+              />
+            </div>
+            <div className=" flex flex-col">
+              <span className="text-sm text-gray-500 font-medium">Recommended</span>
+              <h1 className="text-2xl font-semibold">Casper Practice Test</h1>
+            </div>
+          </div>
+
+          <div className="w-full">
+            <Image
+              src="/category1.png"
+              alt="Casper Thumbnail"
+              width={800}
+              height={200}
+              className="rounded-lg object-cover w-full h-48"
+            />
+          </div>
+
+          <p className="text-sm text-gray-600">
+            Applicants who complete the practice test generally perform better on Casper. The
+            practice test can take 1 hour+ to complete. If your test is within this time frame,
+            please proceed directly to your test instead.
+          </p>
+
+          <div className="border rounded-xl pl-12 pr-10 pt-6 pb-8 space-y-4">
+            <h2 className="text-sm font-semibold text-[#333333DE] uppercase">Practice Tests</h2>
+            <p className="text-sm text-gray-600">
+              Try out our currently available Casper test formats.
+            </p>
+
+            <div className="flex flex-col gap-4">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-800 font-medium">2024/25 Cycle</span>
+                <button
+                  onClick={() => setShowTestInterface(true)}
+                  className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm text-nowrap cursor-pointer"
+                >
+                  Start Test
+                </button>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-800 font-medium">
+                  AUS Teachers Education <br /> (2024 - 2025 Cycle)
+                </span>
+                <button
+                  onClick={() => setShowTestInterface(true)}
+                  className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm text-nowrap cursor-pointer"
+                >
+                  Start Test
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Section - Congratulations */}
+        <CongratulationsScreen onStartTest={() => setShowTestInterface(true)} />
+      </div>
+    );
   }
 
   return (
@@ -148,7 +237,7 @@ export default function CasperPrepare() {
               }
             >
               <GolfCourseIcon
-                className={`w-[15px] h-[15px] fill-current ${isPrepareTab ? 'text-white' : 'text-[#333333DE]'}`}
+                className={`w-[15px] h-[15px] fill-current ${state === 'prepare' ? 'text-white' : 'text-[#333333DE]'}`}
               />{' '}
               HOW TO PREPARE
             </button>
@@ -161,7 +250,7 @@ export default function CasperPrepare() {
               }
             >
               <GolfCourseIcon
-                className={`w-[15px] h-[15px] fill-current ${isCheckTab ? 'text-white' : 'text-[#333333DE]'}`}
+                className={`w-[15px] h-[15px] fill-current ${state === 'prepare' ? 'text-[#333333DE]' : 'text-white'}`}
               />{' '}
               SYSTEM CHECK
             </button>
@@ -205,7 +294,7 @@ export default function CasperPrepare() {
       {state === 'check' &&
         (showCheckTab ? (
           <>
-            <div className="relative">
+            <div className="w-full md:w-96 py-6 bg-white space-y-6 text-gray-800 shrink-0">
               {checkSteps.map((title, i) => {
                 const isCompleted = i + 1 <= checkStage; // mark only first step as completed
                 return (
@@ -237,13 +326,99 @@ export default function CasperPrepare() {
                       {i === 0 && checkStage === 0 && <CheckTab />}
 
                       {i === 0 && isCompleted && checkStage !== 0 && (
-                        <p className="text-[#33333399] text-xs">Download Bitrate Approved!</p>
+                        <p className="text-[#33333399] text-xs ml-2">Download Bitrate Approved!</p>
                       )}
 
-                      {i === 1 && checkStage === 1 && <WebcamCheck />}
-
+                      {i === 1 && checkStage === 1 && (
+                        <div className="space-y-4">
+                          {completedChecks[1] ? (
+                            <div className="flex items-center gap-2 text-green-600">
+                              <span>✅</span>
+                              <span className="text-sm">Webcam check completed successfully</span>
+                            </div>
+                          ) : (
+                            <WebcamCheck
+                              onComplete={() => {
+                                const newChecks = [...completedChecks];
+                                newChecks[1] = true;
+                                setCompletedChecks(newChecks);
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
                       {i === 1 && isCompleted && checkStage !== 1 && (
-                        <p className="text-[#33333399] text-xs">Download Bitrate Approved!</p>
+                        <p className="text-[#33333399] text-xs ml-2">
+                          Webcam check completed successfully!
+                        </p>
+                      )}
+
+                      {i === 2 && checkStage === 2 && (
+                        <div className="space-y-4">
+                          {completedChecks[2] ? (
+                            <div className="flex items-center gap-2 text-green-600">
+                              <span>✅</span>
+                              <span className="text-sm">Microphone is functioning properly</span>
+                            </div>
+                          ) : (
+                            <MicrophoneCheck
+                              onComplete={() => {
+                                const newChecks = [...completedChecks];
+                                newChecks[2] = true;
+                                setCompletedChecks(newChecks);
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
+                      {i === 2 && isCompleted && checkStage !== 2 && (
+                        <p className="text-[#33333399] text-xs ml-2">Download Bitrate Approved!</p>
+                      )}
+
+                      {i === 3 && checkStage === 3 && (
+                        <div className="space-y-4">
+                          {completedChecks[3] === true ? (
+                            <div className="flex items-center gap-2 text-green-600">
+                              <span>✅</span>
+                              <span className="text-sm">Video player is working perfectly</span>
+                            </div>
+                          ) : (
+                            <VideoPlayerCheck
+                              onComplete={() => {
+                                const newChecks = [...completedChecks];
+                                newChecks[3] = true;
+                                setCompletedChecks(newChecks);
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
+                      {i === 3 && isCompleted && checkStage !== 3 && (
+                        <p className="text-[#33333399] text-xs ml-2">Download Bitrate Approved!</p>
+                      )}
+
+                      {i === 4 && checkStage === 4 && (
+                        <div className="space-y-4">
+                          {completedChecks[4] === true ? (
+                            <div className="flex items-center gap-2 text-green-600">
+                              <span>✅</span>
+                              <span className="text-sm">Great! You look and sound clearly</span>
+                            </div>
+                          ) : (
+                            <VideoRecordingCheck
+                              onComplete={() => {
+                                const newChecks = [...completedChecks];
+                                newChecks[4] = true;
+                                setCompletedChecks(newChecks);
+                                // Show congratulations screen immediately
+                                setShowCongratulations(true);
+                              }}
+                              onRecordAgain={() => {
+                                // Reset to initial state if needed
+                              }}
+                            />
+                          )}
+                        </div>
                       )}
                     </div>
                   </div>
