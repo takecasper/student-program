@@ -62,8 +62,8 @@ export default function CheckTab() {
         <div className="space-y-1 text-sm">
           {isValid ? (
             <>
-              <p className="text-green-600">✔ Download bitrate looks good!</p>
-              <p className="text-green-600">✔ Using latest version of Chrome (V1.30)</p>
+              <p className="text-[#00a59b]">✓ Download bitrate looks good!</p>
+              <p className="text-[#00a59b]">✓ Using latest version of Chrome (V1.30)</p>
             </>
           ) : (
             <p className="text-red-600">✘ Your download speed is too low.</p>
