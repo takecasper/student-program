@@ -1,142 +1,142 @@
-'use client'
+'use client';
 import React from 'react';
-import CalendarEvent from '@/components/CalendarEvent';
-import { format, isToday, isSameDay } from 'date-fns';
-
-// Define the event type interface
-interface CalendarEventType {
-  id: string;
-  title: string;
-  startDate: Date;
-  endDate: Date;
-  startTime?: string;
-  endTime?: string;
-  color: string;
-  isAllDay: boolean;
-  location?: string;
-  status?: {
-    text: string;
-    color: string;
-    dotColor: string;
-  };
-}
+import { isSameDay } from 'date-fns';
+import { getEventsForWeekStart, getOverlappingWeekCount, getWeeksShortenTitle } from '@/lib/utils';
+import WeekEvent from './event/WeekEvent';
+import { CalendarEventType } from '@/types/calendar';
 
 interface WeekProps {
-  daysOfWeek: Date[];
+  daysOfWeek: Date[][];
   events: CalendarEventType[];
-  timeSlots: number[];
+  timeSlots: number[]; // e.g., [8, 9, 10, ...]
+  setIsAddModalOpen: Function;
 }
 
-const Week = ({ daysOfWeek, events, timeSlots }: WeekProps) => {
-  // Get events for a specific day
-  const getEventsForDay = (day: Date, allDay = false) => {
-    return events.filter((event: CalendarEventType) => {
-      return isSameDay(event.startDate, day) && event.isAllDay === allDay;
-    });
-  };
-
-  // Get events for a specific time slot
-  const getEventsForTimeSlot = (day: Date, hour: number) => {
-    return events.filter((event: CalendarEventType) => {
+const Week = ({ daysOfWeek, events, timeSlots, setIsAddModalOpen }: WeekProps) => {
+  const getEventsForTimeSlot = (events: CalendarEventType[], hour: number) => {
+    // console.log('adfadsfasdf:', events);
+    return events.filter(event => {
       if (event.isAllDay) return false;
-      if (!isSameDay(event.startDate, day)) return false;
-
-      // Check if the event starts at this hour
       if (event.startTime) {
         const eventHour = Number.parseInt(event.startTime.split(' ')[0]);
         const isPM = event.startTime.includes('PM');
-        const hour24 = isPM && eventHour !== 12 ? eventHour + 12 : eventHour;
+        const hour24 =
+          isPM && eventHour !== 12 ? eventHour + 12 : eventHour === 12 && !isPM ? 0 : eventHour;
         return hour === hour24;
       }
-
       return false;
     });
   };
 
-	return (
-		<>
-			{/* Calendar Grid */}
-			<div className="border border-[#f5f5f5] rounded-md overflow-hidden">
-				{/* Days Header */}
-				<div className="grid grid-cols-[100px_repeat(7,1fr)] border-b border-[#f5f5f5]">
-					<div className="p-3 text-center text-[#6c6c6c] text-sm font-medium"></div>
-					{daysOfWeek.map((day: Date, index: React.Key | null | undefined) => (
-						<div
-							key={index}
-							className={`p-3 text-center border-l border-[#f5f5f5] ${isToday(day) ? 'bg-[#f5f5f5]' : ''}`}
-						>
-							<div className="text-[#6c6c6c] text-sm font-medium">
-								{format(day, 'EEE').toUpperCase()}
-							</div>
-							<div className={`${isToday(day) ? 'text-[#364699]' : 'text-[#333333]'} font-bold`}>
-								{format(day, 'd')}
-							</div>
-						</div>
-					))}
-				</div>
+  const weekTitles: string[] = getWeeksShortenTitle(new Date());
 
-				{/* All-day Events */}
-				<div className="grid grid-cols-[100px_repeat(7,1fr)] border-b border-[#f5f5f5]">
-					<div className="p-3 text-[#6c6c6c] text-sm">all-day</div>
+  return (
+    <>
+      {/* Calendar Grid */}
+      <div className="rounded-md overflow-hidden">
+        {/* Header Row */}
+        <div className="grid grid-cols-[70px_repeat(7,1fr)] bg-white">
+          <div className="p-3"></div>
+          {weekTitles.map((title, i) => (
+            <div
+              key={i}
+              className={`${i === 0 ? 'rounded-tl-4xl' : ''} p-3 text-center border border-[#e5e5e5]`}
+            >
+              <span className="font-bold text-[#444]">{`WEEK ${i + 1}`}</span>
+              <span className="text-[#999] uppercase text-sm ml-1">{`, ${title}`}</span>
+            </div>
+          ))}
+        </div>
 
-					{daysOfWeek.map((day: Date, index: React.Key | null | undefined) => (
-						<div key={index} className="p-2 border-l border-[#f5f5f5]">
-							{getEventsForDay(day, true).map((event: CalendarEventType) => (
-								<div key={event.id} className="mb-2">
-									<CalendarEvent
-										event={event}
-										title={event.title}
-										startTime={event.startTime || ''}
-										endTime={event.endTime || ''}
-										location={event.location}
-										color={event.color}
-										status={event.status}
-										isAllDay={true}
-									/>
-								</div>
-							))}
-						</div>
-					))}
-				</div>
+        {/* All Day Row */}
+        <div className="grid grid-cols-[70px_repeat(7,1fr)]">
+          <div className="flex items-center justify-end pr-3 text-[#444] text-sm font-semibold relative">
+            <span className="absolute top-[-12px]">All Day</span>
+          </div>
+          {daysOfWeek.map((days, index) => {
+            return (
+              <div key={index} className="relative border border-[#e5e5e5] h-[72px]">
+                {getEventsForWeekStart(events, days[0], days[6], true).map((event, i, events) => {
+                  return (
+                    <WeekEvent
+                      key={event.id}
+                      event={event}
+                      title={event.title}
+                      startTime={event.startTime || ''}
+                      endTime={event.endTime || ''}
+                      location={event.location}
+                      color={event.color}
+                      status={event.status}
+                      isAllDay={true}
+                      index={i}
+                      size={events.length}
+                      numWeek={
+                        getOverlappingWeekCount(daysOfWeek, event.startDate, event.endDate).length
+                      }
+                      setIsAddModalOpen={setIsAddModalOpen}
+                    />
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
 
-				{/* Time Slots */}
-				<div className="grid grid-cols-[100px_repeat(7,1fr)]">
-					{timeSlots.map((hour: number) => {
-						const displayHour = hour > 12 ? hour - 12 : hour;
-						const isPM = hour >= 12;
+        {/* Hourly Rows */}
+        <div className="grid grid-cols-[70px_repeat(7,1fr)]">
+          {timeSlots.map((hour: number) => {
+            const displayHour = hour % 12 === 0 ? 12 : hour % 12;
+            const isPM = hour >= 12;
 
-						return (
-							<React.Fragment key={hour}>
-								<div className="border-b border-[#f5f5f5] p-2 text-right pr-3 h-20">
-									<span className="text-[#6c6c6c] text-sm">
-										{displayHour} <span className="text-xs">{isPM ? 'PM' : 'AM'}</span>
-									</span>
-								</div>
+            return (
+              <React.Fragment key={hour}>
+                {/* Left Time Label Column (Red Box Area) */}
+                <div className="h-[144px] flex justify-end items-start pr-3 pt-1 relative">
+                  <span className="text-[#6c6c6c] text-xs absolute top-[-10px]">
+                    <span className="font-bold">{displayHour}:00</span> {isPM ? 'PM' : 'AM'}
+                  </span>
+                </div>
 
-								{daysOfWeek.map((day: Date, dayIndex: React.Key | null | undefined) => (
-									<div key={dayIndex} className="border-l border-b border-[#f5f5f5] relative h-20">
-										{getEventsForTimeSlot(day, hour).map((event: CalendarEventType) => (
-											<div key={event.id} className="absolute top-1 left-2 right-2 z-10">
-												<CalendarEvent
-													event={event}
-													title={event.title}
-													startTime={event.startTime || ''}
-													endTime={event.endTime || ''}
-													location={event.location}
-													color={event.color}
-													status={event.status}
-												/>
-											</div>
-										))}
-									</div>
-								))}
-							</React.Fragment>
-						);
-					})}
-				</div>
-			</div>
-		</>
-	)
-}
+                {/* Cells for Each Day */}
+                {daysOfWeek.map((days, dayIndex) => (
+                  <div key={dayIndex} className=" border border-[#e5e5e5] h-[144px]">
+                    {getEventsForTimeSlot(
+                      getEventsForWeekStart(events, days[0], days[6]),
+                      hour,
+                    ).map((event, i, events) => {
+                      return (
+                        <div key={event.id} className="group relative">
+                          <WeekEvent
+                            event={event}
+                            title={event.title}
+                            startTime={event.startTime || ''}
+                            endTime={event.endTime || ''}
+                            location={event.location}
+                            teacher={event.teacher}
+                            color={event.color}
+                            status={event.status}
+                            isAllDay={event.isAllDay}
+                            isEditable={event.isEditable}
+                            index={i}
+                            size={events.length}
+                            numWeek={
+                              getOverlappingWeekCount(daysOfWeek, event.startDate, event.endDate)
+                                .length
+                            }
+                            setIsAddModalOpen={setIsAddModalOpen}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
+              </React.Fragment>
+            );
+          })}
+        </div>
+      </div>
+    </>
+  );
+};
 
-export default Week
+export default Week;
