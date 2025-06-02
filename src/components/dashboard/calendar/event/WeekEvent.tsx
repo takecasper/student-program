@@ -1,4 +1,13 @@
-import { Clock, MapPin } from 'lucide-react';
+import {
+  Clock,
+  MapPin,
+  User,
+  SquarePen,
+  Stamp,
+  Hourglass,
+  XCircle,
+  CheckCircle,
+} from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { format } from 'date-fns';
 
@@ -24,6 +33,7 @@ interface WeekEventProps {
   startTime: string;
   endTime: string;
   location?: string;
+  teacher?: string;
   color: string;
   status?: {
     text: string;
@@ -31,7 +41,12 @@ interface WeekEventProps {
     dotColor?: string;
   };
   isAllDay?: boolean;
-  event: EventType
+  isEditable?: boolean;
+  event: EventType;
+  numWeek: number;
+  size: number;
+  index: number;
+  setIsAddModalOpen: Function;
 }
 
 export default function WeekEvent({
@@ -40,14 +55,20 @@ export default function WeekEvent({
   startTime,
   endTime,
   location,
+  teacher,
   color,
   status,
   isAllDay = false,
+  isEditable = false,
+  numWeek,
+  size,
+  index,
+  setIsAddModalOpen,
 }: WeekEventProps) {
   const [showModal, setShowModal] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         setShowModal(false);
@@ -60,98 +81,340 @@ export default function WeekEvent({
     };
   }, []);
 
-  return (
-    <div className="flex">
-      <div
-        onClick={() => setShowModal(true)}
-        className={`bg-white rounded-[20px] border border-[#D9D9D9] p-2 flex-1 shadow-lg cursor-pointer ${
-          isAllDay ? 'w-full' : ''
-        }`}
-      >
-        <div className="flex gap-2 items-center">
-          <div
-            className="flex items-center h-[34px] rounded-[20px]"
-            style={{ borderLeft: `4px solid ${color}` }}
-          ></div>
+  const totalWidth = `calc(${100 * numWeek + '%' + ' + ' + (2 * numWeek - 10) + 'px '})`;
+  const eventHeight = isAllDay ? `${64 / size}px` : `${136 / size}px`;
+  const top = isAllDay ? `${(64 / size) * index + 3}px` : `${(136 / size) * index + 3}px`;
 
-          <div className="flex flex-col">
-            <p className="text-sm font-medium">{title}</p>
-            {status && (
-              <span
-                className="ml-auto text-[#364699] text-xs py-1 px-2 rounded-full flex items-center gap-1"
-                style={{ backgroundColor: status.color }}
-              >
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: status.dotColor || color }}
-                ></div>
-                {status.text}
-              </span>
-            )}
-            {!isAllDay && (
-              <>
-                <div className="flex items-center gap-1 mt-1">
-                  <Clock className="h-3 w-3 text-[#6c6c6c]" />
-                  <span className="text-xs text-[#6c6c6c]">
-                    {startTime} - {endTime}
-                  </span>
+  return (
+    <>
+      {isAllDay ? (
+        <div className={`absolute left-1 bg-white z-10`} style={{ width: totalWidth, top: top }}>
+          <div className="flex">
+            <div
+              onClick={() => setShowModal(true)}
+              className={`bg-white ${size > 1 ? (index === 0 ? 'rounded-tr-[10px]' : index === size - 1 && 'rounded-br-[10px]') : 'rounded-r-[10px]'} border border-[#D9D9D9] p-2 flex-1 shadow-lg cursor-pointer`}
+              style={{ borderLeft: `4px solid ${color}`, minHeight: eventHeight }}
+            >
+              <div className="flex gap-2 h-full items-center">
+                <div className="flex flex-col justify-center">
+                  <p className="text-sm font-medium">{title}</p>
+                  {status && size === 1 && (
+                    <span
+                      className="ml-auto text-white text-xs py-1 px-2 rounded-full flex items-center gap-1"
+                      style={{ backgroundColor: status.color }}
+                    >
+                      <div className="w-3 h-3 rounded-full flex justify-center items-center">
+                        {status.text === 'Pending' && <Stamp className="w-3 h-3 text-[#fff]" />}
+                        {status.text === 'Drop Requested' && (
+                          <XCircle className="w-3 h-3 text-[#fff]" />
+                        )}
+                        {status.text === 'Waitlisted' && (
+                          <Hourglass className="w-3 h-3 text-[#fff]" />
+                        )}
+                        {status.text === 'Confirmed' && (
+                          <CheckCircle className="w-3 h-3 text-[#fff]" />
+                        )}
+                      </div>
+                      {status.text}
+                    </span>
+                  )}
                 </div>
-                {location && (
-                  <div className="flex items-center gap-1 mt-1">
-                    <MapPin className="h-3 w-3 text-[#6c6c6c]" />
-                    <span className="text-xs text-[#6c6c6c]">{location}</span>
-                  </div>
-                )}
-              </>
-            )}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      {showModal ?
-        <div
-          ref={wrapperRef}
-          className="absolute z-50"
-        >
-          <div className="bg-white p-6 rounded-lg w-full max-w-[296px] relative shadow-lg border border-[#CCCCCC]">
-            <button onClick={() => setShowModal(false)} className="absolute top-3 right-4 hover:text-black cursor-pointer">✕</button>
+      ) : (
+        <>
+          {size === 1 ? (
+            <div className="absolute left-1 z-50 bg-white" style={{ width: totalWidth, top: top }}>
+              <div className="flex w-full">
+                <div
+                  className={`bg-white ${
+                    size > 1
+                      ? index === 0
+                        ? 'rounded-tr-[10px]'
+                        : index === size - 1 && 'rounded-br-[10px]'
+                      : 'rounded-r-[10px]'
+                  } border border-[#D9D9D9] p-2 shadow-lg cursor-pointer w-full`}
+                  style={{ borderLeft: `4px solid ${color}`, minHeight: '136px' }}
+                >
+                  <div className="flex h-full items-center w-full">
+                    <div className="flex flex-col justify-center w-full ">
+                      <div className="flex flex-col sm:flex-row justify-between pb-1">
+                        <div className="flex flex-col text-nowrap">
+                          <p className="text-md font-medium">{title}</p>
+                        </div>
+                        <div className="flex items-end">
+                          {isEditable ? (
+                            <span
+                              className="text-black text-xs py-1 px-2 rounded-full flex items-center gap-1 w-fit sm:ml-auto"
+                              onClick={() => setIsAddModalOpen()}
+                            >
+                              <SquarePen className="w-4 h-4" />
+                            </span>
+                          ) : status ? (
+                            <span
+                              className="text-white text-xs py-1 px-2 rounded-full flex items-center gap-1 w-fit sm:ml-auto"
+                              style={{ backgroundColor: status.color }}
+                              onClick={() => {
+                                setShowModal(!showModal);
+                              }}
+                            >
+                              <div className="w-3 h-3 rounded-full flex justify-center items-center">
+                                {status.text === 'Pending' && (
+                                  <Stamp className="w-3 h-3 text-[#fff]" />
+                                )}
+                                {status.text === 'Drop Requested' && (
+                                  <XCircle className="w-3 h-3 text-[#fff]" />
+                                )}
+                                {status.text === 'Waitlisted' && (
+                                  <Hourglass className="w-3 h-3 text-[#fff]" />
+                                )}
+                                {status.text === 'Confirmed' && (
+                                  <CheckCircle className="w-3 h-3 text-[#fff]" />
+                                )}
+                              </div>
+                              {status.text}
+                            </span>
+                          ) : null}
+                        </div>
+                      </div>
 
-            <h2 className="text-sm font-semibold mb-[19px] text-[#333333DE]">Type of Booking</h2>
+                      <div className="flex flex-col pb-1">
+                        <div className="w-full flex items-center gap-1">
+                          <Clock className="h-3 w-3 text-[#6c6c6c]" />
+                          <span className="text-sm text-[#6c6c6c]">
+                            {startTime} - {endTime}
+                          </span>
+                        </div>
+                      </div>
 
-            <div className="flex gap-2 mb-4">
-              <button className="w-18 py-1 text-xs bg-[#364699] text-white rounded-full">Vacation</button>
-              <button className="w-18 py-1 text-xs border-[1.4px] border-[#CCCCCC] rounded-full">Duty Hour</button>
-              <button className="w-18 py-1 text-xs border-[1.4px] border-[#CCCCCC] rounded-full">Event</button>
+                      {teacher && (
+                        <div className="flex flex-col pb-1">
+                          <div className="w-full flex items-center gap-1">
+                            <User className="h-3 w-3 text-[#6c6c6c]" />
+                            <span className="text-sm text-[#6c6c6c]">{teacher}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {location && (
+                        <div className="flex flex-col pb-1">
+                          <div className="w-full flex items-center gap-1">
+                            <MapPin className="h-3 w-3 text-[#6c6c6c]" />
+                            <span className="text-sm text-[#6c6c6c]">{location}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {showModal && (
+                        <div className="border-t-2 mt-2">
+                          <div className="text-sm text-[#333] space-y-4">
+                            <h2 className="text-base font-semibold">Elective Details</h2>
+                            <p>
+                              The FP-AddicMed-Victoria-RJH rotation (South Vancouver Island) offers
+                              Family medicine training in Victoria, BC (RJH, VicGH, RAAC, community)
+                              for Canadian students, with flexible lengths (8-week max).
+                            </p>
+
+                            <h2 className="text-base font-semibold">Key Details</h2>
+                            <div>
+                              <p className="font-semibold text-sm">Clinical Locations:</p>
+                              <ul className="list-disc list-inside text-sm text-[#555] space-y-1 mt-1">
+                                <li>Royal Jubilee Hospital (1952 Bay St)</li>
+                                <li>Victoria General Hospital (1 Hospital Way)</li>
+                                <li>Rapid Access Addiction Clinic (RAAC, 1119 Pembroke St)</li>
+                                <li>Various community settings</li>
+                              </ul>
+                            </div>
+
+                            <p className="font-semibold text-sm mt-4">Focus Areas:</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-
-            <div className='flex mb-4'>
-              {/* Start time */}
-              <div className="flex flex-col">
-                <label className="text-xs text-[#33333399] font-medium mb-[2px]">Start time</label>
-                <span className="text-sm whitespace-nowrap border-b-2 text-[#333333DE] border-[#333333DE] pb-[1px]">{format(event.startDate, 'MMMM d, yyyy')}</span>
+          ) : (
+            <>
+              <div
+                className={`absolute left-1 bg-white z-10`}
+                style={{ width: totalWidth, top: top }}
+              >
+                <div className="flex">
+                  <div
+                    className={`bg-white ${index === 0 ? 'rounded-tr-[10px]' : index === size - 1 && 'rounded-br-[10px]'} border border-[#D9D9D9] p-2 flex-1 shadow-lg cursor-pointer`}
+                    style={{ borderLeft: `4px solid ${color}`, minHeight: eventHeight }}
+                  >
+                    <div className="flex h-full items-center">
+                      <div className="flex flex-col justify-center w-full ">
+                        <div className="flex  flex-col sm:flex-row justify-between pb-1">
+                          <div className="flex flex-col text-nowrap">
+                            <p className="text-md font-medium">{title}</p>
+                          </div>
+                          <div className="flex items-end">
+                            {isEditable ? (
+                              <span
+                                className="text-black text-xs py-1 px-2 rounded-full flex items-center gap-1 w-fit sm:ml-auto"
+                                onClick={() => setIsAddModalOpen()}
+                              >
+                                <SquarePen className="w-4 h-4" />
+                              </span>
+                            ) : status ? (
+                              <span
+                                className="text-white text-xs py-1 px-2 rounded-full flex items-center gap-1 w-fit sm:ml-auto"
+                                style={{ backgroundColor: status.color }}
+                                onClick={() => {
+                                  alert('asdfadsf');
+                                  setShowModal(!showModal);
+                                }}
+                              >
+                                <div className="w-3 h-3 rounded-full flex justify-center items-center">
+                                  {status.text === 'Pending' && (
+                                    <Stamp className="w-3 h-3 text-[#fff]" />
+                                  )}
+                                  {status.text === 'Drop Requested' && (
+                                    <XCircle className="w-3 h-3 text-[#fff]" />
+                                  )}
+                                  {status.text === 'Waitlisted' && (
+                                    <Hourglass className="w-3 h-3 text-[#fff]" />
+                                  )}
+                                  {status.text === 'Confirmed' && (
+                                    <CheckCircle className="w-3 h-3 text-[#fff]" />
+                                  )}
+                                </div>
+                                {status.text}
+                              </span>
+                            ) : null}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <span className="mx-2 mt-4 text-[#333333DE]">–</span>
+              <div
+                className="absolute left-1 hidden group-hover:block z-50 bg-white"
+                style={{ width: totalWidth, top: top }}
+              >
+                <div className="flex w-full">
+                  <div
+                    className={`bg-white ${
+                      size > 1
+                        ? index === 0
+                          ? 'rounded-tr-[10px]'
+                          : index === size - 1 && 'rounded-br-[10px]'
+                        : 'rounded-r-[10px]'
+                    } border border-[#D9D9D9] p-2 shadow-lg cursor-pointer w-full`}
+                    style={{ borderLeft: `4px solid ${color}`, minHeight: '136px' }}
+                  >
+                    <div className="flex h-full items-center w-full">
+                      <div className="flex flex-col justify-center w-full ">
+                        <div className="flex flex-col sm:flex-row justify-between pb-1">
+                          <div className="flex flex-col">
+                            <p className="text-md font-medium">{title}</p>
+                          </div>
+                          <div className="flex items-end">
+                            {isEditable ? (
+                              <span
+                                className="text-black text-xs py-1 px-2 rounded-full flex items-center gap-1 w-fit sm:ml-auto"
+                                onClick={() => setIsAddModalOpen()}
+                              >
+                                <SquarePen className="w-4 h-4" />
+                              </span>
+                            ) : status ? (
+                              <span
+                                className="text-white text-xs py-1 px-2 rounded-full flex items-center gap-1 w-fit sm:ml-auto"
+                                style={{ backgroundColor: status.color }}
+                                onClick={() => {
+                                  setShowModal(!showModal);
+                                }}
+                              >
+                                <div className="w-3 h-3 rounded-full flex justify-center items-center">
+                                  {status.text === 'Pending' && (
+                                    <Stamp className="w-3 h-3 text-[#fff]" />
+                                  )}
+                                  {status.text === 'Drop Requested' && (
+                                    <XCircle className="w-3 h-3 text-[#fff]" />
+                                  )}
+                                  {status.text === 'Waitlisted' && (
+                                    <Hourglass className="w-3 h-3 text-[#fff]" />
+                                  )}
+                                  {status.text === 'Confirmed' && (
+                                    <CheckCircle className="w-3 h-3 text-[#fff]" />
+                                  )}
+                                </div>
+                                {status.text}
+                              </span>
+                            ) : null}
+                          </div>
+                        </div>
 
-              {/* End time */}
-              <div className="flex flex-col">
-                <label className="text-xs text-[#33333399] font-medium mb-[2px]">End time</label>
-                <span className="text-sm whitespace-nowrap border-b-2 text-[#333333DE] border-[#333333DE] pb-[1px]">{format(event.endDate, 'MMMM d, yyyy')}</span>
+                        <div className="flex flex-col pb-1">
+                          <div className="w-full flex items-center gap-1">
+                            <Clock className="h-3 w-3 text-[#6c6c6c]" />
+                            <span className="text-sm text-[#6c6c6c]">
+                              {startTime} - {endTime}
+                            </span>
+                          </div>
+                        </div>
+
+                        {teacher && (
+                          <div className="flex flex-col pb-1">
+                            <div className="w-full flex items-center gap-1">
+                              <User className="h-3 w-3 text-[#6c6c6c]" />
+                              <span className="text-sm text-[#6c6c6c]">{teacher}</span>
+                            </div>
+                          </div>
+                        )}
+
+                        {location && (
+                          <div className="flex flex-col pb-1">
+                            <div className="w-full flex items-center gap-1">
+                              <MapPin className="h-3 w-3 text-[#6c6c6c]" />
+                              <span className="text-sm text-[#6c6c6c]">{location}</span>
+                            </div>
+                          </div>
+                        )}
+
+                        {showModal && (
+                          <div className="border-t-2 mt-2">
+                            <div className="text-sm text-[#333] space-y-4">
+                              <h2 className="text-base font-semibold">Elective Details</h2>
+                              <p>
+                                The FP-AddicMed-Victoria-RJH rotation (South Vancouver Island)
+                                offers Family medicine training in Victoria, BC (RJH, VicGH, RAAC,
+                                community) for Canadian students, with flexible lengths (8-week
+                                max).
+                              </p>
+
+                              <h2 className="text-base font-semibold">Key Details</h2>
+                              <div>
+                                <p className="font-semibold text-sm">Clinical Locations:</p>
+                                <ul className="list-disc list-inside text-sm text-[#555] space-y-1 mt-1">
+                                  <li>Royal Jubilee Hospital (1952 Bay St)</li>
+                                  <li>Victoria General Hospital (1 Hospital Way)</li>
+                                  <li>Rapid Access Addiction Clinic (RAAC, 1119 Pembroke St)</li>
+                                  <li>Various community settings</li>
+                                </ul>
+                              </div>
+
+                              <p className="font-semibold text-sm mt-4">Focus Areas:</p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Description</label>
-              <textarea className="border p-2 w-full rounded" rows={5}></textarea>
-            </div>
-
-            <div className='w-full flex justify-end'>
-              <button onClick={() => setShowModal(false)} className="bg-[#364699] text-xs text-white px-4 py-[15px] rounded-full hover:bg-[#1e3088] cursor-pointer">
-                Request Leave
-              </button>
-            </div>
-          </div>
-        </div>:<></>
-      }
-    </div>
+            </>
+          )}
+        </>
+      )}
+    </>
   );
 }

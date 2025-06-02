@@ -139,14 +139,22 @@ export const getOverlappingWeekCount = (
 
 export const getEventsForWeek = (
   events: CalendarEventType[],
-  starDate: Date | string,
-  endDate: Date | string,
+  startDate: Date,
+  endDate: Date,
   allDay = false,
 ) => {
   return events.filter(
-    event =>
-      starDate <= new Date(event.endDate) &&
-      endDate >= new Date(event.startDate) &&
-      event.isAllDay === allDay,
+    event => startDate <= event.endDate && endDate >= event.startDate && event.isAllDay === allDay,
+  );
+};
+
+export const getEventsForWeekStart = (
+  events: CalendarEventType[],
+  startDate: Date,
+  endDate: Date,
+  allDay = false,
+) => {
+  return events.filter(
+    event => startDate <= event.startDate && endDate >= event.startDate && event.isAllDay === allDay,
   );
 };

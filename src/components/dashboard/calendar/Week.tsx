@@ -1,36 +1,22 @@
 'use client';
 import React from 'react';
 import { isSameDay } from 'date-fns';
-import { getEventsForWeek, getWeeksShortenTitle } from '@/lib/utils';
+import { getEventsForWeekStart, getOverlappingWeekCount, getWeeksShortenTitle } from '@/lib/utils';
 import WeekEvent from './event/WeekEvent';
-
-interface CalendarEventType {
-  id: string;
-  title: string;
-  startDate: Date;
-  endDate: Date;
-  startTime?: string;
-  endTime?: string;
-  color: string;
-  isAllDay: boolean;
-  location?: string;
-  status?: {
-    text: string;
-    color: string;
-    dotColor: string;
-  };
-}
+import { CalendarEventType } from '@/types/calendar';
 
 interface WeekProps {
   daysOfWeek: Date[][];
   events: CalendarEventType[];
   timeSlots: number[]; // e.g., [8, 9, 10, ...]
+  setIsAddModalOpen: Function;
 }
 
-const Week = ({ daysOfWeek, events, timeSlots }: WeekProps) => {
-  const getEventsForTimeSlot = (day: Date, hour: number) => {
+const Week = ({ daysOfWeek, events, timeSlots, setIsAddModalOpen }: WeekProps) => {
+  const getEventsForTimeSlot = (events: CalendarEventType[], hour: number) => {
+    // console.log('adfadsfasdf:', events);
     return events.filter(event => {
-      if (event.isAllDay || !isSameDay(event.startDate, day)) return false;
+      if (event.isAllDay) return false;
       if (event.startTime) {
         const eventHour = Number.parseInt(event.startTime.split(' ')[0]);
         const isPM = event.startTime.includes('PM');
@@ -43,10 +29,6 @@ const Week = ({ daysOfWeek, events, timeSlots }: WeekProps) => {
   };
 
   const weekTitles: string[] = getWeeksShortenTitle(new Date());
-
-  const resutl = getEventsForWeek(events, daysOfWeek[1][0], daysOfWeek[2][6], true);
-
-  console.log('Sirius:', resutl);
 
   return (
     <>
@@ -71,24 +53,33 @@ const Week = ({ daysOfWeek, events, timeSlots }: WeekProps) => {
           <div className="flex items-center justify-end pr-3 text-[#444] text-sm font-semibold relative">
             <span className="absolute top-[-12px]">All Day</span>
           </div>
-          {daysOfWeek.map((day, index) => (
-            <div key={index} className="p-2 border border-[#e5e5e5] h-[72px]">
-              {/* {getEventsForWeek(day, true).map(event => (
-                <div key={event.id} className="mb-2">
-                  <WeekEvent
-                    event={event}
-                    title={event.title}
-                    startTime={event.startTime || ''}
-                    endTime={event.endTime || ''}
-                    location={event.location}
-                    color={event.color}
-                    status={event.status}
-                    isAllDay={true}
-                  />
-                </div>
-              ))} */}
-            </div>
-          ))}
+          {daysOfWeek.map((days, index) => {
+            return (
+              <div key={index} className="relative border border-[#e5e5e5] h-[72px]">
+                {getEventsForWeekStart(events, days[0], days[6], true).map((event, i, events) => {
+                  return (
+                    <WeekEvent
+                      key={event.id}
+                      event={event}
+                      title={event.title}
+                      startTime={event.startTime || ''}
+                      endTime={event.endTime || ''}
+                      location={event.location}
+                      color={event.color}
+                      status={event.status}
+                      isAllDay={true}
+                      index={i}
+                      size={events.length}
+                      numWeek={
+                        getOverlappingWeekCount(daysOfWeek, event.startDate, event.endDate).length
+                      }
+                      setIsAddModalOpen={setIsAddModalOpen}
+                    />
+                  );
+                })}
+              </div>
+            );
+          })}
         </div>
 
         {/* Hourly Rows */}
@@ -107,21 +98,36 @@ const Week = ({ daysOfWeek, events, timeSlots }: WeekProps) => {
                 </div>
 
                 {/* Cells for Each Day */}
-                {daysOfWeek.map((day, dayIndex) => (
-                  <div key={dayIndex} className="border border-[#e5e5e5] relative h-[144px]">
-                    {/* {getEventsForTimeSlot(day, hour).map(event => (
-                      <div key={event.id} className="absolute top-1 left-2 right-2 z-10">
-                        <WeekEvent
-                          event={event}
-                          title={event.title}
-                          startTime={event.startTime || ''}
-                          endTime={event.endTime || ''}
-                          location={event.location}
-                          color={event.color}
-                          status={event.status}
-                        />
-                      </div>
-                    ))} */}
+                {daysOfWeek.map((days, dayIndex) => (
+                  <div key={dayIndex} className=" border border-[#e5e5e5] h-[144px]">
+                    {getEventsForTimeSlot(
+                      getEventsForWeekStart(events, days[0], days[6]),
+                      hour,
+                    ).map((event, i, events) => {
+                      return (
+                        <div key={event.id} className="group relative">
+                          <WeekEvent
+                            event={event}
+                            title={event.title}
+                            startTime={event.startTime || ''}
+                            endTime={event.endTime || ''}
+                            location={event.location}
+                            teacher={event.teacher}
+                            color={event.color}
+                            status={event.status}
+                            isAllDay={event.isAllDay}
+                            isEditable={event.isEditable}
+                            index={i}
+                            size={events.length}
+                            numWeek={
+                              getOverlappingWeekCount(daysOfWeek, event.startDate, event.endDate)
+                                .length
+                            }
+                            setIsAddModalOpen={setIsAddModalOpen}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 ))}
               </React.Fragment>

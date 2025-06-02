@@ -186,7 +186,7 @@ export default function DayEvent({
             </div>
           </div>
           {!isAllDay && (
-            <div className="absolute hidden top-0  group-hover:block z-50 w-full">
+            <div className="absolut top-0 hidden group-hover:block z-50 w-full">
               <div className="flex">
                 <div
                   className={`bg-white rounded-r-[8px] border border-[#D9D9D9] flex-1 shadow-lg cursor-pointer ${

@@ -7,7 +7,9 @@ export interface CalendarEventType {
   endTime?: string;
   color: string;
   isAllDay: boolean;
+  isEditable?: boolean;
   location?: string;
+  teacher?: string;
   status?: {
     text: string;
     color: string;

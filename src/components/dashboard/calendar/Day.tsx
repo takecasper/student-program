@@ -6,26 +6,9 @@ import { format, addDays, isSameDay } from 'date-fns';
 import DayEvent from './event/DayEvent';
 import { getEventsForDay, getEventsForTimeSlot } from '@/lib/utils';
 import { TWELVE_HOUR } from '@/lib/const';
+import { CalendarEventType } from '@/types/calendar';
 
 // Define the event type interface
-interface CalendarEventType {
-  id: string;
-  title: string;
-  startDate: Date;
-  endDate: Date;
-  startTime?: string;
-  endTime?: string;
-  color: string;
-  isAllDay: boolean;
-  location?: string;
-  teacher?: string;
-  status?: {
-    text: string;
-    color: string;
-    dotColor: string;
-  };
-  description?: string;
-}
 
 interface DayProps {
   events: CalendarEventType[];
