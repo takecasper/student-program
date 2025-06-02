@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 'use client';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -11,6 +10,7 @@ import CasperTestInterface from './CasperTestInterface';
 import CongratulationsScreen from './CongratulationsScreen';
 
 import GolfCourseIcon from '../../../../public/svgs/golf_course.svg';
+import { Check } from 'lucide-react';
 
 export default function CasperPrepare() {
   const steps = [
@@ -46,10 +46,11 @@ export default function CasperPrepare() {
       description: 'Try the Casper Practice Test in your test format',
     },
   ];
-  const [state, setState] = useState<string>('prepare');
+  const [state, setState] = useState('prepare');
   const [showCheckTab, setShowCheckTab] = useState<boolean>(false);
   const [showTestInterface, setShowTestInterface] = useState<boolean>(false);
   const [showCongratulations, setShowCongratulations] = useState(false);
+  const [checkStage, setCheckStage] = useState(2);
 
   const [completedChecks, setCompletedChecks] = useState<(boolean | string)[]>([
     false, // Browser & Internet Speed Test
@@ -66,6 +67,9 @@ export default function CasperPrepare() {
     'Video Player Check',
     'Video Recording Check',
   ];
+
+  const isPrepareTab = state === 'prepare';
+  const isCheckTab = state === 'check';
 
   // If showing test interface, render it instead
   if (showTestInterface) {
@@ -229,7 +233,7 @@ export default function CasperPrepare() {
               onClick={() => setState('prepare')}
               className={
                 'flex items-center gap-1 px-3 py-1 text-xs rounded-full border border-[#D9D9D9] cursor-pointer' +
-                (state === 'prepare' ? ' bg-[#364699] text-white' : ' bg-white text-[#333333DE]')
+                (isPrepareTab ? ' bg-[#364699] text-white' : ' bg-white text-[#333333DE]')
               }
             >
               <GolfCourseIcon
@@ -242,7 +246,7 @@ export default function CasperPrepare() {
               onClick={() => setState('check')}
               className={
                 'flex items-center gap-1 px-3 py-1 text-xs rounded-full border border-[#D9D9D9] cursor-pointer' +
-                (state === 'prepare' ? ' text-[#333333DE] bg-white' : ' bg-[#364699] text-white')
+                (isCheckTab ? ' bg-[#364699] text-white' : ' bg-white text-[#333333DE]')
               }
             >
               <GolfCourseIcon
@@ -290,120 +294,168 @@ export default function CasperPrepare() {
       {state === 'check' &&
         (showCheckTab ? (
           <>
-            <div className="relative">
-              {checkSteps.map((title, i) => (
-                <div key={i} className="flex flex-col">
-                  <div className="flex gap-4.5">
+            <div className="w-full md:w-96 py-6 bg-white space-y-6 text-gray-800 shrink-0">
+              {checkSteps.map((title, i) => {
+                const isCompleted = i + 1 <= checkStage; // mark only first step as completed
+                return (
+                  <div key={i} className="flex flex-col">
+                    <div className="flex gap-4.5 items-center">
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center border-2  ${
+                          isCompleted ? 'bg-[#00a59b] text-white' : 'bg-[#F5F5F5] text-[#00a59b]'
+                        }`}
+                      >
+                        {isCompleted ? <Check className="h-5 w-5" /> : i + 1}
+                      </div>
+                      <span
+                        className="text-xl font-bold cursor-pointer"
+                        onClick={() => setCheckStage(i)}
+                      >
+                        {title}
+                      </span>
+                    </div>
                     <div
-                      className={`shrink-0 w-6 h-6 rounded-full text-sm flex items-center justify-center ${
-                        completedChecks[i] === true
-                          ? 'bg-[#22C55E] text-white'
-                          : 'bg-[#F5F5F5] text-[#22C55E]'
+                      className={`pb-4 border-l-6 ml-[12px] my-2 pl-6.5 ${
+                        checkSteps.length === i + 1
+                          ? 'border-none'
+                          : isCompleted
+                            ? 'border-[#00a59b]'
+                            : 'border-[#F5F5F5]'
                       }`}
                     >
-                      {completedChecks[i] === true ? '✓' : i + 1}
+                      {i === 0 && checkStage === 0 && <CheckTab />}
+
+                      {i === 0 && isCompleted && checkStage !== 0 && (
+                        <p className="text-[#33333399] text-xs ml-2">Download Bitrate Approved!</p>
+                      )}
+
+                      {i === 1 && checkStage === 1 && (
+                        <div className="space-y-4">
+                          {completedChecks[1] ? (
+                            <div className="flex items-center gap-2 text-green-600">
+                              <span>✅</span>
+                              <span className="text-sm">Webcam check completed successfully</span>
+                            </div>
+                          ) : (
+                            <WebcamCheck
+                              onComplete={() => {
+                                const newChecks = [...completedChecks];
+                                newChecks[1] = true;
+                                setCompletedChecks(newChecks);
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
+                      {i === 1 && isCompleted && checkStage !== 1 && (
+                        <p className="text-[#33333399] text-xs ml-2">
+                          Webcam check completed successfully!
+                        </p>
+                      )}
+
+                      {i === 2 && checkStage === 2 && (
+                        <div className="space-y-4">
+                          {completedChecks[2] ? (
+                            <div className="flex items-center gap-2 text-green-600">
+                              <span>✅</span>
+                              <span className="text-sm">Microphone is functioning properly</span>
+                            </div>
+                          ) : (
+                            <MicrophoneCheck
+                              onComplete={() => {
+                                const newChecks = [...completedChecks];
+                                newChecks[2] = true;
+                                setCompletedChecks(newChecks);
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
+                      {i === 2 && isCompleted && checkStage !== 2 && (
+                        <p className="text-[#33333399] text-xs ml-2">Download Bitrate Approved!</p>
+                      )}
+
+                      {i === 3 && checkStage === 3 && (
+                        <div className="space-y-4">
+                          {completedChecks[3] === true ? (
+                            <div className="flex items-center gap-2 text-green-600">
+                              <span>✅</span>
+                              <span className="text-sm">Video player is working perfectly</span>
+                            </div>
+                          ) : (
+                            <VideoPlayerCheck
+                              onComplete={() => {
+                                const newChecks = [...completedChecks];
+                                newChecks[3] = true;
+                                setCompletedChecks(newChecks);
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
+                      {i === 3 && isCompleted && checkStage !== 3 && (
+                        <p className="text-[#33333399] text-xs ml-2">Download Bitrate Approved!</p>
+                      )}
+
+                      {i === 4 && checkStage === 4 && (
+                        <div className="space-y-4">
+                          {completedChecks[4] === true ? (
+                            <div className="flex items-center gap-2 text-green-600">
+                              <span>✅</span>
+                              <span className="text-sm">Great! You look and sound clearly</span>
+                            </div>
+                          ) : (
+                            <VideoRecordingCheck
+                              onComplete={() => {
+                                const newChecks = [...completedChecks];
+                                newChecks[4] = true;
+                                setCompletedChecks(newChecks);
+                                // Show congratulations screen immediately
+                                setShowCongratulations(true);
+                              }}
+                              onRecordAgain={() => {
+                                // Reset to initial state if needed
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
                     </div>
-                    <span className="text-xl font-bold">{title}</span>
                   </div>
-                  <div
-                    className={`pb-4 border-l-6 ml-[9px] my-2 pl-6.5 ${
-                      checkSteps.length === i + 1
-                        ? 'border-none'
-                        : completedChecks[i] === true
-                          ? 'border-[#22C55E]'
-                          : 'border-[#F5F5F5]'
-                    }`}
-                  >
-                    {i === 0 && <CheckTab />}
-
-                    {i === 1 && (
-                      <div className="space-y-4">
-                        {completedChecks[1] ? (
-                          <div className="flex items-center gap-2 text-green-600">
-                            <span>✅</span>
-                            <span className="text-sm">Webcam check completed successfully</span>
-                          </div>
-                        ) : (
-                          <WebcamCheck
-                            onComplete={() => {
-                              const newChecks = [...completedChecks];
-                              newChecks[1] = true;
-                              setCompletedChecks(newChecks);
-                            }}
-                          />
-                        )}
-                      </div>
-                    )}
-
-                    {i === 2 && (
-                      <div className="space-y-4">
-                        {completedChecks[2] ? (
-                          <div className="flex items-center gap-2 text-green-600">
-                            <span>✅</span>
-                            <span className="text-sm">Microphone is functioning properly</span>
-                          </div>
-                        ) : (
-                          <MicrophoneCheck
-                            onComplete={() => {
-                              const newChecks = [...completedChecks];
-                              newChecks[2] = true;
-                              setCompletedChecks(newChecks);
-                            }}
-                          />
-                        )}
-                      </div>
-                    )}
-
-                    {i === 3 && (
-                      <div className="space-y-4">
-                        {completedChecks[3] === true ? (
-                          <div className="flex items-center gap-2 text-green-600">
-                            <span>✅</span>
-                            <span className="text-sm">Video player is working perfectly</span>
-                          </div>
-                        ) : (
-                          <VideoPlayerCheck
-                            onComplete={() => {
-                              const newChecks = [...completedChecks];
-                              newChecks[3] = true;
-                              setCompletedChecks(newChecks);
-                            }}
-                          />
-                        )}
-                      </div>
-                    )}
-
-                    {i === 4 && (
-                      <div className="space-y-4">
-                        {completedChecks[4] === true ? (
-                          <div className="flex items-center gap-2 text-green-600">
-                            <span>✅</span>
-                            <span className="text-sm">Great! You look and sound clearly</span>
-                          </div>
-                        ) : (
-                          <VideoRecordingCheck
-                            onComplete={() => {
-                              const newChecks = [...completedChecks];
-                              newChecks[4] = true;
-                              setCompletedChecks(newChecks);
-                              // Show congratulations screen immediately
-                              setShowCongratulations(true);
-                            }}
-                            onRecordAgain={() => {
-                              // Reset to initial state if needed
-                            }}
-                          />
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </>
         ) : (
           <div className="max-w-md w-full bg-white rounded-lg p-6">
-            <h1 className="text-xl font-semibold mb-4 text-[#333333DE]">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setState('prepare')}
+                className={
+                  'flex items-center gap-1 px-3 py-1 text-xs rounded-full border border-[#D9D9D9] cursor-pointer' +
+                  (isPrepareTab ? ' bg-[#364699] text-white' : ' bg-white text-[#333333DE]')
+                }
+              >
+                <GolfCourseIcon
+                  className={`w-[15px] h-[15px] fill-current ${isPrepareTab ? 'text-white' : 'text-[#333333DE]'}`}
+                />{' '}
+                HOW TO PREPARE
+              </button>
+
+              <button
+                onClick={() => setState('check')}
+                className={
+                  'flex items-center gap-1 px-3 py-1 text-xs rounded-full border border-[#D9D9D9] cursor-pointer' +
+                  (isCheckTab ? ' bg-[#364699] text-white' : ' bg-white text-[#333333DE]')
+                }
+              >
+                <GolfCourseIcon
+                  className={`w-[15px] h-[15px] fill-current ${isCheckTab ? 'text-white' : 'text-[#333333DE]'}`}
+                />{' '}
+                SYSTEM CHECK
+              </button>
+            </div>
+            <h1 className="mt-2  text-xl font-semibold mb-4 text-[#333333DE]">
               Welcome to the Casper System Requirements
             </h1>
             <p className="text-sm text-[#333333DE] mb-3">
@@ -420,19 +472,37 @@ export default function CasperPrepare() {
               will need:
             </p>
 
-            <ul className="list-disc pl-5 text-sm text-gray-800 space-y-2">
-              <li>
-                <strong>Chrome or Firefox:</strong> Only these two web browsers are supported. An
-                updated Chrome browser is recommended. The latest version of Firefox is a good
-                back-up browser if you run into trouble.
+            <ul className="list-none pl-5 text-sm text-gray-800 space-y-2">
+              <li className="flex items-start gap-2">
+                <span className="text-green-600">✓</span>
+                <div>
+                  <strong>Chrome or Firefox:</strong> Only these two web browsers are supported. An
+                  updated Chrome browser is recommended. The latest version of Firefox is a good
+                  back-up browser if you run into trouble.
+                </div>
               </li>
-              <li>
-                Stable high speed internet connection with a bandwidth speed of at least 2 Mbps.
+              <li className="flex items-start gap-2">
+                <span className="text-green-600">✓</span>
+                <div>
+                  Stable high speed internet connection with a bandwidth speed of at least 2 Mbps.
+                </div>
               </li>
-              <li>Keyboard</li>
-              <li>Audio output (speakers or headphones)</li>
-              <li>Webcam</li>
-              <li>Working microphone</li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-600">✓</span>
+                <div>Keyboard</div>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-600">✓</span>
+                <div>Audio output (speakers or headphones)</div>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-600">✓</span>
+                <div>Webcam</div>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-green-600">✓</span>
+                <div>Working microphone</div>
+              </li>
             </ul>
 
             <p className="text-sm text-[#333333DE] mt-4">
