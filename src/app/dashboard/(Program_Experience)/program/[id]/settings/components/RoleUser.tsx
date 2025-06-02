@@ -1,11 +1,12 @@
 import React from 'react';
 
 import Image from 'next/image';
-import { useState } from 'react';
-import {  Plus, SendHorizontal } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Plus, SendHorizontal } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Table,
   TableRow,
@@ -28,25 +29,79 @@ type UserData = {
   username: string;
   role: string;
   status: string;
+  email: string;
   image: string;
 };
 
 const initialTableData: UserData[] = [
-  { id: '1', username: 'Medicine', role: 'Learner', status: 'Active', image: '/images/avatar.png' },
-  { id: '2', username: 'Medicine', role: 'Learner', status: 'Active', image: '/images/avatar.png' },
-  { id: '3', username: 'Medicine', role: 'Learner', status: 'Active', image: '/images/avatar.png' },
+  {
+    id: '1',
+    username: 'Isabella Ding',
+    email: 'Isabellading@gmail.com',
+    role: 'Learner',
+    status: 'Active',
+    image: '/images/avatar.png',
+  },
+  {
+    id: '2',
+    username: 'Isabella Ding',
+    email: 'Isabellading@gmail.com',
+    role: 'Learner',
+    status: 'Active',
+    image: '/images/avatar.png',
+  },
+  {
+    id: '3',
+    username: 'Isabella Ding',
+    email: 'Isabellading@gmail.com',
+    role: 'Learner',
+    status: 'Active',
+    image: '/images/avatar.png',
+  },
 ];
 
 const UserRole = () => {
+  const headerCheckboxRef = useRef<HTMLButtonElement>(null);
+
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const [tableData, setTableData] = useState<UserData[]>(initialTableData);
+  const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
   const [newUser, setNewUser] = useState<UserData>({
     username: '',
     role: '',
     status: '',
+    email: '',
     image: '',
     id: crypto.randomUUID(),
   });
+
+  const allIds = tableData.map(row => row.id);
+  const allSelected = selectedRows.size === tableData.length;
+  const partiallySelected = selectedRows.size > 0 && !allSelected;
+
+  const toggleAll = (checked: boolean) => {
+    setSelectedRows(checked ? new Set(allIds) : new Set());
+  };
+
+  const toggleRow = (id: string) => {
+    setSelectedRows(prev => {
+      const newSet = new Set(prev);
+
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
+
+  useEffect(() => {
+    const input = headerCheckboxRef.current?.querySelector('input');
+    if (input) {
+      input.indeterminate = partiallySelected;
+    }
+  }, [partiallySelected]);
 
   return (
     <div>
@@ -56,11 +111,21 @@ const UserRole = () => {
         <Table>
           <TableHeader>
             <TableRow className="border-b">
-              <TableHead className="text-[#6c6c6c] bg-[#fbfbfb] border-[#f5f5f5] font-medium">
-                User Name
+              <TableHead className="w-[50px] bg-[#fbfbfb] border-[#f5f5f5]">
+                <div className="w-full flex items-center justify-center">
+                  <Checkbox
+                    checked={allSelected}
+                    ref={headerCheckboxRef}
+                    className="cursor-pointer"
+                    onCheckedChange={checked => toggleAll(Boolean(checked))}
+                  />
+                </div>
               </TableHead>
               <TableHead className="text-[#6c6c6c] bg-[#fbfbfb] border-[#f5f5f5] font-medium">
-                Role
+                Name
+              </TableHead>
+              <TableHead className="text-[#6c6c6c] bg-[#fbfbfb] border-[#f5f5f5] font-medium">
+                Email
               </TableHead>
               <TableHead className="text-[#6c6c6c] bg-[#fbfbfb] border-[#f5f5f5] font-medium">
                 Status
@@ -71,6 +136,15 @@ const UserRole = () => {
           <TableBody>
             {tableData.map((program, index) => (
               <TableRow key={index} className="border-b border-[#f5f5f5]">
+                <TableCell className="w-[50px]">
+                  <div className="w-full flex items-center justify-center">
+                    <Checkbox
+                      className="cursor-pointer"
+                      checked={selectedRows.has(program.id)}
+                      onCheckedChange={() => toggleRow(program.id)}
+                    />
+                  </div>
+                </TableCell>
                 <TableCell className="text-[#333333DE] font-medium flex items-center gap-3">
                   <div className=" flex items-center gap-2">
                     <div className="bg-[#F5F5F5] rounded-full border-[2px] overflow-hidden border-[#F5F5F5] w-[24px] h-[24px] flex items-center justify-center">
@@ -86,20 +160,24 @@ const UserRole = () => {
                   </div>
                 </TableCell>
                 <TableCell className="text-[#333333DE] font-medium">
-                  <div className="bg-[#fff] border border-[#333] rounded-[20px] w-min h-[30px] px-3 flex items-center justify-center">
-                    <p className="m-0  text-[14px] font-normal">{program.role}</p>
-                  </div>
+                  {/* <div className="bg-[#fff] border border-[#333] rounded-[20px] w-min h-[30px] px-3 flex items-center justify-center"> */}
+                  <p className="m-0  text-[14px] font-normal">{program.email}</p>
+                  {/* </div> */}
                 </TableCell>
                 <TableCell className="text-[#333333DE] font-medium">
-                  <div className="px-3 flex items-center justify-start gap-2">
-                    <div
-                      className={`w-[6px] h-[6px] rounded-full ${program.status === 'Active' ? 'bg-[#70C0B8]' : 'bg-[#b40e0e]'}`}
-                    ></div>
-                    <p
-                      className={`m-0 text-[14px] font-normal ${program.status === 'Active' ? 'text-[#70C0B8]' : 'text-[#b40e0e]'}`}
-                    >
-                      {program.status}
-                    </p>
+                  <div className="flex items-center justify-between w-full">
+                    <div className="px-3 flex items-center justify-start gap-2">
+                      <div
+                        className={`w-[6px] h-[6px] rounded-full ${program.status === 'Active' ? 'bg-[#70C0B8]' : 'bg-[#b40e0e]'}`}
+                      ></div>
+                      <p
+                        className={`m-0 text-[14px] font-normal ${program.status === 'Active' ? 'text-[#70C0B8]' : 'text-[#b40e0e]'}`}
+                      >
+                        {program.status}
+                      </p>
+                    </div>
+
+                    <div></div>
                   </div>
                 </TableCell>
               </TableRow>
@@ -108,7 +186,7 @@ const UserRole = () => {
             {isAdding ? (
               <TableRow>
                 <TableCell
-                  colSpan={3}
+                  colSpan={4}
                   className="text-left bg-[#fcfcfc] text-[#333333] font-medium"
                 >
                   <div className="flex items-center gap-3">
@@ -120,7 +198,15 @@ const UserRole = () => {
                       className="flex-2 h-[52px] w-[12rem] rounded-[5px] placeholder:text-[#858585] placeholder:font-medium"
                     />
 
-                    <Select onValueChange={value => setNewUser({ ...newUser, role: value })}>
+                    <Input
+                      type="text"
+                      value={newUser.email}
+                      placeholder="Type Email"
+                      onChange={e => setNewUser({ ...newUser, email: e.target.value })}
+                      className="flex-2 h-[52px] w-[5rem] rounded-[5px] placeholder:text-[#858585] placeholder:font-medium"
+                    />
+
+                    {/* <Select onValueChange={value => setNewUser({ ...newUser, role: value })}>
                       <SelectTrigger className="w-[8rem] !h-[52px] rounded-[5px] placeholder:text-[#858585] placeholder:font-medium">
                         <SelectValue placeholder="Select role" />
                       </SelectTrigger>
@@ -130,7 +216,7 @@ const UserRole = () => {
                           <SelectItem value="Program">Program</SelectItem>
                         </SelectGroup>
                       </SelectContent>
-                    </Select>
+                    </Select> */}
 
                     <Select onValueChange={value => setNewUser({ ...newUser, status: value })}>
                       <SelectTrigger className="w-[8rem] !h-[52px] rounded-[5px] placeholder:text-[#858585] placeholder:font-medium">
@@ -151,6 +237,7 @@ const UserRole = () => {
                         setNewUser({
                           username: '',
                           role: '',
+                          email: '',
                           status: '',
                           image: '',
                           id: crypto.randomUUID(),
@@ -166,7 +253,7 @@ const UserRole = () => {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={3}
+                  colSpan={4}
                   className="text-left bg-[#F5F5F5] text-[#333333] font-medium"
                 >
                   <Button

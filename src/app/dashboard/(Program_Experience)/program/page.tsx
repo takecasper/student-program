@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { AlignLeft, Plus, SendHorizontal } from 'lucide-react';
+import { AlignLeft, Plus } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -42,7 +42,7 @@ export default function ProgramPage() {
   const setTitle = useBreadcrumbStore(state => state.setTitle);
 
   useEffect(() => {
-    if(setTitle) setTitle('Program');
+    if (setTitle) setTitle('Program');
   }, [setTitle]);
 
   const handleRedirect = (program: ProgramData) => {
@@ -88,13 +88,25 @@ export default function ProgramPage() {
                     {program.name}
                   </div>
                 </TableCell>
-                <TableCell className="text-[#333333DE] font-medium">
-                  <div className=" flex items-center gap-3">
-                    <div className="bg-[#fff] border border-[#333] rounded-[4px] w-[24px] h-[24px] flex items-center justify-center">
-                      <Image src="/svgs/clarify.svg" width={13} height={12} alt="Program" />
+                <TableCell className="text-[#333333DE] w-[25rem] font-medium">
+                  <div className="flex justify-between items-center">
+                    <div className=" flex items-center gap-3">
+                      <div className="bg-[#fff] border border-[#333] rounded-[4px] w-[24px] h-[24px] flex items-center justify-center">
+                        <Image src="/svgs/clarify.svg" width={13} height={12} alt="Program" />
+                      </div>
+
+                      {program.year}
                     </div>
 
-                    {program.year}
+                    <div className="flex items-center gap-2">
+                      <Button className="cursor-pointer hover:bg-transparent shadow-none bg-transparent border border-[#ebebeb] rounded-[4px] w-[24px] h-[24px] p-0 flex items-center justify-center">
+                        <Image width={11} height={11} src={'/svgs/Handout-Icon.svg'} alt="copy" />
+                      </Button>
+
+                      <Button className="cursor-pointer hover:bg-transparent shadow-none bg-transparent border border-[#ebebeb] rounded-[4px] w-[24px] h-[24px] p-0 flex items-center justify-center">
+                        <Image width={11} height={11} src={'/svgs/delete-gray.svg'} alt="delete" />
+                      </Button>
+                    </div>
                   </div>
                 </TableCell>
               </TableRow>
@@ -102,35 +114,44 @@ export default function ProgramPage() {
 
             {isAdding ? (
               <TableRow>
-                <TableCell
-                  colSpan={2}
-                  className="text-left bg-[#fcfcfc] text-[#333333] font-medium"
-                >
-                  <div className="flex items-center gap-3">
-                    <Input
-                      type="text"
-                      value={newProgram.name}
-                      placeholder="Type Program Name"
-                      onChange={e => setNewProgram({ ...newProgram, name: e.target.value })}
-                      className="flex-2 h-[52px] rounded-[5px] placeholder:text-[#858585] placeholder:font-medium"
-                    />
-                    <Input
-                      type="text"
-                      placeholder="Year"
-                      value={newProgram.year}
-                      onChange={e => setNewProgram({ ...newProgram, year: e.target.value })}
-                      className="flex-1 h-[52px] rounded-[5px] placeholder:text-[#858585] placeholder:font-medium"
-                    />
-                    <Button
-                      onClick={() => {
-                        setTableData([...tableData, newProgram]);
-                        setIsAdding(false);
-                        setNewProgram({ name: '', year: '', id: crypto.randomUUID() });
-                      }}
-                      className="bg-transparent hover:bg-transparent cursor-pointer text-white rounded-[4px] h-[30px] px-2"
-                    >
-                      <SendHorizontal width={24} height={24} className="bg-none text-[#334599]" />
-                    </Button>
+                <TableCell colSpan={2} className="text-left bg-[#fff] text-[#333333] font-medium">
+                  <div className="flex flex-col gap-3 items-end w-full">
+                    <div className="flex items-center gap-3 w-full">
+                      <Input
+                        type="text"
+                        value={newProgram.name}
+                        placeholder="Type Program Name"
+                        onChange={e => setNewProgram({ ...newProgram, name: e.target.value })}
+                        className="flex-2 h-[52px] rounded-[5px] placeholder:text-[#858585] placeholder:font-medium"
+                      />
+                      <Input
+                        type="text"
+                        placeholder="YYYY/MM"
+                        value={newProgram.year}
+                        onChange={e => setNewProgram({ ...newProgram, year: e.target.value })}
+                        className="flex-1 h-[52px] rounded-[5px] placeholder:text-[#858585] placeholder:font-medium"
+                      />
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <Button
+                        className="bg-[#fff] hover:bg-[#fff] border-[#D9D9D9] rounded-[10px] w-[93px] h-[40px] cursor-pointer"
+                        variant="outline"
+                      >
+                        Cancel
+                      </Button>
+
+                      <Button
+                        onClick={() => {
+                          setIsAdding(false);
+                          setTableData([...tableData, newProgram]);
+                          setNewProgram({ name: '', year: '', id: crypto.randomUUID() });
+                        }}
+                        className="bg-[#364799] hover:bg-[#364799] border-[#364799] rounded-[10px] w-[93px] h-[40px] cursor-pointer"
+                      >
+                        Add
+                      </Button>
+                    </div>
                   </div>
                 </TableCell>
               </TableRow>
