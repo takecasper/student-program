@@ -71,6 +71,13 @@ export default function CasperPrepare() {
   const isPrepareTab = state === 'prepare';
   const isCheckTab = state === 'check';
 
+  const handleSpeedTestComplete = () => {
+    const newChecks = [...completedChecks];
+    newChecks[0] = true;
+    setCompletedChecks(newChecks);
+    setCheckStage(1); // Move to next stage
+  };
+
   // If showing test interface, render it instead
   if (showTestInterface) {
     return <CasperTestInterface onBack={() => setShowTestInterface(false)} />;
@@ -317,10 +324,14 @@ export default function CasperPrepare() {
                             : 'border-[#F5F5F5]'
                       }`}
                     >
-                      {i === 0 && checkStage === 0 && <CheckTab />}
+                      {i === 0 && checkStage === 0 && (
+                        <CheckTab onComplete={handleSpeedTestComplete} />
+                      )}
 
                       {i === 0 && isCompleted && checkStage !== 0 && (
-                        <p className="text-[#33333399] text-xs ml-2">Download Bitrate Approved!</p>
+                        <p className="text-[#33333399] text-xs ml-2">
+                          Speed Test Completed Successfully!
+                        </p>
                       )}
 
                       {i === 1 && checkStage === 1 && (

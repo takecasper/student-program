@@ -227,117 +227,122 @@ export default function ProcedurePage() {
                 </TableRow>
 
                 {/* Expanded Details */}
-                {expandedRow === competency.id &&
-                  competency.procedures.map(procedure => (
-                    <TableRow key={procedure.id} className="bg-gray-50 border-b border-[#f5f5f5]">
-                      <TableCell className="py-4"></TableCell>
-                      <TableCell className="font-medium border-r border-[#f5f5f5] py-4 px-4">
-                        <div className="flex items-start gap-2">
-                          <div className="w-6 h-6 rounded-[8px] bg-[#f5f5f5] flex items-center justify-center">
-                            <Image
-                              src={procedure.icon || '/placeholder.svg'}
-                              alt="procedure"
-                              width={12}
-                              height={12}
-                            />
+                {expandedRow === competency.id && (
+                  <>
+                    {competency.procedures.map(procedure => (
+                      <TableRow key={procedure.id} className="bg-gray-50 border-b border-[#f5f5f5]">
+                        <TableCell className="py-4"></TableCell>
+                        <TableCell className="font-medium border-r border-[#f5f5f5] py-4 px-4">
+                          <div className="flex items-start gap-2">
+                            <div className="w-6 h-6 rounded-[8px] bg-[#f5f5f5] flex items-center justify-center">
+                              <Image
+                                src={procedure.icon || '/placeholder.svg'}
+                                alt="procedure"
+                                width={12}
+                                height={12}
+                              />
+                            </div>
+                            <div>
+                              <div>{procedure.name}</div>
+                              <div
+                                className="text-sm text-gray-500 mt-1"
+                                dangerouslySetInnerHTML={{ __html: procedure.description }}
+                              />
+                            </div>
                           </div>
-                          <div>
-                            <div>{procedure.name}</div>
-                            <div
-                              className="text-sm text-gray-500 mt-1"
-                              dangerouslySetInnerHTML={{ __html: procedure.description }}
-                            />
+                        </TableCell>
+                        <TableCell className="border-r border-[#f5f5f5] py-4 px-4 w-[140px]">
+                          <div>{procedure.dateEntered.date}</div>
+                          <div className="text-sm text-gray-500">{procedure.dateEntered.time}</div>
+                        </TableCell>
+                        <TableCell className="border-r border-[#f5f5f5] py-4 px-4 w-[140px]">
+                          <div>{procedure.dateOfProcedure.date}</div>
+                          <div className="text-sm text-gray-500">
+                            {procedure.dateOfProcedure.time}
                           </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="border-r border-[#f5f5f5] py-4 px-4 w-[140px]">
-                        <div>{procedure.dateEntered.date}</div>
-                        <div className="text-sm text-gray-500">{procedure.dateEntered.time}</div>
-                      </TableCell>
-                      <TableCell className="border-r border-[#f5f5f5] py-4 px-4 w-[140px]">
-                        <div>{procedure.dateOfProcedure.date}</div>
-                        <div className="text-sm text-gray-500">
-                          {procedure.dateOfProcedure.time}
-                        </div>
-                      </TableCell>
-                      <TableCell className="border-r border-[#f5f5f5] py-4 px-4">
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded-full overflow-hidden">
-                            <Image
-                              src={procedure.supervisor.avatar || '/placeholder.svg'}
-                              alt={procedure.supervisor.name}
-                              width={32}
-                              height={32}
-                              className="object-cover"
-                            />
+                        </TableCell>
+                        <TableCell className="border-r border-[#f5f5f5] py-4 px-4">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 rounded-full overflow-hidden">
+                              <Image
+                                src={procedure.supervisor.avatar || '/placeholder.svg'}
+                                alt={procedure.supervisor.name}
+                                width={32}
+                                height={32}
+                                className="object-cover"
+                              />
+                            </div>
+                            <span>{procedure.supervisor.name}</span>
                           </div>
-                          <span>{procedure.supervisor.name}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="py-4 px-4">
-                        <div className="text-white bg-[#00A59B] font-semibold rounded-[10px] px-4 py-2 flex items-center gap-1">
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="white"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <mask
-                              id="mask0_1770_27501"
-                              style={{ maskType: 'alpha' }}
-                              maskUnits="userSpaceOnUse"
-                              x="0"
-                              y="0"
+                        </TableCell>
+                        <TableCell className="py-4 px-4">
+                          <div className="text-white bg-[#00A59B] font-semibold rounded-[10px] px-4 py-2 flex items-center gap-1">
+                            <svg
                               width="16"
                               height="16"
+                              viewBox="0 0 16 16"
+                              fill="white"
+                              xmlns="http://www.w3.org/2000/svg"
                             >
-                              <rect
-                                x="0.5"
-                                y="0.5"
-                                width="15"
-                                height="15"
-                                fill="#D9D9D9"
-                                stroke="white"
-                              />
-                            </mask>
-                            <g mask="url(#mask0_1770_27501)">
-                              <path
-                                d="M6.66667 10.9327L4 8.26602L4.93333 7.33268L6.66667 9.06602L11.0667 4.66602L12 5.59935L6.66667 10.9327Z"
-                                fill="white"
-                                fill-opacity="1"
-                              />
-                              <path
-                                d="M11.9824 5.59961L6.66699 10.915L4.01758 8.26562L4.93262 7.34961L6.66699 9.08398L6.67578 9.0752L11.0664 4.68359L11.9824 5.59961Z"
-                                stroke="white"
-                                stroke-opacity="1"
-                                stroke-width="0.5"
-                              />
-                            </g>
-                          </svg>
-                          {procedure.status}
-                        </div>
+                              <mask
+                                id="mask0_1770_27501"
+                                style={{ maskType: 'alpha' }}
+                                maskUnits="userSpaceOnUse"
+                                x="0"
+                                y="0"
+                                width="16"
+                                height="16"
+                              >
+                                <rect
+                                  x="0.5"
+                                  y="0.5"
+                                  width="15"
+                                  height="15"
+                                  fill="#D9D9D9"
+                                  stroke="white"
+                                />
+                              </mask>
+                              <g mask="url(#mask0_1770_27501)">
+                                <path
+                                  d="M6.66667 10.9327L4 8.26602L4.93333 7.33268L6.66667 9.06602L11.0667 4.66602L12 5.59935L6.66667 10.9327Z"
+                                  fill="white"
+                                  fill-opacity="1"
+                                />
+                                <path
+                                  d="M11.9824 5.59961L6.66699 10.915L4.01758 8.26562L4.93262 7.34961L6.66699 9.08398L6.67578 9.0752L11.0664 4.68359L11.9824 5.59961Z"
+                                  stroke="white"
+                                  stroke-opacity="1"
+                                  stroke-width="0.5"
+                                />
+                              </g>
+                            </svg>
+                            {procedure.status}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+
+                    {/* Add New Button inside expanded section */}
+                    <TableRow className="bg-gray-50 border-b border-[#f5f5f5]">
+                      <TableCell colSpan={6} className="py-4">
+                        <Button
+                          onClick={handleAddNew}
+                          variant="link"
+                          className="text-[#364699] hover:no-underline ml-12 cursor-pointer"
+                        >
+                          <div className="bg-[#364699] cursor-pointer p-2 rounded-[8px] mr-2">
+                            <Plus className="w-4 h-4 text-white" />
+                          </div>
+                          Add New
+                        </Button>
                       </TableCell>
                     </TableRow>
-                  ))}
+                  </>
+                )}
               </>
             ))}
           </TableBody>
         </Table>
-
-        {/* Add New Button */}
-        <div className="mt-6">
-          <Button
-            onClick={handleAddNew}
-            variant="link"
-            className="text-[#364699] hover:no-underline"
-          >
-            <div className="bg-[#364699] cursor-pointer p-2 rounded-[8px] mr-2">
-              <Plus className="w-4 h-4 text-white" />
-            </div>
-            Add New
-          </Button>
-        </div>
       </div>
 
       {showSidebar && (
