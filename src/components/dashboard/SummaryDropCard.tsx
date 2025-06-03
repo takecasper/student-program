@@ -22,7 +22,7 @@ export default function SummaryDropCard({ iconSrc, title, onClick }: SummaryCard
           </div>
           <button
             onClick={onClick}
-            className="text-white bg-[#253E92] text-sm font-medium rounded-full px-4 py-1.5 hover:bg-[#1a2e78] transition"
+            className="text-white bg-[#253E92] text-sm font-medium rounded-full px-4 py-1.5 hover:bg-[#1a2e78] transition mt-3"
           >
             Make Changes
           </button>
