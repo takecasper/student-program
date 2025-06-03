@@ -50,7 +50,7 @@ export default function CasperPrepare() {
   const [showCheckTab, setShowCheckTab] = useState<boolean>(false);
   const [showTestInterface, setShowTestInterface] = useState<boolean>(false);
   const [showCongratulations, setShowCongratulations] = useState(false);
-  const [checkStage, setCheckStage] = useState(2);
+  const [checkStage, setCheckStage] = useState(4);
 
   const [completedChecks, setCompletedChecks] = useState<(boolean | string)[]>([
     false, // Browser & Internet Speed Test
