@@ -50,7 +50,7 @@ export default function CasperPrepare() {
   const [showCheckTab, setShowCheckTab] = useState<boolean>(false);
   const [showTestInterface, setShowTestInterface] = useState<boolean>(false);
   const [showCongratulations, setShowCongratulations] = useState(false);
-  const [checkStage, setCheckStage] = useState(4);
+  const [checkStage, setCheckStage] = useState(1);
 
   const [completedChecks, setCompletedChecks] = useState<(boolean | string)[]>([
     false, // Browser & Internet Speed Test
@@ -81,65 +81,65 @@ export default function CasperPrepare() {
     return (
       <div className="bg-white py-6 md:py-10 text-gray-800 flex flex-col md:flex-row gap-10">
         {/* Left Section - Same as main layout */}
-        <div className="md:w-2/3 space-y-6 border-r border-[#CCCCCC]">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
+        <div className="md:w-2/3 mx-auto mt-8 bg-white flex justify-center border-r">
+          <div className="w-full max-w-[650px] space-y-6">
+            {/* Header */}
+            <div className="flex space-x-3">
+              <div className="w-[60px] h-[60px] rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
+                <Image src="/svgs/stars.svg" alt="clinical" width={24} height={24} />
+              </div>
+              <div className="flex flex-col justify-center">
+                <span className="text-sm text-gray-500 font-medium">Recommended</span>
+                <h1 className="text-2xl font-semibold">Casper Practice Test</h1>
+              </div>
+            </div>
+
+            {/* Thumbnail */}
+            <div className="w-full">
               <Image
-                src="/svgs/stars.svg"
-                alt="clinical"
-                width={16}
-                height={16}
-                className="text-transparent"
+                src="/category1.png"
+                alt="Casper Thumbnail"
+                width={800}
+                height={200}
+                className="rounded-2xl object-cover w-full h-48"
               />
             </div>
-            <div className=" flex flex-col">
-              <span className="text-sm text-gray-500 font-medium">Recommended</span>
-              <h1 className="text-2xl font-semibold">Casper Practice Test</h1>
-            </div>
-          </div>
 
-          <div className="w-full">
-            <Image
-              src="/category1.png"
-              alt="Casper Thumbnail"
-              width={800}
-              height={200}
-              className="rounded-lg object-cover w-full h-48"
-            />
-          </div>
-
-          <p className="text-sm text-gray-600">
-            Applicants who complete the practice test generally perform better on Casper. The
-            practice test can take 1 hour+ to complete. If your test is within this time frame,
-            please proceed directly to your test instead.
-          </p>
-
-          <div className="border rounded-xl pl-12 pr-10 pt-6 pb-8 space-y-4">
-            <h2 className="text-sm font-semibold text-[#333333DE] uppercase">Practice Tests</h2>
+            {/* Description */}
             <p className="text-sm text-gray-600">
-              Try out our currently available Casper test formats.
+              Applicants who complete the practice test generally perform better on Casper. The
+              practice test can take 1 hour+ to complete. If your test is within this time frame,
+              please proceed directly to your test instead.
             </p>
 
-            <div className="flex flex-col gap-4">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-800 font-medium">2024/25 Cycle</span>
-                <button
-                  onClick={() => setShowTestInterface(true)}
-                  className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm text-nowrap cursor-pointer"
-                >
-                  Start Test
-                </button>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-800 font-medium">
-                  AUS Teachers Education <br /> (2024 - 2025 Cycle)
-                </span>
-                <button
-                  onClick={() => setShowTestInterface(true)}
-                  className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm text-nowrap cursor-pointer"
-                >
-                  Start Test
-                </button>
+            {/* Practice Test Box */}
+            <div className="border rounded-xl pl-12 pr-10 pt-6 pb-8 space-y-4 bg-white shadow">
+              <h2 className="text-sm font-semibold text-[#333333DE] uppercase">Practice Tests</h2>
+              <p className="text-sm text-gray-600">
+                Try out our currently available Casper test formats.
+              </p>
+
+              <div className="flex flex-col gap-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-800 font-medium">2024/25 Cycle</span>
+                  <button
+                    onClick={() => setShowTestInterface(true)}
+                    className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm"
+                  >
+                    Start Test
+                  </button>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-800 font-medium">
+                    AUS Teachers Education <br /> (2024 - 2025 Cycle)
+                  </span>
+                  <button
+                    onClick={() => setShowTestInterface(true)}
+                    className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm"
+                  >
+                    Start Test
+                  </button>
+                </div>
               </div>
             </div>
           </div>

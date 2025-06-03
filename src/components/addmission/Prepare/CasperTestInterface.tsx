@@ -6,12 +6,11 @@ interface CasperTestInterfaceProps {
   onBack: () => void;
 }
 
-export default function CasperTestInterface({ onBack }: CasperTestInterfaceProps) {
-  const [currentSection, setCurrentSection] = useState('intro');
-
-  const trackerItems = {
-    intro: { label: 'Intro', completed: true },
-    videoResponses: [
+const initialCheckSteps = [
+  { label: 'Intro', completed: false },
+  {
+    label: 'Video Responses',
+    children: [
       { label: 'Video Response 1', completed: false },
       { label: 'Video Response 2', completed: false },
       { label: 'Video Response 3', completed: false },
@@ -19,19 +18,64 @@ export default function CasperTestInterface({ onBack }: CasperTestInterfaceProps
       { label: 'Video Response 5', completed: false },
       { label: 'Video Response 6', completed: false },
     ],
-    break: { label: 'Break', completed: false },
-    typedResponses: [
+  },
+  { label: 'Break', completed: false },
+  {
+    label: 'Typed Responses',
+    children: [
       { label: 'Typed Response 1', completed: false },
       { label: 'Typed Response 2', completed: false },
       { label: 'Typed Response 3', completed: false },
       { label: 'Typed Response 4', completed: false },
       { label: 'Typed Response 5', completed: false },
+      { label: 'Break', completed: false },
+      { label: 'Typed Response 6', completed: false },
+      { label: 'Typed Response 7', completed: false },
+      { label: 'Typed Response 8', completed: false },
+      { label: 'Typed Response 9', completed: false },
+      { label: 'Typed Response 10', completed: false },
+
+      { label: 'Typed Response 1', completed: false },
+      { label: 'Typed Response 2', completed: false },
+      { label: 'Typed Response 3', completed: false },
+      { label: 'Typed Response 4', completed: false },
+      { label: 'Typed Response 5', completed: false },
+      { label: 'Break', completed: false },
+      { label: 'Typed Response 6', completed: false },
+      { label: 'Typed Response 7', completed: false },
+      { label: 'Typed Response 8', completed: false },
+      { label: 'Typed Response 9', completed: false },
+      { label: 'Typed Response 10', completed: false },
+      { label: 'Typed Response 1', completed: false },
+      { label: 'Typed Response 2', completed: false },
+      { label: 'Typed Response 3', completed: false },
+      { label: 'Typed Response 4', completed: false },
+      { label: 'Typed Response 5', completed: false },
+      { label: 'Break', completed: false },
+      { label: 'Typed Response 6', completed: false },
+      { label: 'Typed Response 7', completed: false },
+      { label: 'Typed Response 8', completed: false },
+      { label: 'Typed Response 9', completed: false },
+      { label: 'Typed Response 10', completed: false },
     ],
-    exit: { label: 'Exit', completed: false },
-  };
+    completed: false,
+  },
+  { label: 'Exit', completed: false },
+];
+
+interface StepItem {
+  label: string;
+  completed?: boolean;
+  children?: StepItem[];
+}
+
+export default function CasperTestInterface({ onBack }: CasperTestInterfaceProps) {
+  const [currentSection, setCurrentSection] = useState('intro');
+
+  const [checkSteps, setCheckStep] = useState<StepItem[]>(initialCheckSteps);
 
   const renderIntroSection = () => (
-    <div className=" w-full bg-white rounded-lg">
+    <div className=" w-[850px] bg-white rounded-lg">
       <div className="p-8">
         <div className="mb-6">
           <div className="flex items-center gap-2 pb-2">
@@ -60,19 +104,9 @@ export default function CasperTestInterface({ onBack }: CasperTestInterfaceProps
 
           <p className="text-gray-600 text-xs text-start">For this practice test:</p>
 
-          <ul className="text-left text-gray-600 space-y-2 max-w-md">
-            <li className="flex items-start gap-2">
-              <span className="text-blue-600 mt-1">•</span>
-              <span className="text-xs">
-                It will take approximately 1.5 hours to complete this practice test.
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-blue-600 mt-1">•</span>
-              <span className="text-xs">
-                You will get your score after completion of the practice test.
-              </span>
-            </li>
+          <ul className="text-xs text-gray-600 space-y-1 text-start">
+            <li>• It will take approximately 1.5 hours to complete this practice test.</li>
+            <li>• You will get your score after completion of the practice test.</li>
           </ul>
 
           <div className="mt-6 pt-6 border-t">
@@ -96,7 +130,11 @@ export default function CasperTestInterface({ onBack }: CasperTestInterfaceProps
 
           <div className="mt-8 flex justify-end">
             <button
-              onClick={() => setCurrentSection('videoResponses')}
+              onClick={() => {
+                setCurrentSection('videoResponses');
+                checkSteps[0].completed = true;
+                setCheckStep(checkSteps);
+              }}
               className="bg-[#364699] text-white px-8 py-3 rounded-full font-medium hover:bg-blue-700 transition text-xs"
             >
               Proceed
@@ -108,7 +146,18 @@ export default function CasperTestInterface({ onBack }: CasperTestInterfaceProps
   );
 
   const renderVideoResponsesSection = () => (
-    <div className="max-w-2xl w-full bg-white rounded-lg shadow-sm border p-8">
+    <div className="max-w-2xl w-full bg-white rounded-lg p-8">
+      <div className="mb-6">
+        <div className="flex items-center gap-2 pb-2">
+          <div className="w-10 h-10 bg-[#F5F5F5] rounded-lg flex items-center justify-center">
+            <Image src="/hotel_class.svg" alt="icon" width={16} height={16} />
+          </div>
+          <div className="flex flex-col">
+            <p className="text-sm text-gray-600">Recommend</p>
+            <h1 className="text-xl font-semibold text-gray-800">Casper Practice Test</h1>
+          </div>
+        </div>
+      </div>
       <div className="space-y-6">
         <h1 className="text-xl font-semibold text-gray-800">
           You are about to start the Video Response section
@@ -121,6 +170,7 @@ export default function CasperTestInterface({ onBack }: CasperTestInterfaceProps
 
           <div className="space-y-4">
             <h3 className="font-semibold text-gray-800">Format guidelines:</h3>
+
             <ul className="space-y-2 text-sm text-gray-600">
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-1">•</span>
@@ -189,7 +239,7 @@ export default function CasperTestInterface({ onBack }: CasperTestInterfaceProps
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="bg-gray-50 flex">
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
@@ -213,70 +263,63 @@ export default function CasperTestInterface({ onBack }: CasperTestInterfaceProps
         </div>
 
         {/* Test Content */}
-        <div className="flex-1 flex items-center justify-center p-8">
+        <div className="flex-1 flex mb-auto bg-white justify-center p-8">
           {currentSection === 'intro' && renderIntroSection()}
           {currentSection === 'videoResponses' && renderVideoResponsesSection()}
         </div>
       </div>
 
       {/* Right Sidebar - Tracker */}
-      <div className="w-80 bg-white border-l p-6 space-y-6">
-        <h3 className="font-semibold text-gray-800 text-xs">Tracker</h3>
+      <div className="w-80 bg-white border-l p-6 overflow-auto max-h-[calc(100vh-115px)]">
+        <h1 className="font-semibold text-xl text-gray-800 mb-2">Tracker</h1>
 
-        {/* Intro */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <div
-              className={`w-3 h-3 rounded-full ${currentSection === 'intro' ? 'bg-blue-600' : 'bg-gray-300'}`}
-            ></div>
-            <span className="text-xs font-medium text-gray-800">Intro</span>
-          </div>
-        </div>
-
-        {/* Video Responses */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <div
-              className={`w-3 h-3 rounded-full ${currentSection === 'videoResponses' ? 'bg-blue-600' : 'bg-gray-300'}`}
-            ></div>
-            <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
-              Video Responses
-            </h4>
-          </div>
-          <div className="space-y-2">
-            {trackerItems.videoResponses.map((item, index) => (
-              <div key={index} className="flex items-center gap-2 pl-4">
-                <div className="w-2 h-2 rounded-full bg-gray-300"></div>
-                <span className="text-xs text-gray-600">{item.label}</span>
+        {checkSteps.map((item, i) => {
+          let isCompleted = item.completed; // mark only first step as completed
+          return (
+            <div key={i} className="flex flex-col">
+              <div className="flex gap-4.5 items-center">
+                <div
+                  className={`w-5 h-5 rounded-full flex items-center justify-center border-2  ${
+                    isCompleted ? 'bg-[#364697] text-white' : 'bg-[#F5F5F5] text-[#364697]'
+                  }`}
+                ></div>
+                <span
+                  className="text-lg font-bold cursor-pointer text-gray-500"
+                  onClick={() => {
+                    const updatedSteps = checkSteps.map(step =>
+                      step.label === item.label ? { ...step, completed: true } : step,
+                    );
+                    setCheckStep(updatedSteps);
+                  }}
+                >
+                  {item.label}
+                </span>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Break */}
-        <div className="space-y-2">
-          <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Break</h4>
-        </div>
-
-        {/* Typed Responses */}
-        <div className="space-y-3">
-          <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
-            Typed Responses
-          </h4>
-          <div className="space-y-2">
-            {trackerItems.typedResponses.map((item, index) => (
-              <div key={index} className="flex items-center gap-2 pl-4">
-                <div className="w-2 h-2 rounded-full bg-gray-300"></div>
-                <span className="text-xs text-gray-600">{item.label}</span>
+              <div
+                className={`pb-4 border-l-6 ml-[7px] my-0.5 pl-6.5 ${
+                  checkSteps.length === i + 1
+                    ? 'border-none'
+                    : isCompleted
+                      ? 'border-[#364697]'
+                      : 'border-[#F5F5F5]'
+                }`}
+              >
+                {item.children && (
+                  <div className="space-y-2">
+                    {item.children.map((child, index) => (
+                      <div key={index} className="flex items-center gap-2 pl-4">
+                        <div
+                          className={`w-2 h-2 rounded-full  ${child.completed ? 'bg-[#364697]' : 'bg-gray-300'}`}
+                        ></div>
+                        <span className="text-xs text-gray-600">{child.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Exit */}
-        <div className="space-y-2">
-          <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Exit</h4>
-        </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
