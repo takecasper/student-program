@@ -154,8 +154,8 @@ export default function CasperPrepare() {
   return (
     <div className="bg-white py-6 md:py-10 text-gray-800 flex flex-col md:flex-row gap-10">
       {/* Left Section */}
-      <div className="flex justify-center md:w-2/3 items-center border-r bg-white">
-        <div className="w-[650px] space-y-6">
+      <div className="md:w-2/3 mx-auto mt-8 bg-white flex justify-center border-r">
+        <div className="w-full max-w-[650px] space-y-6">
           {/* Header */}
           <div className="flex space-x-3">
             <div className="w-[60px] h-[60px] rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
@@ -288,7 +288,7 @@ export default function CasperPrepare() {
       {state === 'check' &&
         (showCheckTab ? (
           <>
-            <div className="w-full md:w-96 py-6 bg-white text-gray-800 shrink-0">
+            <div className="w-full md:w-96 py-6 bg-white text-gray-800 shrink-0 mr-5">
               <h1 className="mt-2  text-xl font-semibold mb-4 text-[#333333DE]">System Check</h1>
               {checkSteps.map((title, i) => {
                 const isCompleted = i + 1 <= checkStage; // mark only first step as completed
