@@ -274,7 +274,7 @@ export default function CasperTestInterface({ onBack }: CasperTestInterfaceProps
         <h1 className="font-semibold text-xl text-gray-800 mb-2">Tracker</h1>
 
         {checkSteps.map((item, i) => {
-          let isCompleted = item.completed; // mark only first step as completed
+          const isCompleted = item.completed; // mark only first step as completed
           return (
             <div key={i} className="flex flex-col">
               <div className="flex gap-4.5 items-center">
