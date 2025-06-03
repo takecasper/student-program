@@ -13,6 +13,7 @@ import { useState } from 'react';
 import * as Select from '@radix-ui/react-select';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import SummaryDropCard from './SummaryDropCard';
+import ChatbotInterface from '@/components/chatbot/ChatbotInterface';
 
 const ratingOptions = [
   { label: 'Day View', value: 'day' },
@@ -25,7 +26,7 @@ export default function DashboardContent() {
   const [viewMode, setViewMode] = useState<string>('day');
 
   return (
-    <div className="p-6">
+    <div className="p-6 relative">
       <div className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-6">
         <div className="space-y-6">
           <h2 className="text-lg font-medium text-[#333333]">DASHBOARD</h2>
@@ -137,7 +138,7 @@ export default function DashboardContent() {
             </div>
           </div>
 
-          <ScrollArea className="h-screen">
+          <ScrollArea className="h-[calc(100vh-300px)]">
             <div className="space-y-3">
               {[
                 { day: 'Wed', date: '28', time: '09:00 - 11:00', isTest: true },
@@ -167,6 +168,10 @@ export default function DashboardContent() {
               ))}
             </div>
           </ScrollArea>
+
+          <div className="fixed bottom-6 right-6 z-50">
+            <ChatbotInterface />
+          </div>
         </div>
       </div>
     </div>
