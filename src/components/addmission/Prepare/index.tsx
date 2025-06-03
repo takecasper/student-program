@@ -288,7 +288,8 @@ export default function CasperPrepare() {
       {state === 'check' &&
         (showCheckTab ? (
           <>
-            <div className="w-full md:w-96 py-6 bg-white space-y-6 text-gray-800 shrink-0">
+            <div className="w-full md:w-96 py-6 bg-white text-gray-800 shrink-0">
+              <h1 className="mt-2  text-xl font-semibold mb-4 text-[#333333DE]">System Check</h1>
               {checkSteps.map((title, i) => {
                 const isCompleted = i + 1 <= checkStage; // mark only first step as completed
                 return (
