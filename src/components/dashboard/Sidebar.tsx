@@ -96,15 +96,18 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
                 />
               }
             />
-            <SidebarNavItem
-              label={userType === 'student' ? 'My Calendar' : 'Calendar'}
-              href="/dashboard/calendar"
-              icon={
-                <CalendarIcon
-                  className={`${pathname === '/dashboard/calendar' ? 'fill-[#364799]' : 'fill-[#818181]'}`}
-                />
-              }
-            />
+
+            {userType === 'student' && (
+              <SidebarNavItem
+                label={'My Calendar'}
+                href="/dashboard/calendar"
+                icon={
+                  <CalendarIcon
+                    className={`${pathname === '/dashboard/calendar' ? 'fill-[#364799]' : 'fill-[#818181]'}`}
+                  />
+                }
+              />
+            )}
 
             {userType === 'student' && (
               <SidebarNavItem
@@ -158,10 +161,7 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
             }
           />
 
-          <div
-            className="relative"
-            onMouseEnter={() => setIsOpen(true)}
-          >
+          <div className="relative" onMouseEnter={() => setIsOpen(true)}>
             <SidebarNavItem
               label="Marketplace"
               isFooterItem={true}
