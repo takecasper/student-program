@@ -12,7 +12,7 @@ type MarketPlacePopoverProps = {
 
 const MarketPlacePopover = ({ setIsOpen }: MarketPlacePopoverProps) => {
   return (
-    <div className="absolute z-50 bottom-[0px] left-[4rem]">
+    <div className="absolute z-100 bottom-[-12rem] left-[11.5rem]">
       <Card
         onMouseLeave={() => setIsOpen(false)}
         className="w-[330px]  h-[280px] rounded-2xl shadow-md"

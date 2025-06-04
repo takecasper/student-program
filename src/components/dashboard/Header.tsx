@@ -1,15 +1,24 @@
-import { Bell, Search, ListFilter } from 'lucide-react';
+import { Bell, Search, ListFilter, ArrowLeft } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useBreadcrumbStore } from '@/store/breadcrumbs';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardHeader() {
+  const router = useRouter();
   const title = useBreadcrumbStore(state => state.title);
+
+  const handleBack = () => {
+    router.back();
+  };
 
   return (
     <header className="flex justify-between items-center">
-      <h1 className="text-sm font-medium text-[#858585]">{title}</h1>
+      <div className="flex items-center space-x-2">
+        <ArrowLeft className="w-4 h-4 text-[#858585] cursor-pointer" onClick={handleBack} />
+        <h1 className="text-sm font-medium text-[#858585]">{title}</h1>
+      </div>
 
       <form
         role="search"

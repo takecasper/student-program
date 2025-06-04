@@ -25,6 +25,7 @@ const VideoPlayerCheck = ({ onComplete }: VideoPlayerCheckProps) => {
   };
 
   const handleVideoEnd = () => {
+    console.log('Hellow Odfadsf');
     setIsPlaying(false);
     setVideoEnded(true);
   };
@@ -106,6 +107,8 @@ const VideoPlayerCheck = ({ onComplete }: VideoPlayerCheckProps) => {
             // Stop audio
             oscillator.stop();
             audioContext.close();
+            // Manually trigger video end
+            handleVideoEnd();
           }
         };
 
@@ -118,6 +121,18 @@ const VideoPlayerCheck = ({ onComplete }: VideoPlayerCheckProps) => {
 
         // Start oscillator
         oscillator.start();
+
+        // Set a timeout to handle video end
+        const videoEndTimeout = setTimeout(() => {
+          handleVideoEnd();
+        }, duration * 1000);
+
+        // Cleanup
+        return () => {
+          clearTimeout(videoEndTimeout);
+          oscillator.stop();
+          audioContext.close();
+        };
       }
     }
   }, [hasStartedTest]);
@@ -197,29 +212,32 @@ const VideoPlayerCheck = ({ onComplete }: VideoPlayerCheckProps) => {
             <p className="text-sm font-medium">Did the video and audio play properly?</p>
 
             <div className="space-y-2">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="videoCheck"
-                  value="yes"
-                  className="w-4 h-4 text-blue-600"
-                  checked={selectedAnswer === 'yes'}
-                  onChange={e => handleAnswerChange(e.target.value)}
-                />
-                <span className="text-sm">Yes, the video played properly.</span>
-              </label>
-
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  name="videoCheck"
-                  value="no"
-                  className="w-4 h-4 text-blue-600"
-                  checked={selectedAnswer === 'no'}
-                  onChange={e => handleAnswerChange(e.target.value)}
-                />
-                <span className="text-sm">No, I had trouble playing the video properly.</span>
-              </label>
+              {['yes', 'no'].map(value => (
+                <label key={value} className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="videoCheck"
+                    value={value}
+                    checked={selectedAnswer === value}
+                    onChange={e => handleAnswerChange(e.target.value)}
+                    className="sr-only"
+                  />
+                  <div
+                    className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition ${
+                      selectedAnswer === value ? ' bg-blue-800' : 'border-gray-300 bg-white'
+                    }`}
+                  >
+                    {selectedAnswer === value && (
+                      <div className="w-2.5 h-2.5 bg-blue-800 rounded-sm" />
+                    )}
+                  </div>
+                  <span className="text-sm">
+                    {value === 'yes'
+                      ? 'Yes, the video played properly.'
+                      : 'No, I had trouble playing the video properly.'}
+                  </span>
+                </label>
+              ))}
             </div>
 
             {selectedAnswer === 'no' && (
