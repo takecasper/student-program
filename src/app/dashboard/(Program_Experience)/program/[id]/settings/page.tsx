@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { CircleUser } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
+import AddEvaluationForm from './components/AddEvaluationForm';
+
 import SiteSettings from './components/Site';
 import UserRole from './components/RoleUser';
 import { Button } from '@/components/ui/button';
@@ -71,6 +73,7 @@ export default function ProgramPage() {
   ];
 
   const showSideBar = !isConfiguring && !isSettingUpRotation && !isSettingUpEvaluationForms;
+  const isHidden = isSettingUpEvaluationForms;
 
   return (
     <div className="p-6 flex gap-2">
@@ -125,8 +128,14 @@ export default function ProgramPage() {
         </>
       )}
 
+      {isSettingUpEvaluationForms && (
+        <div className="basis-5/5">
+          <AddEvaluationForm setIsSettingUpEvaluationForms={setIsSettingUpEvaluationForms} />
+        </div>
+      )}
+
       {/* Content */}
-      <div className={`${!showSideBar ? 'basis-5/5 ' : 'basis-4/5 '}`}>
+      <div className={`${isHidden ? 'hidden': 'flex'} ${!showSideBar ? 'basis-5/5 ' : 'basis-4/5 '}`}>
         {settingsView === 0 && (
           <CurriculumRotation
             isConfiguring={isConfiguring}
@@ -134,6 +143,8 @@ export default function ProgramPage() {
             currentSelection={subMenuSettingsView}
             isSettingUpRotation={isSettingUpRotation}
             setIsSettingUpRotation={setIsSettingUpRotation}
+            isSettingUpEvaluationForms={isSettingUpEvaluationForms}
+            setIsSettingUpEvaluationForms={setIsSettingUpEvaluationForms}
           />
         )}
 
