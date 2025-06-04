@@ -142,7 +142,7 @@ export default function AddEvaluationForm({
         {showSendContent && (
           <div className="w-[300px] border-none h-full min-h-[65vh] bg-white p-0 flex flex-col gap-2">
             <div className="w-full h-[56px] px-5 bg-[#f4f4f4] rounded-t-[10px] flex items-center justify-between">
-              <h4 className="text-[#616161] text-[14px] font-bold">SEND</h4>
+              {/* <h4 className="text-[#616161] text-[14px] font-bold">SEND</h4> */}
             </div>
 
             <div className="space-y-4 px-6 pt-7 bg-[#fbfbfb]  ">

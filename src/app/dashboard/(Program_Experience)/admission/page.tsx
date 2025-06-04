@@ -33,7 +33,9 @@ export default function ProgramAdmissionPage() {
 
   return (
     <div className="relative w-full min-h-[calc(100vh_-_103px)]">
-      <div className="p-6 w-full max-w-[60%]">
+      <div
+        className={`p-6 w-full transition-all duration-300 ${showSidebar.show ? 'pr-[500px]' : ''}`}
+      >
         <div className="flex justify-between items-center mb-5">
           <div>
             <h1 className="text-sm font-medium text-[#333333]">PROGRAMS</h1>
@@ -60,9 +62,9 @@ export default function ProgramAdmissionPage() {
                     <span className="text-[12px] text-[#364699]">{item.applied} Applied</span>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="overflow-x-auto border border-t-0 p-0 rounded-b-md">
+                <AccordionContent className="overflow-x-auto ">
                   <table className="w-full text-left text-sm">
-                    <thead className="border-b">
+                    <thead className="">
                       <tr className="border border-[#F5F5F5] px-4 py-[13px] cursor-pointer bg-[#D9D9D91A] rounded-t-md">
                         <th className="text-[#33333399] text-[12px] px-4 py-2">Student</th>
                         <th className="text-[#33333399] text-[12px] px-4 py-2">Program</th>
@@ -129,7 +131,7 @@ export default function ProgramAdmissionPage() {
 
       {showSidebar.show && (
         <div className="absolute top-0 right-0 bottom-0 z-40 flex justify-end h-full">
-          <div className="bg-white w-[485px] py-[20px] px-[24px] h-full overflow-y-auto shadow-lg border-l border-[#f5f5f5] animate-in slide-in-from-right">
+          <div className="bg-white w-[485px] py-[20px] px-[24px] h-full overflow-y-auto shadow-none border-l-2 border-[#f5f5f5] animate-in slide-in-from-right">
             <div className="mb-10 flex items-center justify-between">
               <h5 className="text-[16px] font-bold text-[#333333DE] p-0">
                 {sidebarScreen === 0 ? 'STUDENT PROFILE' : 'CONFIGURATION'}

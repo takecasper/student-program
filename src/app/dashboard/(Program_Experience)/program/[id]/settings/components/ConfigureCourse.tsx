@@ -6,6 +6,15 @@ import LearnersTab from './LearnersTab';
 import EvaluationTab from './EvaluationTab';
 
 import { Button } from '@/components/ui/button';
+import {
+  Table,
+  TableRow,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+} from '@/components/ui/table';
+import FormBuilder from './FormBuilder';
 
 type CourseConfigureProps = {
   isSettingUpEvaluationForms: boolean;
