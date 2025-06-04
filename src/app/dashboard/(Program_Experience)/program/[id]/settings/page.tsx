@@ -48,16 +48,16 @@ export default function ProgramPage() {
       label: `Learner's List`,
       icon: <CircleUser color="#4e4e4e" width={16} height={16} />,
     },
-    {
-      id: 2,
-      label: 'Evaluation forms',
-      icon: <Image width={16} height={16} src="/svgs/calendar_view_week.svg" alt="Form" />,
-    },
-    {
-      id: 3,
-      label: 'Grade sheet',
-      icon: <Image width={16} height={16} src="/svgs/sports_score.svg" alt="Grade" />,
-    },
+    // {
+    //   id: 2,
+    //   label: 'Evaluation forms',
+    //   icon: <Image width={16} height={16} src="/svgs/calendar_view_week.svg" alt="Form" />,
+    // },
+    // {
+    //   id: 3,
+    //   label: 'Grade sheet',
+    //   icon: <Image width={16} height={16} src="/svgs/sports_score.svg" alt="Grade" />,
+    // },
     {
       id: 4,
       label: 'Site',
