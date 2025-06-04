@@ -51,20 +51,22 @@ const AddRole = ({ setScreenView }: AddRoleProps) => {
           <div className="border-b-[#D9D9D9] border-b-[1px] w-full flex items-center justify-between pb-3">
             <span className="text-[#858585] text-[12px] font-bold">Add New Role</span>
 
-            <div className="flex items-center gap-3">
-              <Button
-                onClick={() => setScreenView(0)}
-                className="text-[#333333DE] cursor-pointer w-[95px] text-[12px] bg-transparent hover:bg-transparent border border-[#D9D9D9] rounded-[20px]"
-              >
-                CANCEL
-              </Button>
-              <Button
-                onClick={() => setScreenView(0)}
-                className="text-[#fff] cursor-pointer w-[95px] text-[12px] bg-[#364699] hover:bg-[#364699] border border-[#D9D9D9] rounded-[20px]"
-              >
-                SAVE
-              </Button>
-            </div>
+            {settingsColumns.tertiaryLevel && (
+              <div className="flex items-center gap-3">
+                <Button
+                  onClick={() => setScreenView(0)}
+                  className="text-[#333333DE] cursor-pointer w-[95px] text-[12px] bg-transparent hover:bg-transparent border border-[#D9D9D9] rounded-[20px]"
+                >
+                  CANCEL
+                </Button>
+                <Button
+                  onClick={() => setScreenView(0)}
+                  className="text-[#fff] cursor-pointer w-[95px] text-[12px] bg-[#364699] hover:bg-[#364699] border border-[#D9D9D9] rounded-[20px]"
+                >
+                  SAVE
+                </Button>
+              </div>
+            )}
           </div>
         </div>
 
