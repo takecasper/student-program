@@ -1,51 +1,32 @@
-import {
-  Clock,
-  MapPin,
-  User,
-  SquarePen,
-  Stamp,
-  Hourglass,
-  XCircle,
-  CheckCircle,
-} from 'lucide-react';
+import { Clock, MapPin, User } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
+import StatusBadge from '../StatusBadge';
+import { CalendarEventType, Status } from '@/types/calendar';
 
 interface WeekEventProps {
-  title: string;
-  startTime: string;
-  endTime: string;
-  location?: string;
   teacher?: string;
   color: string;
-  status?: {
-    text: string;
-    color: string;
-    dotColor?: string;
-  };
+  status?: Status;
   isAllDay?: boolean;
-  isEditable?: boolean;
   numWeek: number;
   size: number;
   index: number;
+  event: CalendarEventType;
   setIsAddModalOpen: () => void;
 }
 
 export default function WeekEvent({
-  title,
-  startTime,
-  endTime,
-  location,
   teacher,
   color,
   status,
   isAllDay = false,
-  isEditable = false,
   numWeek,
   size,
   index,
-  setIsAddModalOpen,
+  event,
 }: WeekEventProps) {
   const [showModal, setShowModal] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -54,21 +35,18 @@ export default function WeekEvent({
         setShowModal(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const totalWidth = `calc(${100 * numWeek + '%' + ' + ' + (2 * numWeek - 10) + 'px '})`;
-  const eventHeight = isAllDay ? `${64 / size}px` : `${136 / size}px`;
-  const top = isAllDay ? `${(64 / size) * index + 3}px` : `${(136 / size) * index + 3}px`;
+  const eventHeight = `${(isAllDay ? 64 : 136) / size}px`;
+  const top = `${((isAllDay ? 64 : 136) / size) * index + 3}px`;
 
   return (
     <>
       {isAllDay ? (
-        <div className={`absolute left-1 bg-white z-10`} style={{ width: totalWidth, top: top }}>
+        <div className={`absolute left-1 bg-white `} style={{ width: totalWidth, top: top }}>
           <div className="flex">
             <div
               onClick={() => setShowModal(true)}
@@ -77,27 +55,20 @@ export default function WeekEvent({
             >
               <div className="flex gap-2 h-full items-center">
                 <div className="flex flex-col justify-center">
-                  <p className="text-sm font-medium">{title}</p>
-                  {status && size === 1 && (
-                    <span
-                      className="ml-auto text-white text-xs py-1 px-2 rounded-full flex items-center gap-1"
-                      style={{ backgroundColor: status.color }}
-                    >
-                      <div className="w-3 h-3 rounded-full flex justify-center items-center">
-                        {status.text === 'Pending' && <Stamp className="w-3 h-3 text-[#fff]" />}
-                        {status.text === 'Drop Requested' && (
-                          <XCircle className="w-3 h-3 text-[#fff]" />
-                        )}
-                        {status.text === 'Waitlisted' && (
-                          <Hourglass className="w-3 h-3 text-[#fff]" />
-                        )}
-                        {status.text === 'Confirmed' && (
-                          <CheckCircle className="w-3 h-3 text-[#fff]" />
-                        )}
-                      </div>
-                      {status.text}
-                    </span>
-                  )}
+                  <p className="text-md font-medium truncate">{event.title}</p>
+                  <div className="flex items-end">
+                    <div className="flex items-end">
+                      {status && (
+                        <StatusBadge
+                          status={status}
+                          showTooltip={showTooltip}
+                          setShowModal={setShowModal}
+                          setShowTooltip={setShowTooltip}
+                          event={event}
+                        />
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -106,7 +77,10 @@ export default function WeekEvent({
       ) : (
         <>
           {size === 1 ? (
-            <div className="absolute left-1 z-50 bg-white" style={{ width: totalWidth, top: top }}>
+            <div
+              className={`absolute left-1 bg-white ${showTooltip ? 'z-30' : showModal ? 'z-20' : 'z-10'}`}
+              style={{ width: totalWidth, top: top }}
+            >
               <div className="flex w-full">
                 <div
                   className={`bg-white ${
@@ -122,41 +96,18 @@ export default function WeekEvent({
                     <div className="flex flex-col justify-center w-full ">
                       <div className="flex flex-col sm:flex-row justify-between pb-1">
                         <div className="flex flex-col text-nowrap">
-                          <p className="text-md font-medium">{title}</p>
+                          <p className="text-md font-medium">{event.title}</p>
                         </div>
-                        <div className="flex items-end">
-                          {isEditable ? (
-                            <span
-                              className="text-black text-xs py-1 px-2 rounded-full flex items-center gap-1 w-fit sm:ml-auto"
-                              onClick={() => setIsAddModalOpen()}
-                            >
-                              <SquarePen className="w-4 h-4" />
-                            </span>
-                          ) : status ? (
-                            <span
-                              className="text-white text-xs py-1 px-2 rounded-full flex items-center gap-1 w-fit sm:ml-auto"
-                              style={{ backgroundColor: status.color }}
-                              onClick={() => {
-                                setShowModal(!showModal);
-                              }}
-                            >
-                              <div className="w-3 h-3 rounded-full flex justify-center items-center">
-                                {status.text === 'Pending' && (
-                                  <Stamp className="w-3 h-3 text-[#fff]" />
-                                )}
-                                {status.text === 'Drop Requested' && (
-                                  <XCircle className="w-3 h-3 text-[#fff]" />
-                                )}
-                                {status.text === 'Waitlisted' && (
-                                  <Hourglass className="w-3 h-3 text-[#fff]" />
-                                )}
-                                {status.text === 'Confirmed' && (
-                                  <CheckCircle className="w-3 h-3 text-[#fff]" />
-                                )}
-                              </div>
-                              {status.text}
-                            </span>
-                          ) : null}
+                        <div className="flex">
+                          {status && (
+                            <StatusBadge
+                              status={status}
+                              showTooltip={showTooltip}
+                              setShowModal={setShowModal}
+                              setShowTooltip={setShowTooltip}
+                              event={event}
+                            />
+                          )}
                         </div>
                       </div>
 
@@ -164,7 +115,7 @@ export default function WeekEvent({
                         <div className="w-full flex items-center gap-1">
                           <Clock className="h-3 w-3 text-[#6c6c6c]" />
                           <span className="text-sm text-[#6c6c6c]">
-                            {startTime} - {endTime}
+                            {event.startTime} - {event.endTime}
                           </span>
                         </div>
                       </div>
@@ -178,11 +129,11 @@ export default function WeekEvent({
                         </div>
                       )}
 
-                      {location && (
+                      {event.location && (
                         <div className="flex flex-col pb-1">
                           <div className="w-full flex items-center gap-1">
                             <MapPin className="h-3 w-3 text-[#6c6c6c]" />
-                            <span className="text-sm text-[#6c6c6c]">{location}</span>
+                            <span className="text-sm text-[#6c6c6c]">{event.location}</span>
                           </div>
                         </div>
                       )}
@@ -220,7 +171,7 @@ export default function WeekEvent({
           ) : (
             <>
               <div
-                className={`absolute left-1 bg-white z-10`}
+                className={`absolute left-1 bg-white z-1`}
                 style={{ width: totalWidth, top: top }}
               >
                 <div className="flex">
@@ -232,42 +183,18 @@ export default function WeekEvent({
                       <div className="flex flex-col justify-center w-full ">
                         <div className="flex  flex-col sm:flex-row justify-between pb-1">
                           <div className="flex flex-col text-nowrap">
-                            <p className="text-md font-medium">{title}</p>
+                            <p className="text-md font-medium">{event.title}</p>
                           </div>
                           <div className="flex items-end">
-                            {isEditable ? (
-                              <span
-                                className="text-black text-xs py-1 px-2 rounded-full flex items-center gap-1 w-fit sm:ml-auto"
-                                onClick={() => setIsAddModalOpen()}
-                              >
-                                <SquarePen className="w-4 h-4" />
-                              </span>
-                            ) : status ? (
-                              <span
-                                className="text-white text-xs py-1 px-2 rounded-full flex items-center gap-1 w-fit sm:ml-auto"
-                                style={{ backgroundColor: status.color }}
-                                onClick={() => {
-                                  alert('asdfadsf');
-                                  setShowModal(!showModal);
-                                }}
-                              >
-                                <div className="w-3 h-3 rounded-full flex justify-center items-center">
-                                  {status.text === 'Pending' && (
-                                    <Stamp className="w-3 h-3 text-[#fff]" />
-                                  )}
-                                  {status.text === 'Drop Requested' && (
-                                    <XCircle className="w-3 h-3 text-[#fff]" />
-                                  )}
-                                  {status.text === 'Waitlisted' && (
-                                    <Hourglass className="w-3 h-3 text-[#fff]" />
-                                  )}
-                                  {status.text === 'Confirmed' && (
-                                    <CheckCircle className="w-3 h-3 text-[#fff]" />
-                                  )}
-                                </div>
-                                {status.text}
-                              </span>
-                            ) : null}
+                            {status && (
+                              <StatusBadge
+                                status={status}
+                                showTooltip={showTooltip}
+                                setShowModal={setShowModal}
+                                setShowTooltip={setShowTooltip}
+                                event={event}
+                              />
+                            )}
                           </div>
                         </div>
                       </div>
@@ -277,7 +204,7 @@ export default function WeekEvent({
               </div>
 
               <div
-                className="absolute left-1 hidden group-hover:block z-50 bg-white"
+                className={`absolute left-1 hidden group-hover:block bg-white ${showTooltip ? 'z-30' : showModal ? 'z-20' : 'z-10'}`}
                 style={{ width: totalWidth, top: top }}
               >
                 <div className="flex w-full">
@@ -295,41 +222,18 @@ export default function WeekEvent({
                       <div className="flex flex-col justify-center w-full ">
                         <div className="flex flex-col sm:flex-row justify-between pb-1">
                           <div className="flex flex-col">
-                            <p className="text-md font-medium">{title}</p>
+                            <p className="text-md font-medium">{event.title}</p>
                           </div>
                           <div className="flex items-end">
-                            {isEditable ? (
-                              <span
-                                className="text-black text-xs py-1 px-2 rounded-full flex items-center gap-1 w-fit sm:ml-auto"
-                                onClick={() => setIsAddModalOpen()}
-                              >
-                                <SquarePen className="w-4 h-4" />
-                              </span>
-                            ) : status ? (
-                              <span
-                                className="text-white text-xs py-1 px-2 rounded-full flex items-center gap-1 w-fit sm:ml-auto"
-                                style={{ backgroundColor: status.color }}
-                                onClick={() => {
-                                  setShowModal(!showModal);
-                                }}
-                              >
-                                <div className="w-3 h-3 rounded-full flex justify-center items-center">
-                                  {status.text === 'Pending' && (
-                                    <Stamp className="w-3 h-3 text-[#fff]" />
-                                  )}
-                                  {status.text === 'Drop Requested' && (
-                                    <XCircle className="w-3 h-3 text-[#fff]" />
-                                  )}
-                                  {status.text === 'Waitlisted' && (
-                                    <Hourglass className="w-3 h-3 text-[#fff]" />
-                                  )}
-                                  {status.text === 'Confirmed' && (
-                                    <CheckCircle className="w-3 h-3 text-[#fff]" />
-                                  )}
-                                </div>
-                                {status.text}
-                              </span>
-                            ) : null}
+                            {status && (
+                              <StatusBadge
+                                status={status}
+                                showTooltip={showTooltip}
+                                setShowModal={setShowModal}
+                                setShowTooltip={setShowTooltip}
+                                event={event}
+                              />
+                            )}
                           </div>
                         </div>
 
@@ -337,7 +241,7 @@ export default function WeekEvent({
                           <div className="w-full flex items-center gap-1">
                             <Clock className="h-3 w-3 text-[#6c6c6c]" />
                             <span className="text-sm text-[#6c6c6c]">
-                              {startTime} - {endTime}
+                              {event.startTime} - {event.endTime}
                             </span>
                           </div>
                         </div>
@@ -351,17 +255,17 @@ export default function WeekEvent({
                           </div>
                         )}
 
-                        {location && (
-                          <div className="flex flex-col pb-1">
+                        {event.location && (
+                          <div className="flex flex-col pb-1 z-10">
                             <div className="w-full flex items-center gap-1">
                               <MapPin className="h-3 w-3 text-[#6c6c6c]" />
-                              <span className="text-sm text-[#6c6c6c]">{location}</span>
+                              <span className="text-sm text-[#6c6c6c]">{event.location}</span>
                             </div>
                           </div>
                         )}
 
                         {showModal && (
-                          <div className="border-t-2 mt-2">
+                          <div className="border-t-2 mt-2 z-50">
                             <div className="text-sm text-[#333] space-y-4">
                               <h2 className="text-base font-semibold">Elective Details</h2>
                               <p>

@@ -7,14 +7,32 @@ export interface CalendarEventType {
   endTime?: string;
   color: string;
   isAllDay: boolean;
-  isEditable?: boolean;
   location?: string;
   teacher?: string;
-  status?: {
-    text: string;
-    color: string;
-    dotColor: string;
-    icon?: string;
-  };
+  status?: Status;
   description?: string;
 }
+
+export interface Status {
+  text:
+    | 'Pending'
+    | 'Drop Requested'
+    | 'Waitlisted'
+    | 'Confirmed'
+    | 'Editable'
+    | 'Swap Requested'
+    | string;
+  color?: string;
+}
+
+export type SlideState =
+  | 'CONFIRM'
+  | 'INIT_ADD'
+  | 'SUBMIT_ADD'
+  | 'INIT_SWAP'
+  | 'CONFIRM_SWAP'
+  | 'SWAP_REQUEST_A'
+  | 'SWAP_REQUEST_B'
+  | 'INIT_DROP'
+  | 'DROP_REQUEST'
+  | 'DEFAULT';
