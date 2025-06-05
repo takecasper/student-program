@@ -36,6 +36,10 @@ export default function ProgramPage() {
     }
   };
 
+  const handleCalenderRedirect = () => {
+    router.push('/dashboard/calendar');
+  };
+
   useEffect(() => {
     setTitle(`Program / ${program ? `${program.name} - ${program.year}` : ''}`);
   }, [setTitle, program]);
@@ -89,7 +93,9 @@ export default function ProgramPage() {
                   </div>
                 )}
 
-                <div className={`relative ${index === 0 ? 'border-b-2 border-[#D9D9D9] rounded-[20px]' : ''}`}>
+                <div
+                  className={`relative ${index === 0 ? 'border-b-2 border-[#D9D9D9] rounded-[20px]' : ''}`}
+                >
                   <Image
                     width={500}
                     height={300}
@@ -100,7 +106,11 @@ export default function ProgramPage() {
                     className="w-full h-40 object-cover rounded-[2px]"
                   />
 
-                  <span className={`${card.status === 'CURRENT' ? 'text-[#00A59B]' : 'text-[#333333DE]'} font-bold block border border-[#D9D9D9] py-1 px-2 w-max text-[12px] rounded-[10px] bg-white absolute bottom-3 right-3`}>{card.status}</span>
+                  <span
+                    className={`${card.status === 'CURRENT' ? 'text-[#00A59B]' : 'text-[#333333DE]'} font-bold block border border-[#D9D9D9] py-1 px-2 w-max text-[12px] rounded-[10px] bg-white absolute bottom-3 right-3`}
+                  >
+                    {card.status}
+                  </span>
                 </div>
 
                 <CardContent className="p-4 px-0 flex-grow">
@@ -140,8 +150,15 @@ export default function ProgramPage() {
                       ))}
                     </div>
 
-                    <Button className="!p-0 !px-0 cursor-pointer bg-[#fff] hover:bg-gray-300 w-[30px] h-[30px] flex items-center justify-center rounded-[4px] border border-[#3333331A]">
-                      <CalendarSVG width={24} height={24} className='object-fit w-[24px] h-[24px]'/>
+                    <Button
+                      onClick={handleCalenderRedirect}
+                      className="!p-0 !px-0 cursor-pointer bg-[#fff] hover:bg-gray-300 w-[30px] h-[30px] flex items-center justify-center rounded-[4px] border border-[#3333331A]"
+                    >
+                      <CalendarSVG
+                        width={24}
+                        height={24}
+                        className="object-fit w-[24px] h-[24px]"
+                      />
                     </Button>
                   </div>
                 </CardContent>

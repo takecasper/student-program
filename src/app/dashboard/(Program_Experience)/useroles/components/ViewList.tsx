@@ -12,30 +12,61 @@ import {
   TableHead,
   TableHeader,
 } from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 import { UserRolesData } from '../types';
 
 import AddIcon from '../../../../../../public/svgs/add-white.svg';
+import { ChevronDown } from 'lucide-react';
 
 type ViewListProps = {
   setScreenView: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const initialTableData: UserRolesData[] = [
-  { id: '1', name: 'ADMINISTRATOR', numberOfUsers: 33 },
-  { id: '2', name: 'ADMINISTRATOR - BLUMETEST6', numberOfUsers: 33 },
-  { id: '3', name: 'ADMINISTRATOR - DUPLICATE - 2024-06-031t12:00:08', numberOfUsers: 33 },
-  { id: '4', name: 'BLUME ADMIN', numberOfUsers: 33 },
+type User = {
+  name: string;
+  avatar: string;
+};
+
+const initialTableData: (UserRolesData & { users: User[] })[] = [
+  {
+    id: '1',
+    name: 'ADMINISTRATOR',
+    numberOfUsers: 34,
+    users: Array(3).fill({ name: 'Isabella Ding', avatar: '/avatar.png' }),
+  },
+  {
+    id: '2',
+    name: 'ADMINISTRATOR - BLUMETEST6',
+    numberOfUsers: 1,
+    users: [{ name: 'Isabella Ding', avatar: '/avatar.png' }],
+  },
+  {
+    id: '3',
+    name: 'ADMINISTRATOR - DUPLICATE - 2024-06-031t12:00:08',
+    numberOfUsers: 1,
+    users: [{ name: 'Isabella Ding', avatar: '/avatar.png' }],
+  },
+  {
+    id: '4',
+    name: 'BLUME ADMIN',
+    numberOfUsers: 1,
+    users: [{ name: 'Isabella Ding', avatar: '/avatar.png' }],
+  },
 ];
 
 const ViewList = ({ setScreenView }: ViewListProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [tableData, setTableData] = useState<UserRolesData[]>(initialTableData);
+  const [tableData, setTableData] = useState(initialTableData);
 
   return (
-    <div className="p-6 px-20 relative h-full max-w-[730px] m-auto">
+    <div className="p-6 relative h-full w-full">
       {/* Header */}
-      <div className="mt-4  flex justify-between items-center mb-8">
+      <div className="mt-4 flex justify-between items-center mb-8">
         <div>
           <h1 className="text-sm font-medium text-[#333333]">Users</h1>
         </div>
@@ -49,25 +80,58 @@ const ViewList = ({ setScreenView }: ViewListProps) => {
         </Button>
       </div>
 
-      <div className={`grid grid-cols-1 lg:grid-cols-1 gap-6`}>
-        <Table>
+      <div className="w-full">
+        <Table className="w-full">
           <TableHeader>
-            <TableRow className="border-b border-[#f5f5f5]">
-              <TableHead className="text-[#6c6c6c] font-medium">Role Name</TableHead>
-              <TableHead className="text-[#6c6c6c] font-medium">Number of Users</TableHead>
-              <TableHead className="text-[#6c6c6c] font-medium">Default</TableHead>
+            <TableRow className="bg-[#D9D9D91A] border-b border-[#f5f5f5]">
+              <TableHead className="text-[#6c6c6c] font-medium w-[40%]">Role Name</TableHead>
+              <TableHead className="text-[#6c6c6c] font-medium w-[40%]">Number of Users</TableHead>
+              <TableHead className="text-[#6c6c6c] font-medium w-[20%]">Default</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {tableData.map((item, index) => (
               <TableRow key={index} className="border-b border-[#f5f5f5] cursor-pointer">
-                <TableCell className="text-[#333333DE] font-medium gap-3">
-                  <div className="gap-3">{item.name}</div>
+                <TableCell className="text-[#333333DE] font-medium">
+                  <div>{item.name}</div>
                 </TableCell>
-                <TableCell className="text-[#333333DE] font-medium gap-3">
-                  <div className="gap-3">{item.numberOfUsers}</div>
+                <TableCell className="text-[#333333DE] font-medium">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="flex items-center gap-2">
+                      <div className="flex -space-x-2">
+                        {item.users.slice(0, 3).map((user, i) => (
+                          <Image
+                            key={i}
+                            src={user.avatar}
+                            alt={user.name}
+                            width={24}
+                            height={24}
+                            className="rounded-full border-2 border-white"
+                          />
+                        ))}
+                      </div>
+                      <span className="bg-[#F5F5F5] px-2 py-1 rounded-full text-sm">
+                        {item.numberOfUsers}
+                      </span>
+                      <ChevronDown className="w-[12px] h-[12px]" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      {item.users.map((user, i) => (
+                        <div key={i} className="flex items-center gap-2 p-2">
+                          <Image
+                            src={user.avatar}
+                            alt={user.name}
+                            width={24}
+                            height={24}
+                            className="rounded-full"
+                          />
+                          <span>{user.name}</span>
+                        </div>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </TableCell>
-                <TableCell className="text-[#333333DE] font-medium gap-3">
+                <TableCell className="text-[#333333DE] font-medium">
                   <div className="flex items-center gap-2">
                     <Button className="cursor-pointer hover:bg-transparent shadow-none bg-transparent border border-[#ebebeb] rounded-[4px] w-[24px] h-[24px] p-0 flex items-center justify-center">
                       <Image width={11} height={11} src={'/svgs/delete.svg'} alt="delete" />

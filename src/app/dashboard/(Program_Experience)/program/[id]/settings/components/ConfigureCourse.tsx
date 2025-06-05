@@ -2,7 +2,9 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 
-import { Input } from '@/components/ui/input';
+import LearnersTab from './LearnersTab';
+import EvaluationTab from './EvaluationTab';
+
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -12,18 +14,25 @@ import {
   TableHead,
   TableHeader,
 } from '@/components/ui/table';
+import FormBuilder from './FormBuilder';
 
 type CourseConfigureProps = {
+  isSettingUpEvaluationForms: boolean;
   setIsConfiguring: (isConfiguring: boolean) => void;
+  setIsSettingUpEvaluationForms: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const tabs = ['SESSION', 'GRADES', 'HANDOUTS', 'EVAL', 'PEOPLE'];
+const tabs = ['SESSION', 'GRADES', 'HANDOUTS', 'EVAL', 'LEARNER'];
 
-const CourseConfigure = ({ setIsConfiguring }: CourseConfigureProps) => {
+const CourseConfigure = ({
+  setIsConfiguring,
+  isSettingUpEvaluationForms,
+  setIsSettingUpEvaluationForms,
+}: CourseConfigureProps) => {
   const [activeTab, setActiveTab] = useState('SESSION');
 
   return (
-    <div>
+    <div className='w-full'>
       <div className="flex items-center justify-between mb-5">
         <Button
           onClick={() => setIsConfiguring(false)}
@@ -40,9 +49,9 @@ const CourseConfigure = ({ setIsConfiguring }: CourseConfigureProps) => {
         </Button>
 
         <div className="flex items-center gap-3">
-          <Button className="border-2 border-[#364699] rounded-[20px] bg-white text-[#364699] cursor-pointer hover:bg-[#364699] hover:text-white">
+          {/* <Button className="border-2 border-[#364699] rounded-[20px] bg-white text-[#364699] cursor-pointer hover:bg-[#364699] hover:text-white">
             Review
-          </Button>
+          </Button> */}
           <Button
             className="border-2 border-[#D9D9D9] rounded-[20px] bg-[#364799] text-white cursor-pointer hover:bg-[#D9D9D9] hover:text-white"
             onClick={() => setIsConfiguring(false)}
@@ -69,7 +78,7 @@ const CourseConfigure = ({ setIsConfiguring }: CourseConfigureProps) => {
         </h2>
       </div>
 
-      <div className="flex w-full gap-2">
+      <div className="flex w-full gap-3">
         <div className="w-[45%]">
           <section
             style={{ aspectRatio: '16 / 9' }}
@@ -155,7 +164,7 @@ const CourseConfigure = ({ setIsConfiguring }: CourseConfigureProps) => {
           </section>
         </div>
 
-        <div className="w-[1px] h-auto"></div>
+        <div className="w-[1px] bg-[#F5F5F5]"></div>
 
         <div className="w-[55%] ">
           <div role="tablist" aria-label="Session tabs" className="flex space-x-3 mb-5">
@@ -184,18 +193,29 @@ const CourseConfigure = ({ setIsConfiguring }: CourseConfigureProps) => {
             ))}
           </div>
 
-          <div className="bg-gray-50 rounded-lg h-[calc(100%-56px)] flex flex-col justify-center items-center">
-            <Button
-              aria-label="Add new session"
-              className="bg-gray-200 hover:bg-gray-300 rounded-lg w-12 h-12 flex justify-center items-center mb-3 p-0"
-              variant="ghost"
-            >
-              <span className="text-gray-600 text-2xl font-thin">+</span>
-            </Button>
-            <p className="text-gray-500 text-sm font-sans text-center">
-              Click on &apos;add&apos; to start to add new session
-            </p>
-          </div>
+          {activeTab === 'LEARNER' && <LearnersTab />}
+
+          {activeTab === 'EVAL' && (
+            <EvaluationTab
+              isSettingUpEvaluationForms={isSettingUpEvaluationForms}
+              setIsSettingUpEvaluationForms={setIsSettingUpEvaluationForms}
+            />
+          )}
+
+          {activeTab === 'SESSION' && (
+            <div className="bg-gray-50 rounded-lg h-[calc(100%-56px)] flex flex-col justify-center items-center">
+              <Button
+                aria-label="Add new session"
+                className="bg-gray-200 hover:bg-gray-300 rounded-lg w-12 h-12 flex justify-center items-center mb-3 p-0"
+                variant="ghost"
+              >
+                <span className="text-gray-600 text-2xl font-thin">+</span>
+              </Button>
+              <p className="text-gray-500 text-sm font-sans text-center">
+                Click on &apos;add&apos; to start to add new session
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

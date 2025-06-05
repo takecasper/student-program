@@ -66,6 +66,7 @@ const UserRole = () => {
   const [isAdding, setIsAdding] = useState<boolean>(false);
   const [tableData, setTableData] = useState<UserData[]>(initialTableData);
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
+  const [hoveredRow, setHoveredRow] = useState<string | null>(null);
   const [newUser, setNewUser] = useState<UserData>({
     username: '',
     role: '',
@@ -96,6 +97,15 @@ const UserRole = () => {
     });
   };
 
+  const handleRemoveUser = (id: string) => {
+    setTableData(prev => prev.filter(user => user.id !== id));
+    setSelectedRows(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(id);
+      return newSet;
+    });
+  };
+
   useEffect(() => {
     const input = headerCheckboxRef.current?.querySelector('input');
     if (input) {
@@ -104,11 +114,11 @@ const UserRole = () => {
   }, [partiallySelected]);
 
   return (
-    <div>
+    <div className='w-full'>
       <h4 className="text-[12px] text-[#4f4f4f] font-medium mb-4">USER & ROLE</h4>
 
-      <div className={`grid grid-cols-1 lg:grid-cols-1 gap-6`}>
-        <Table>
+      <div className="w-full">
+        <Table className="w-full">
           <TableHeader>
             <TableRow className="border-b">
               <TableHead className="w-[50px] bg-[#fbfbfb] border-[#f5f5f5]">
@@ -135,7 +145,12 @@ const UserRole = () => {
 
           <TableBody>
             {tableData.map((program, index) => (
-              <TableRow key={index} className="border-b border-[#f5f5f5]">
+              <TableRow
+                key={index}
+                className="border-b border-[#f5f5f5] relative"
+                onMouseEnter={() => setHoveredRow(program.id)}
+                onMouseLeave={() => setHoveredRow(null)}
+              >
                 <TableCell className="w-[50px]">
                   <div className="w-full flex items-center justify-center">
                     <Checkbox
@@ -160,9 +175,7 @@ const UserRole = () => {
                   </div>
                 </TableCell>
                 <TableCell className="text-[#333333DE] font-medium">
-                  {/* <div className="bg-[#fff] border border-[#333] rounded-[20px] w-min h-[30px] px-3 flex items-center justify-center"> */}
-                  <p className="m-0  text-[14px] font-normal">{program.email}</p>
-                  {/* </div> */}
+                  <p className="m-0 text-[14px] font-normal">{program.email}</p>
                 </TableCell>
                 <TableCell className="text-[#333333DE] font-medium">
                   <div className="flex items-center justify-between w-full">
@@ -177,7 +190,14 @@ const UserRole = () => {
                       </p>
                     </div>
 
-                    <div></div>
+                    {hoveredRow === program.id && (
+                      <Button
+                        onClick={() => handleRemoveUser(program.id)}
+                        className="cursor-pointer hover:bg-transparent shadow-none bg-transparent border border-[#ebebeb] rounded-full h-[24px] px-2 flex items-center gap-1 text-black text-xs"
+                      >
+                        Remove
+                      </Button>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>
@@ -205,18 +225,6 @@ const UserRole = () => {
                       onChange={e => setNewUser({ ...newUser, email: e.target.value })}
                       className="flex-2 h-[52px] w-[5rem] rounded-[5px] placeholder:text-[#858585] placeholder:font-medium"
                     />
-
-                    {/* <Select onValueChange={value => setNewUser({ ...newUser, role: value })}>
-                      <SelectTrigger className="w-[8rem] !h-[52px] rounded-[5px] placeholder:text-[#858585] placeholder:font-medium">
-                        <SelectValue placeholder="Select role" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectItem value="Learner">Learner</SelectItem>
-                          <SelectItem value="Program">Program</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select> */}
 
                     <Select onValueChange={value => setNewUser({ ...newUser, status: value })}>
                       <SelectTrigger className="w-[8rem] !h-[52px] rounded-[5px] placeholder:text-[#858585] placeholder:font-medium">

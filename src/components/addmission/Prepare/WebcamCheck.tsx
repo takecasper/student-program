@@ -20,9 +20,12 @@ const WebcamCheck = ({ onComplete }: WebcamCheckProps) => {
       if (imageSrc) {
         setCapturedImage(imageSrc);
         // Call onComplete when photo is taken
-        onComplete();
       }
     }
+  };
+
+  const usePhoto = () => {
+    onComplete();
   };
 
   const retake = () => {
@@ -42,13 +45,13 @@ const WebcamCheck = ({ onComplete }: WebcamCheckProps) => {
             audio={false}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
-            className="w-[400px] h-[280px] rounded-lg bg-black"
+            className="w-[280px] h-[280px] rounded-lg bg-black"
             videoConstraints={{ facingMode: 'user' }}
           />
         ) : (
           <Image
             src={capturedImage}
-            width={400}
+            width={280}
             height={280}
             className="rounded-lg object-cover"
             alt="Captured"
@@ -57,20 +60,29 @@ const WebcamCheck = ({ onComplete }: WebcamCheckProps) => {
         )}
 
         <div className="flex w-full gap-2 justify-end">
-          {capturedImage && (
+          {capturedImage ? (
+            <>
+              <button
+                onClick={retake}
+                className="mt-2 text-[#364699] bg-white text-sm font-semibold px-7 py-5 rounded-3xl cursor-pointer border-2  "
+              >
+                Retake Photo
+              </button>
+              <button
+                onClick={usePhoto}
+                className="mt-2 bg-[#364699] text-white text-sm font-semibold px-7 py-5 rounded-3xl shadow-md cursor-pointer mr-1"
+              >
+                Use Photo
+              </button>
+            </>
+          ) : (
             <button
-              onClick={retake}
-              className="mt-2 text-[#364699] bg-white text-sm font-semibold px-7 py-5 rounded-3xl cursor-pointer"
+              onClick={capture}
+              className="mt-2 bg-[#364699] text-white text-sm font-semibold px-7 py-5 rounded-3xl shadow-md cursor-pointer mr-1"
             >
-              Retake Photo
+              Take Photo
             </button>
           )}
-          <button
-            onClick={capture}
-            className="mt-2 bg-[#364699] text-white text-sm font-semibold px-7 py-5 rounded-3xl shadow-md cursor-pointer"
-          >
-            Take Photo
-          </button>
         </div>
       </div>
     ) : (
@@ -84,7 +96,7 @@ const WebcamCheck = ({ onComplete }: WebcamCheckProps) => {
         </div>
 
         {/* Webcam Placeholder */}
-        <div className="w-[400px] h-[280px] bg-[#333] rounded-lg" />
+        <div className="w-[280px] h-[280px] bg-[#333] rounded-lg" />
 
         {/* Take Photo Button */}
         <button
@@ -112,9 +124,6 @@ const WebcamCheck = ({ onComplete }: WebcamCheckProps) => {
         </p>
       </div>
       <div className="flex justify-end gap-6 w-full">
-        <button className="text-[#364699] text-sm font-medium underline cursor-pointer">
-          Need more info?
-        </button>
         <button
           onClick={() => setIsReady(true)}
           className="bg-[#364699] text-white text-sm font-semibold px-10 py-5 rounded-3xl shadow-md cursor-pointer"

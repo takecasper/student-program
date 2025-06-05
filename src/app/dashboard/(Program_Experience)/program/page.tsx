@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { AlignLeft, Plus } from 'lucide-react';
+import { Plus /** AlignLeft */ } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -59,9 +59,9 @@ export default function ProgramPage() {
         </div>
 
         <div className="flex gap-2">
-          <Button variant="outline" size="icon" className="h-9 w-9 border-[#d9d9d9]">
+          {/* <Button variant="outline" size="icon" className="h-9 w-9 border-[#d9d9d9]">
             <AlignLeft className="h-4 w-4 text-[#6c6c6c]" />
-          </Button>
+          </Button> */}
         </div>
       </div>
 

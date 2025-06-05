@@ -17,7 +17,7 @@ const SetupRotation = ({ setIsSettingUpRotation }: SetupRotationProps) => {
   const buttons = ['INFO', 'DAILY AVAILABILITY'];
 
   return (
-    <div>
+    <div className='w-full'>
       <div className="flex items-center justify-between mb-5">
         <Button
           onClick={() => setIsSettingUpRotation(false)}

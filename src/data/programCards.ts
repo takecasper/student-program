@@ -51,8 +51,20 @@ export const programCards = [
     status: 'CURRENT',
     content: [
       {
-        name: 'CLINICAL PHASE',
+        name: 'S1',
         lock: false,
+      },
+      {
+        name: 'S2',
+        lock: false,
+      },
+      {
+        name: 'S3',
+        lock: false,
+      },
+      {
+        name: 'S4',
+        lock: true,
       },
     ],
   },
@@ -62,7 +74,19 @@ export const programCards = [
     year: 'YEAR 4',
     content: [
       {
-        name: 'CLINICAL PHASE',
+        name: 'S1',
+        lock: false,
+      },
+      {
+        name: 'S2',
+        lock: false,
+      },
+      {
+        name: 'S3',
+        lock: false,
+      },
+      {
+        name: 'S4',
         lock: true,
       },
     ],

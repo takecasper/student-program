@@ -287,6 +287,7 @@ export default function CourseDetailSidebar({
                     setIsExpanded(true);
                   }}
                 >
+                  <Image src="/svgs/session.svg" alt="session" width={14} height={14} />
                   SESSION
                 </Button>
                 <Button
@@ -299,6 +300,7 @@ export default function CourseDetailSidebar({
                     setIsExpanded(true);
                   }}
                 >
+                  <Image src="/svgs/sports_score.svg" alt="grades" width={14} height={14} />
                   GRADES
                 </Button>
                 <Button
@@ -311,17 +313,19 @@ export default function CourseDetailSidebar({
                     setIsExpanded(true);
                   }}
                 >
+                  <Image src="/svgs/Handout-icon.svg" alt="handouts" width={14} height={14} />
                   HANDOUTS
                 </Button>
-                {/* <Button
+                <Button
                   variant="ghost"
                   className={`py-3 rounded-full border border-[#D9D9D9] ${
                     activeTab === 'EVAL' ? 'bg-[#364699] text-white' : ''
                   }`}
                   onClick={() => setActiveTab('EVAL')}
                 >
+                  <Image src="/svgs/edit_document.svg" alt="evaluation" width={13} height={13} />
                   EVAL
-                </Button> */}
+                </Button>
               </div>
 
               {/* Tab content */}
@@ -381,9 +385,17 @@ export default function CourseDetailSidebar({
               >
                 HANDOUTS
               </Button>
-              {/* <Button variant="ghost" className="flex-1 py-3 rounded-full border border-[#D9D9D9]">
+              <Button
+                variant="ghost"
+                className="flex-1 py-3 rounded-full border border-[#D9D9D9]"
+                onClick={() => {
+                  setActiveTab('EVAL');
+                  setIsExpanded(true);
+                  onExpand(true);
+                }}
+              >
                 EVAL
-              </Button> */}
+              </Button>
             </div>
 
             <div className="flex flex-col gap-4 px-4">

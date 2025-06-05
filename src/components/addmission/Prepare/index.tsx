@@ -50,7 +50,7 @@ export default function CasperPrepare() {
   const [showCheckTab, setShowCheckTab] = useState<boolean>(false);
   const [showTestInterface, setShowTestInterface] = useState<boolean>(false);
   const [showCongratulations, setShowCongratulations] = useState(false);
-  const [checkStage, setCheckStage] = useState(2);
+  const [checkStage, setCheckStage] = useState(1);
 
   const [completedChecks, setCompletedChecks] = useState<(boolean | string)[]>([
     false, // Browser & Internet Speed Test
@@ -71,6 +71,13 @@ export default function CasperPrepare() {
   const isPrepareTab = state === 'prepare';
   const isCheckTab = state === 'check';
 
+  const handleSpeedTestComplete = () => {
+    const newChecks = [...completedChecks];
+    newChecks[0] = true;
+    setCompletedChecks(newChecks);
+    setCheckStage(1); // Move to next stage
+  };
+
   // If showing test interface, render it instead
   if (showTestInterface) {
     return <CasperTestInterface onBack={() => setShowTestInterface(false)} />;
@@ -79,67 +86,69 @@ export default function CasperPrepare() {
   // If showing congratulations, show only that screen
   if (showCongratulations) {
     return (
-      <div className="bg-white py-6 px-16 md:px-26 md:py-10 text-gray-800 flex flex-col md:flex-row gap-10">
+      <div className="bg-white  py-5 md:pt-10 md-pb-4 text-gray-800 flex flex-col md:flex-row gap-10 max-h-[calc(100vh-155px)]">
         {/* Left Section - Same as main layout */}
-        <div className="md:w-2/3 space-y-6 pr-[11.5rem] border-r border-[#CCCCCC]">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
-              <Image
-                src="/svgs/stars.svg"
-                alt="clinical"
-                width={16}
-                height={16}
-                className="text-transparent"
-              />
-            </div>
-            <div className=" flex flex-col">
-              <span className="text-sm text-gray-500 font-medium">Recommended</span>
-              <h1 className="text-2xl font-semibold">Casper Practice Test</h1>
-            </div>
-          </div>
-
-          <div className="w-full">
-            <Image
-              src="/category1.png"
-              alt="Casper Thumbnail"
-              width={800}
-              height={200}
-              className="rounded-lg object-cover w-full h-48"
-            />
-          </div>
-
-          <p className="text-sm text-gray-600">
-            Applicants who complete the practice test generally perform better on Casper. The
-            practice test can take 1 hour+ to complete. If your test is within this time frame,
-            please proceed directly to your test instead.
-          </p>
-
-          <div className="border rounded-xl pl-12 pr-10 pt-6 pb-8 space-y-4">
-            <h2 className="text-sm font-semibold text-[#333333DE] uppercase">Practice Tests</h2>
-            <p className="text-sm text-gray-600">
-              Try out our currently available Casper test formats.
-            </p>
-
-            <div className="flex flex-col gap-4">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-800 font-medium">2024/25 Cycle</span>
-                <button
-                  onClick={() => setShowTestInterface(true)}
-                  className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm text-nowrap cursor-pointer"
-                >
-                  Start Test
-                </button>
+        <div className="md:w-2/3 mx-auto mt-8 bg-white flex justify-center border-r min-h-[calc(100vh-110px)]">
+          <div className="w-full mx-auto mt-8 bg-white flex justify-center border-r h-[calc(100vh-230px)] overflow-auto">
+            <div className="w-full max-w-[650px] space-y-6">
+              {/* Header */}
+              <div className="flex space-x-3">
+                <div className="w-[60px] h-[60px] rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
+                  <Image src="/svgs/stars.svg" alt="clinical" width={24} height={24} />
+                </div>
+                <div className="flex flex-col justify-center">
+                  <span className="text-sm text-gray-500 font-medium">Recommended</span>
+                  <h1 className="text-2xl font-semibold">Casper Practice Test</h1>
+                </div>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-800 font-medium">
-                  AUS Teachers Education <br /> (2024 - 2025 Cycle)
-                </span>
-                <button
-                  onClick={() => setShowTestInterface(true)}
-                  className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm text-nowrap cursor-pointer"
-                >
-                  Start Test
-                </button>
+
+              {/* Thumbnail */}
+              <div className="w-full">
+                <Image
+                  src="/category1.png"
+                  alt="Casper Thumbnail"
+                  width={800}
+                  height={200}
+                  className="rounded-2xl object-cover w-full h-48"
+                />
+              </div>
+
+              {/* Description */}
+              <p className="text-sm text-gray-600">
+                Applicants who complete the practice test generally perform better on Casper. The
+                practice test can take 1 hour+ to complete. If your test is within this time frame,
+                please proceed directly to your test instead.
+              </p>
+
+              {/* Practice Test Box */}
+              <div className="border rounded-xl pl-12 pr-10 pt-6 pb-8 space-y-4 bg-white shadow">
+                <h2 className="text-sm font-semibold text-[#333333DE] uppercase">Practice Tests</h2>
+                <p className="text-sm text-gray-600">
+                  Try out our currently available Casper test formats.
+                </p>
+
+                <div className="flex flex-col gap-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-800 font-medium">2024/25 Cycle</span>
+                    <button
+                      onClick={() => setShowTestInterface(true)}
+                      className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm"
+                    >
+                      Start Test
+                    </button>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-800 font-medium">
+                      AUS Teachers Education <br /> (2024 - 2025 Cycle)
+                    </span>
+                    <button
+                      onClick={() => setShowTestInterface(true)}
+                      className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm"
+                    >
+                      Start Test
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -152,67 +161,69 @@ export default function CasperPrepare() {
   }
 
   return (
-    <div className="bg-white py-6 px-16 md:px-26 md:py-10 text-gray-800 flex flex-col md:flex-row gap-10">
+    <div className="bg-white py-5 md:pt-10 md-pb-4 text-gray-800 flex flex-col md:flex-row gap-10">
       {/* Left Section */}
-      <div className="md:w-2/3 space-y-6 pr-[11.5rem] border-r border-[#CCCCCC]">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
-            <Image
-              src="/svgs/stars.svg"
-              alt="clinical"
-              width={16}
-              height={16}
-              className="text-transparent"
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm text-gray-500 font-medium">Recommended</span>
-            <h1 className="text-2xl font-semibold">Casper Practice Test</h1>
-          </div>
-        </div>
-
-        <div className="w-full">
-          <Image
-            src="/category1.png"
-            alt="Casper Thumbnail"
-            width={800}
-            height={200}
-            className="rounded-lg object-cover w-full h-48"
-          />
-        </div>
-
-        <p className="text-sm text-gray-600">
-          Applicants who complete the practice test generally perform better on Casper. The practice
-          test can take 1 hour+ to complete. If your test is within this time frame, please proceed
-          directly to your test instead.
-        </p>
-
-        <div className="border rounded-xl pl-12 pr-10 pt-6 pb-8 space-y-4">
-          <h2 className="text-sm font-semibold text-[#333333DE] uppercase">Practice Tests</h2>
-          <p className="text-sm text-gray-600">
-            Try out our currently available Casper test formats.
-          </p>
-
-          <div className="flex flex-col gap-4">
-            <div className="flex justify-between items-center">
-              <span className="text-gray-800 font-medium">2024/25 Cycle</span>
-              <button
-                onClick={() => setShowTestInterface(true)}
-                className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm text-nowrap cursor-pointer"
-              >
-                Start Test
-              </button>
+      <div className="md:w-2/3 mx-auto mt-8 bg-white flex justify-center ">
+        <div className="w-full mx-auto mt-8 bg-white flex justify-center border-r h-[calc(100vh-230px)] overflow-auto">
+          <div className="w-full max-w-[650px] space-y-6">
+            {/* Header */}
+            <div className="flex space-x-3">
+              <div className="w-[60px] h-[60px] rounded-[16px] bg-[#f5f5f5] flex items-center justify-center">
+                <Image src="/svgs/stars.svg" alt="clinical" width={24} height={24} />
+              </div>
+              <div className="flex flex-col justify-center">
+                <span className="text-sm text-gray-500 font-medium">Recommended</span>
+                <h1 className="text-2xl font-semibold">Casper Practice Test</h1>
+              </div>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-800 font-medium">
-                AUS Teachers Education <br /> (2024 - 2025 Cycle)
-              </span>
-              <button
-                onClick={() => setShowTestInterface(true)}
-                className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm text-nowrap cursor-pointer"
-              >
-                Start Test
-              </button>
+
+            {/* Thumbnail */}
+            <div className="w-full">
+              <Image
+                src="/category1.png"
+                alt="Casper Thumbnail"
+                width={800}
+                height={200}
+                className="rounded-2xl object-cover w-full h-48"
+              />
+            </div>
+
+            {/* Description */}
+            <p className="text-sm text-gray-600">
+              Applicants who complete the practice test generally perform better on Casper. The
+              practice test can take 1 hour+ to complete. If your test is within this time frame,
+              please proceed directly to your test instead.
+            </p>
+
+            {/* Practice Test Box */}
+            <div className="border rounded-xl pl-12 pr-10 pt-6 pb-8 space-y-4 bg-white shadow">
+              <h2 className="text-sm font-semibold text-[#333333DE] uppercase">Practice Tests</h2>
+              <p className="text-sm text-gray-600">
+                Try out our currently available Casper test formats.
+              </p>
+
+              <div className="flex flex-col gap-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-800 font-medium">2024/25 Cycle</span>
+                  <button
+                    onClick={() => setShowTestInterface(true)}
+                    className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm"
+                  >
+                    Start Test
+                  </button>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-800 font-medium">
+                    AUS Teachers Education <br /> (2024 - 2025 Cycle)
+                  </span>
+                  <button
+                    onClick={() => setShowTestInterface(true)}
+                    className="px-4 py-2 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 text-sm"
+                  >
+                    Start Test
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -251,36 +262,38 @@ export default function CasperPrepare() {
           </div>
 
           {/* Heading */}
-          <h2 className="text-xl font-semibold">How to Prepare for Casper</h2>
-          <p className="text-sm text-gray-600">
-            Please use the items listed below as guidance to help you prepare for your Casper test,
-            we recommend you check off items as you go to keep track of your progress.
-          </p>
+          <div className="overflow-auto h-[calc(100vh-270px)]">
+            <h2 className="text-xl font-semibold">How to Prepare for Casper</h2>
+            <p className="text-sm text-gray-600">
+              Please use the items listed below as guidance to help you prepare for your Casper
+              test, we recommend you check off items as you go to keep track of your progress.
+            </p>
 
-          {/* Steps */}
-          <div className="space-y-6 relative">
-            <div className="absolute w-1.5 h-[384px] bg-[#F5F5F5] left-[9px]"></div>
-            {steps.map((step, index) => (
-              <div key={index} className="relative flex gap-4.5">
-                {/* Step Circle */}
-                <div className="shrink-0 w-6 h-6 rounded-full bg-[#F5F5F5] text-[#22C55E] text-sm flex items-center justify-center">
-                  {step.number}
-                </div>
+            {/* Steps */}
+            <div className="space-y-6 relative">
+              <div className="absolute w-1.5 h-[384px] bg-[#F5F5F5] left-[9px]"></div>
+              {steps.map((step, index) => (
+                <div key={index} className="relative flex gap-4.5">
+                  {/* Step Circle */}
+                  <div className="shrink-0 w-6 h-6 rounded-full bg-[#F5F5F5] text-[#22C55E] text-sm flex items-center justify-center">
+                    {step.number}
+                  </div>
 
-                {/* Step Content */}
-                <div className="space-y-1">
-                  <h3 className="font-semibold text-gray-800">
-                    Step {step.number}: {step.title}
-                  </h3>
-                  <p className="text-sm text-[#33333399]">{step.description}</p>
-                  {step.button && (
-                    <button className="mt-2 px-6 py-4 border border-[#364699] text-[#364699] rounded-full text-sm hover:bg-blue-50 cursor-pointer">
-                      {step.button}
-                    </button>
-                  )}
+                  {/* Step Content */}
+                  <div className="space-y-1">
+                    <h3 className="font-semibold text-gray-800">
+                      Step {step.number}: {step.title}
+                    </h3>
+                    <p className="text-sm text-[#33333399]">{step.description}</p>
+                    {step.button && (
+                      <button className="mt-2 px-6 py-4 border border-[#364699] text-[#364699] rounded-full text-sm hover:bg-blue-50 cursor-pointer">
+                        {step.button}
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -288,7 +301,8 @@ export default function CasperPrepare() {
       {state === 'check' &&
         (showCheckTab ? (
           <>
-            <div className="w-full md:w-96 py-6 bg-white space-y-6 text-gray-800 shrink-0">
+            <div className="w-full md:w-96 py-6 bg-white text-gray-800 shrink-0 mr-5">
+              <h1 className="mt-2  text-xl font-semibold mb-4 text-[#333333DE]">System Check</h1>
               {checkSteps.map((title, i) => {
                 const isCompleted = i + 1 <= checkStage; // mark only first step as completed
                 return (
@@ -317,10 +331,14 @@ export default function CasperPrepare() {
                             : 'border-[#F5F5F5]'
                       }`}
                     >
-                      {i === 0 && checkStage === 0 && <CheckTab />}
+                      {i === 0 && checkStage === 0 && (
+                        <CheckTab onComplete={handleSpeedTestComplete} />
+                      )}
 
                       {i === 0 && isCompleted && checkStage !== 0 && (
-                        <p className="text-[#33333399] text-xs ml-2">Download Bitrate Approved!</p>
+                        <p className="text-[#33333399] text-xs ml-2">
+                          Speed Test Completed Successfully!
+                        </p>
                       )}
 
                       {i === 1 && checkStage === 1 && (

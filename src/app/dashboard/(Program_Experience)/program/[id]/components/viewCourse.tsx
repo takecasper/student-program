@@ -226,7 +226,7 @@ const ViewCourse = ({ selectedCourse, setShowCourse, setSelectedCourse }: ViewCo
 
                 <TableCell className="font-medium">Physiology</TableCell>
 
-                <TableCell>Oct 1, 2023</TableCell>
+                <TableCell></TableCell>
                 <TableCell>Nov 15, 2023</TableCell>
                 <TableCell>
                   <Button
@@ -261,7 +261,7 @@ const ViewCourse = ({ selectedCourse, setShowCourse, setSelectedCourse }: ViewCo
 
                 <TableCell className="font-medium">Death and Dying</TableCell>
 
-                <TableCell>Oct 1, 2023</TableCell>
+                <TableCell></TableCell>
                 <TableCell>Nov 15, 2023</TableCell>
                 <TableCell>
                   <Button
