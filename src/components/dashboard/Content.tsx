@@ -12,7 +12,7 @@ import SuggestedCourseCard from './SuggestedCourseCard';
 import { useState } from 'react';
 import * as Select from '@radix-ui/react-select';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
-import SummaryDropCard from './SummaryDropCard';
+// import SummaryDropCard from './SummaryDropCard';
 import ChatbotInterface from '@/components/chatbot/ChatbotInterface';
 
 const ratingOptions = [
