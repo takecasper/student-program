@@ -9,6 +9,7 @@ import AddEvaluationForm from './components/AddEvaluationForm';
 import SiteSettings from './components/Site';
 import UserRole from './components/RoleUser';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 import GradeSheet from './components/GradeSheet';
 import EvaluationForms from './components/EvaluationForms';
 import CurriculumRotation from './components/RotationCurriculum';
@@ -102,10 +103,13 @@ export default function ProgramPage() {
                         <Button
                           key={index}
                           onClick={() => setSubMenuSettingsView(index)}
-                          className={`${subMenuSettingsView === index ? '!bg-[#f5f5f5] text-[#364699]' : 'bg-transparent text-[#4e4e4e]'} h-[58px] cursor-pointer text-[14px] font-medium hover:text-[#364699] w-full hover:bg-[#f5f5f5] flex items-center gap-2 justify-start !pl-[1rem]`}
+                          className={`${subMenuSettingsView === index ? '!bg-[#f5f5f5] text-[#364699]' : 'bg-transparent text-[#4e4e4e]'} h-[58px] cursor-pointer text-[14px] font-medium hover:text-[#364699] w-full hover:bg-[#f5f5f5] flex items-center gap-2 justify-between !pl-[1rem]`}
                         >
-                          {subMenu.year}{' '}
-                          {subMenu.status === 'COMPLETE' && (
+                          {subMenu.year}
+
+                          <Switch className='data-[state=checked]:bg-[#364699]' id="airplane-mode" />
+
+                          {/* {subMenu.status === 'COMPLETE' && (
                             <span className="text-[#70C0B8] text-xs font-bold px-2 py-2 rounded-[10px] bg-white border-[1px] border-[#D9D9D9]">
                               COMPLETE
                             </span>
@@ -114,7 +118,7 @@ export default function ProgramPage() {
                             <span className="text-[#F5CA66] text-xs font-bold px-2 py-2 rounded-[10px] bg-white border-[1px] border-[#D9D9D9]">
                               WIP
                             </span>
-                          )}
+                          )} */}
                         </Button>
                       ))}
                     </div>
@@ -135,7 +139,9 @@ export default function ProgramPage() {
       )}
 
       {/* Content */}
-      <div className={`${isHidden ? 'hidden': 'flex'} ${!showSideBar ? 'basis-5/5 ' : 'basis-4/5 '}`}>
+      <div
+        className={`${isHidden ? 'hidden' : 'flex'} ${!showSideBar ? 'basis-5/5 ' : 'basis-4/5 '}`}
+      >
         {settingsView === 0 && (
           <CurriculumRotation
             isConfiguring={isConfiguring}

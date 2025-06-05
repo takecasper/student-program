@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const SetupRotationStepFinal = () => {
   return (
-    <div className="px-5 text-center">
+    <div className="px-5 text-center h-full flex flex-col justify-center items-stretch">
       <div className="mx-auto w-[70px] h-[70px] rounded-full bg-[#009688] flex items-center justify-center mb-5">
         <Image width={48} height={48} alt="Program" src={`/svgs/check_small.svg`} />
       </div>

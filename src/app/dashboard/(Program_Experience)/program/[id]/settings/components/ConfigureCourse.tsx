@@ -49,9 +49,9 @@ const CourseConfigure = ({
         </Button>
 
         <div className="flex items-center gap-3">
-          <Button className="border-2 border-[#364699] rounded-[20px] bg-white text-[#364699] cursor-pointer hover:bg-[#364699] hover:text-white">
+          {/* <Button className="border-2 border-[#364699] rounded-[20px] bg-white text-[#364699] cursor-pointer hover:bg-[#364699] hover:text-white">
             Review
-          </Button>
+          </Button> */}
           <Button
             className="border-2 border-[#D9D9D9] rounded-[20px] bg-[#364799] text-white cursor-pointer hover:bg-[#D9D9D9] hover:text-white"
             onClick={() => setIsConfiguring(false)}

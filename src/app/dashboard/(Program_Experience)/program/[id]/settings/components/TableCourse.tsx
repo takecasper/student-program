@@ -128,7 +128,6 @@ const CourseTable = ({ setIsConfiguring }: CourseTableProps) => {
             </TableCell>
             <TableCell className="text-left bg-[#fcfcfc] text-[#333333] font-medium">
               <Input
-                disabled
                 type="text"
                 value={newCourse.location}
                 placeholder="Type Location"
