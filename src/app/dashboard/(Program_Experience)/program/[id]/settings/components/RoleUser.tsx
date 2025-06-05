@@ -114,7 +114,7 @@ const UserRole = () => {
   }, [partiallySelected]);
 
   return (
-    <div className="w-full">
+    <div className='w-full'>
       <h4 className="text-[12px] text-[#4f4f4f] font-medium mb-4">USER & ROLE</h4>
 
       <div className="w-full">
