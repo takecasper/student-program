@@ -1,33 +1,23 @@
+import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export interface SummaryCardProps {
+export interface SummaryDropCardProps {
   iconSrc: string;
+  title: string;
 }
 
-export default function SummaryDropCard({ iconSrc }: SummaryCardProps) {
+export default function SummaryDropCard({ iconSrc, title }: SummaryDropCardProps) {
   return (
-    <div className="flex items-center justify-between p-4 rounded-xl border border-gray-200 shadow-sm bg-white w-full max-w-md">
-      <div className="flex items-start gap-4">
-        <div className="w-[56px] h-[56px]bg-gray-100 p-2 rounded-lg">
-          <Image src={iconSrc} alt="Star icon" width={24} height={24} />
-        </div>
-
-        <div>
-          <h3 className="text-lg font-semibold text-[#b4325f] leading-tight">
-            Add/Drop
-            <br />
-            Scheduling
-          </h3>
-        </div>
-      </div>
-
-      <Link
-        href="dashboard/calendar"
-        className="bg-[#364699] text-white text-sm font-medium py-2 px-4 rounded-full hover:bg-[#2538A8] transition"
-      >
-        Make Changes
-      </Link>
-    </div>
+    <Link href="dashboard/calendar">
+      <Card className="border border-[#EFEFEF] shadow-sm rounded-[16px] hover:shadow-md transition">
+        <CardContent className="flex items-center gap-4 px-6">
+          <div className="w-16 h-16 rounded-[12px] border border-[#D9D9D9] flex items-center justify-center">
+            <Image src={iconSrc} alt={title} width={20} height={20} />
+          </div>
+          <p className="text-lg font-semibold text-[#555]">{title}</p>
+        </CardContent>
+      </Card>
+    </Link>
   );
 }

@@ -14,6 +14,8 @@ import * as Select from '@radix-ui/react-select';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 // import SummaryDropCard from './SummaryDropCard';
 import ChatbotInterface from '@/components/chatbot/ChatbotInterface';
+import SummaryDropCard from './SummaryDropCard';
+import ScheduleListItem from '../ScheduleListItem';
 
 const ratingOptions = [
   { label: 'Day View', value: 'day' },
@@ -22,6 +24,7 @@ const ratingOptions = [
 
 export default function DashboardContent() {
   const { user } = useAuth();
+  const [scheduleState, setScheduleState] = useState(false);
   if (!user) return null;
   const [viewMode, setViewMode] = useState<string>('day');
 
@@ -31,8 +34,16 @@ export default function DashboardContent() {
         <div className="space-y-6">
           <h2 className="text-lg font-medium text-[#333333]">DASHBOARD</h2>
           <div className="flex gap-4">
-            <SummaryCard iconSrc="/golf_course.svg" title="Ongoing Course" value="1" />
-            <SummaryCard iconSrc="hotel_class.svg" title="Upcoming Sessions" value="3" />
+            <div className="flex items-center justify-center rounded-[16px] border border-[#f0f0f0] bg-white px-2 py-2 shadow-sm">
+              <div className="flex-1">
+                <SummaryCard iconSrc="hotel_class.svg" value={1} title="Ongoing Course" />
+              </div>
+              <div className="w-px h-10 bg-[#eee] mx-6" />
+              <div className="flex-1">
+                <SummaryCard iconSrc="hotel_class.svg" value={3} title="Ongoing Course" />
+              </div>
+            </div>
+            <SummaryDropCard iconSrc="hotel_class.svg" title="Add/Drop Scheduling" />
           </div>
 
           <div className="space-y-4 flex flex-col w-[700px] ">
@@ -100,7 +111,9 @@ export default function DashboardContent() {
 
         <div className="space-y-4 pr-10">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-medium text-[#333333]">TO-DO LIST</h2>
+            <h2 className="text-xs font-bold text-[#555] tracking-wide uppercase">
+              Schedule / To Do&apos;s
+            </h2>
             <div className="cursor-pointer w-32">
               <Select.Root value={viewMode} onValueChange={(value: string) => setViewMode(value)}>
                 <Select.Trigger
@@ -139,32 +152,98 @@ export default function DashboardContent() {
 
           <ScrollArea className="h-[calc(100vh-300px)]">
             <div className="space-y-3">
-              {[
-                { day: 'Wed', date: '28', time: '09:00 - 11:00', isTest: true },
-                { day: 'Thu', date: '29', time: '09:00 - 11:00', isForm: true },
-                { day: 'Fri', date: '30', time: '09:00 - 11:00', isSession: true },
-                { day: 'Sat', date: '31', time: '09:00 - 11:00', isSession: true },
-                { day: 'Mon', date: '02', time: '09:00 - 11:00', isSession: true },
-                { day: 'Tue', date: '03', time: '09:00 - 11:00', isSession: true },
-                { day: 'Wed', date: '04', time: '09:00 - 11:00', isSession: true },
-                { day: 'Thu', date: '05', time: '09:00 - 11:00', isSession: true },
-                { day: 'Fri', date: '06', time: '09:00 - 11:00', isSession: true },
-                { day: 'Sat', date: '07', time: '09:00 - 11:00', isSession: true },
-                { day: 'Sun', date: '08', time: '09:00 - 11:00', isSession: true },
-                { day: 'Mon', date: '09', time: '09:00 - 11:00', isSession: true },
-              ].map((item, index) => (
-                <TodoListItem
-                  key={index}
-                  day={item.day}
-                  date={item.date}
-                  time={item.time}
-                  sessionName="Session Name"
-                  courseName="Course Name"
-                  isTest={item.isTest}
-                  isForm={item.isForm}
-                  isSession={item.isSession}
-                />
-              ))}
+              {scheduleState
+                ? [
+                    { day: 'Wed', date: '28', time: '09:00 - 11:00', isTest: true },
+                    { day: 'Thu', date: '29', time: '09:00 - 11:00', isForm: true },
+                    { day: 'Fri', date: '30', time: '09:00 - 11:00', isSession: true },
+                    { day: 'Sat', date: '31', time: '09:00 - 11:00', isSession: true },
+                    { day: 'Mon', date: '02', time: '09:00 - 11:00', isSession: true },
+                    { day: 'Tue', date: '03', time: '09:00 - 11:00', isSession: true },
+                    { day: 'Wed', date: '04', time: '09:00 - 11:00', isSession: true },
+                    { day: 'Thu', date: '05', time: '09:00 - 11:00', isSession: true },
+                    { day: 'Fri', date: '06', time: '09:00 - 11:00', isSession: true },
+                    { day: 'Sat', date: '07', time: '09:00 - 11:00', isSession: true },
+                    { day: 'Sun', date: '08', time: '09:00 - 11:00', isSession: true },
+                    { day: 'Mon', date: '09', time: '09:00 - 11:00', isSession: true },
+                  ].map((item, index) => (
+                    <TodoListItem
+                      key={index}
+                      day={item.day}
+                      date={item.date}
+                      time={item.time}
+                      sessionName="Session Name"
+                      courseName="Course Name"
+                      isTest={item.isTest}
+                      isForm={item.isForm}
+                      isSession={item.isSession}
+                    />
+                  ))
+                : [
+                    {
+                      day: 'Wed',
+                      date: '28',
+                      sessionName: 'Prenatal Screening Panel',
+                      time: '9:00am–11:00am',
+                      location: 'Online',
+                      type: 'Lecture',
+                      instructor: 'Allen',
+                    },
+                    {
+                      day: 'Thu',
+                      date: '29',
+                      sessionName: 'Health Session',
+                      time: '1:00pm–2:30pm',
+                      location: 'Room 204',
+                      type: 'Seminar',
+                      instructor: 'Jane',
+                    },
+                    {
+                      day: 'Fri',
+                      date: '30',
+                      sessionName: 'Nutrition Workshop',
+                      time: '10:00 am – 12:00 pm',
+                      location: 'Online',
+                      type: 'Workshop',
+                      instructor: 'Michael',
+                    },
+                    {
+                      day: 'Fri',
+                      date: '30',
+                      sessionName: 'Nutrition Workshop',
+                      time: '10:00 am – 12:00 pm',
+                      location: 'Online',
+                      type: 'Workshop',
+                      instructor: 'Michael',
+                    },
+                    {
+                      day: 'Fri',
+                      date: '30',
+                      sessionName: 'Nutrition Workshop',
+                      time: '10:00 am – 12:00 pm',
+                      location: 'Online',
+                      type: 'Workshop',
+                      instructor: 'Michael',
+                    },
+                    {
+                      day: 'Fri',
+                      date: '30',
+                      sessionName: 'Nutrition Workshop',
+                      time: '10:00 am – 12:00 pm',
+                      location: 'Online',
+                      type: 'Workshop',
+                      instructor: 'Michael',
+                    },
+                    {
+                      day: 'Fri',
+                      date: '30',
+                      sessionName: 'Nutrition Workshop',
+                      time: '10:00 am – 12:00 pm',
+                      location: 'Online',
+                      type: 'Workshop',
+                      instructor: 'Michael',
+                    },
+                  ].map((item, index) => <ScheduleListItem key={index} {...item} />)}
             </div>
           </ScrollArea>
 

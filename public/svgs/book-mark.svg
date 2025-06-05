@@ -1,0 +1,14 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <!-- Thick L-shape -->
+  <rect x="6" y="12" width="6" height="27" fill="black"/>
+  <rect x="6" y="33" width="24" height="6" fill="black"/>
+
+  <!-- Blocky Document -->
+  <rect x="20" y="6" width="20" height="20" fill="black"/>
+
+ <!-- Inner white bars -->
+  <rect x="22" y="12" width="12" height="3" fill="white"/>
+  <rect x="22" y="17" width="12" height="3" fill="white"/>
+  <rect x="22" y="22" width="8" height="3" fill="white"/>
+</svg>
