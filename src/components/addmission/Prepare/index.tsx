@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useState } from 'react';
-import CheckTab from './CheckTab';
+import SpeedTestCheck from './SpeedTestCheck';
 import WebcamCheck from './WebcamCheck';
 import MicrophoneCheck from './MicrophoneCheck';
 import VideoPlayerCheck from './VideoPlayerCheck';
@@ -9,43 +9,10 @@ import VideoRecordingCheck from './VideoRecordingCheck';
 import CasperTestInterface from './CasperTestInterface';
 import CongratulationsScreen from './CongratulationsScreen';
 
-import GolfCourseIcon from '../../../../public/svgs/golf_course.svg';
 import { Check } from 'lucide-react';
+import PrepareCasper from './PrepareCasper';
 
 export default function CasperPrepare() {
-  const steps = [
-    {
-      number: '1',
-      title: 'Make a Reservation',
-      description: 'Please make a reservation first to start using your checklist',
-      button: 'Reserve Test',
-    },
-    {
-      number: '2',
-      title: 'Review Test Tips',
-      description: (
-        <>
-          Review Casper Preparation Tips{' '}
-          <a href="#" className="text-blue-600 underline">
-            Here
-          </a>
-          .
-        </>
-      ),
-    },
-    {
-      number: '3',
-      title: 'System Requirement Check',
-      description:
-        'Perform a mandatory system requirements check in your intended test environment in the days leading up to your test.',
-      button: 'System Check',
-    },
-    {
-      number: '4',
-      title: 'Start Casper Practice Test',
-      description: 'Try the Casper Practice Test in your test format',
-    },
-  ];
   const [state, setState] = useState('prepare');
   const [showCheckTab, setShowCheckTab] = useState<boolean>(false);
   const [showTestInterface, setShowTestInterface] = useState<boolean>(false);
@@ -67,9 +34,6 @@ export default function CasperPrepare() {
     'Video Player Check',
     'Video Recording Check',
   ];
-
-  const isPrepareTab = state === 'prepare';
-  const isCheckTab = state === 'check';
 
   const handleSpeedTestComplete = () => {
     const newChecks = [...completedChecks];
@@ -232,68 +196,8 @@ export default function CasperPrepare() {
       {/* Right Section - Preparation Steps */}
       {state === 'prepare' && (
         <div className="w-full md:w-96 py-6 bg-white space-y-6 text-gray-800 shrink-0">
-          {/* Top Buttons */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setState('prepare')}
-              className={
-                'flex items-center gap-1 px-3 py-1 text-xs rounded-full border border-[#D9D9D9] cursor-pointer' +
-                (isPrepareTab ? ' bg-[#364699] text-white' : ' bg-white text-[#333333DE]')
-              }
-            >
-              <GolfCourseIcon
-                className={`w-[15px] h-[15px] fill-current ${state === 'prepare' ? 'text-white' : 'text-[#333333DE]'}`}
-              />{' '}
-              HOW TO PREPARE
-            </button>
-
-            <button
-              onClick={() => setState('check')}
-              className={
-                'flex items-center gap-1 px-3 py-1 text-xs rounded-full border border-[#D9D9D9] cursor-pointer' +
-                (isCheckTab ? ' bg-[#364699] text-white' : ' bg-white text-[#333333DE]')
-              }
-            >
-              <GolfCourseIcon
-                className={`w-[15px] h-[15px] fill-current ${state === 'prepare' ? 'text-[#333333DE]' : 'text-white'}`}
-              />{' '}
-              SYSTEM CHECK
-            </button>
-          </div>
-
-          {/* Heading */}
           <div className="overflow-auto h-[calc(100vh-270px)]">
-            <h2 className="text-xl font-semibold">How to Prepare for Casper</h2>
-            <p className="text-sm text-gray-600">
-              Please use the items listed below as guidance to help you prepare for your Casper
-              test, we recommend you check off items as you go to keep track of your progress.
-            </p>
-
-            {/* Steps */}
-            <div className="space-y-6 relative">
-              <div className="absolute w-1.5 h-[384px] bg-[#F5F5F5] left-[9px]"></div>
-              {steps.map((step, index) => (
-                <div key={index} className="relative flex gap-4.5">
-                  {/* Step Circle */}
-                  <div className="shrink-0 w-6 h-6 rounded-full bg-[#F5F5F5] text-[#22C55E] text-sm flex items-center justify-center">
-                    {step.number}
-                  </div>
-
-                  {/* Step Content */}
-                  <div className="space-y-1">
-                    <h3 className="font-semibold text-gray-800">
-                      Step {step.number}: {step.title}
-                    </h3>
-                    <p className="text-sm text-[#33333399]">{step.description}</p>
-                    {step.button && (
-                      <button className="mt-2 px-6 py-4 border border-[#364699] text-[#364699] rounded-full text-sm hover:bg-blue-50 cursor-pointer">
-                        {step.button}
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <PrepareCasper setState={setState} />
           </div>
         </div>
       )}
@@ -332,12 +236,12 @@ export default function CasperPrepare() {
                       }`}
                     >
                       {i === 0 && checkStage === 0 && (
-                        <CheckTab onComplete={handleSpeedTestComplete} />
+                        <SpeedTestCheck onComplete={handleSpeedTestComplete} />
                       )}
 
                       {i === 0 && isCompleted && checkStage !== 0 && (
                         <p className="text-[#33333399] text-xs ml-2">
-                          Speed Test Completed Successfully!
+                          Video recorder works just fine!
                         </p>
                       )}
 
@@ -360,9 +264,7 @@ export default function CasperPrepare() {
                         </div>
                       )}
                       {i === 1 && isCompleted && checkStage !== 1 && (
-                        <p className="text-[#33333399] text-xs ml-2">
-                          Webcam check completed successfully!
-                        </p>
+                        <p className="text-[#33333399] text-xs ml-2">Submitted Photo! </p>
                       )}
 
                       {i === 2 && checkStage === 2 && (
@@ -384,7 +286,9 @@ export default function CasperPrepare() {
                         </div>
                       )}
                       {i === 2 && isCompleted && checkStage !== 2 && (
-                        <p className="text-[#33333399] text-xs ml-2">Download Bitrate Approved!</p>
+                        <p className="text-[#33333399] text-xs ml-2">
+                          Microphone is functioning properly!
+                        </p>
                       )}
 
                       {i === 3 && checkStage === 3 && (
@@ -406,7 +310,9 @@ export default function CasperPrepare() {
                         </div>
                       )}
                       {i === 3 && isCompleted && checkStage !== 3 && (
-                        <p className="text-[#33333399] text-xs ml-2">Download Bitrate Approved!</p>
+                        <p className="text-[#33333399] text-xs ml-2">
+                          Video player is working perfectly!
+                        </p>
                       )}
 
                       {i === 4 && checkStage === 4 && (
@@ -440,33 +346,6 @@ export default function CasperPrepare() {
           </>
         ) : (
           <div className="max-w-md w-full bg-white rounded-lg p-6">
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setState('prepare')}
-                className={
-                  'flex items-center gap-1 px-3 py-1 text-xs rounded-full border border-[#D9D9D9] cursor-pointer' +
-                  (isPrepareTab ? ' bg-[#364699] text-white' : ' bg-white text-[#333333DE]')
-                }
-              >
-                <GolfCourseIcon
-                  className={`w-[15px] h-[15px] fill-current ${isPrepareTab ? 'text-white' : 'text-[#333333DE]'}`}
-                />{' '}
-                HOW TO PREPARE
-              </button>
-
-              <button
-                onClick={() => setState('check')}
-                className={
-                  'flex items-center gap-1 px-3 py-1 text-xs rounded-full border border-[#D9D9D9] cursor-pointer' +
-                  (isCheckTab ? ' bg-[#364699] text-white' : ' bg-white text-[#333333DE]')
-                }
-              >
-                <GolfCourseIcon
-                  className={`w-[15px] h-[15px] fill-current ${isCheckTab ? 'text-white' : 'text-[#333333DE]'}`}
-                />{' '}
-                SYSTEM CHECK
-              </button>
-            </div>
             <h1 className="mt-2  text-xl font-semibold mb-4 text-[#333333DE]">
               Welcome to the Casper System Requirements
             </h1>

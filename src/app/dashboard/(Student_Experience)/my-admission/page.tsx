@@ -81,31 +81,40 @@ const AdmissionCycleStep: React.FC<StepProps> = ({ formData, onChange }) => {
   };
 
   return (
-    <div className="flex items-start gap-2">
-      {['2025-2026', '2026-2027'].map(cycle => (
-        <div
-          key={cycle}
-          className={`border rounded-md p-3 cursor-pointer hover:border-[#00a59b] transition-colors ${
-            formData.admissionCycle === cycle
-              ? 'border-[#00a59b] bg-[#00a59b]/5'
-              : 'border-[#d9d9d9]'
-          }`}
-          onClick={() => handleCycleChange(cycle)}
-        >
-          <div className="flex items-center space-x-2">
-            <div
-              className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                formData.admissionCycle === cycle
-                  ? 'border-[#00a59b] bg-[#00a59b]'
-                  : 'border-gray-300'
-              }`}
-            >
-              {formData.admissionCycle === cycle && <Check className="h-3 w-3 text-white" />}
+    <div className="space-y-4">
+      <div className="bg-[#EC7A000D] p-4 rounded-[10px] text-xs">
+        <p>
+          If you&apos;re applying to Medicine programs (Including Osteopathic). Select the
+          admissions cycle ending in the year of your program start date.
+        </p>
+      </div>
+
+      <div className="flex items-start gap-2">
+        {['2025-2026', '2026-2027'].map(cycle => (
+          <div
+            key={cycle}
+            className={`border rounded-md p-3 cursor-pointer hover:border-[#00a59b] transition-colors ${
+              formData.admissionCycle === cycle
+                ? 'border-[#00a59b] bg-[#00a59b]/5'
+                : 'border-[#d9d9d9]'
+            }`}
+            onClick={() => handleCycleChange(cycle)}
+          >
+            <div className="flex items-center space-x-2">
+              <div
+                className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                  formData.admissionCycle === cycle
+                    ? 'border-[#00a59b] bg-[#00a59b]'
+                    : 'border-gray-300'
+                }`}
+              >
+                {formData.admissionCycle === cycle && <Check className="h-3 w-3 text-white" />}
+              </div>
+              <Label className="cursor-pointer select-none">{cycle}</Label>
             </div>
-            <Label className="cursor-pointer select-none">{cycle}</Label>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
