@@ -14,7 +14,7 @@ export default function DashboardHeader() {
   };
 
   return (
-    <header className="flex justify-between items-center">
+    <header className="relative flex justify-between items-center">
       <div className="flex items-center space-x-2">
         <ArrowLeft className="w-4 h-4 text-[#858585] cursor-pointer" onClick={handleBack} />
         <h1 className="text-sm font-medium text-[#858585]">{title}</h1>
@@ -23,7 +23,7 @@ export default function DashboardHeader() {
       <form
         role="search"
         aria-label="Site search"
-        className="flex items-center w-full max-w-md border border-input rounded-full px-2 py-0 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
+        className="absolute left-0 right-0 top-0 bottom-0 m-auto  flex items-center w-full max-w-md border border-input rounded-full px-2 py-0 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
       >
         <Button
           size="icon"
@@ -36,7 +36,7 @@ export default function DashboardHeader() {
         </Button>
 
         <Input
-          name="q"
+          name="searc"
           type="search"
           placeholder="Search"
           aria-label="Search input"

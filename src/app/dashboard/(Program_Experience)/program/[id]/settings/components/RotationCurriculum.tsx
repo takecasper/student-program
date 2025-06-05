@@ -89,12 +89,16 @@ const CurriculumRotation = ({
   console.log('selectedData', selectedData);
 
   return (
-    <div className='w-full'>
+    <div className="w-full">
       <h4 className="text-[12px] text-[#4f4f4f] font-medium mb-4">CURRICULUM & ROTATION</h4>
 
       <div className="mb-7 p-[2px] rounded-[20px] bg-gradient-to-r from-[rgba(210,210,255,0.4)] to-[rgba(221,153,246,0.4)] w-full">
-        <div className="flex flex-col items-start justify-end h-[107px] w-full bg-gradient-to-r from-white to-[#e6e4ff] rounded-[20px] px-5 py-4">
-          <p className="text-[#636363] font-semibold mb-2">{selectedData?.year}</p>
+        <div className="flex flex-col items-start justify-between h-[143px] w-full bg-gradient-to-r from-white to-[#e6e4ff] rounded-[20px] px-5 py-4">
+          <p className="text-[#333333DE] text-[24px] font-semibold mb-2">{selectedData?.year}</p>
+
+          <div className="items-center flex gap-2">
+            {selectedData?.content.map((item, index) => <Button className='bg-white rounded-[10px] p-0 w-[43px] h-[30px] border border-[#D9D9D9] text-[#000000] text-[14px]' key={item.name}>{item.name}</Button>)}
+          </div>
         </div>
       </div>
 
@@ -102,8 +106,8 @@ const CurriculumRotation = ({
         <div className="flex items-center justify-between gap-2 w-full">
           <div className="flex items-center gap-2">{renderHeaderButtons()}</div>
 
-          {currentTab === 0 && <div className="flex items-center gap-2">{renderCourses()}</div>}
-          {currentTab === 1 && <div className="flex items-center gap-2">{renderCourses()}</div>}
+          {/* {currentTab === 0 && <div className="flex items-center gap-2">{renderCourses()}</div>}
+          {currentTab === 1 && <div className="flex items-center gap-2">{renderCourses()}</div>} */}
         </div>
       </div>
 

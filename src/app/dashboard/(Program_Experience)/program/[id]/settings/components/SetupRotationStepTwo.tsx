@@ -25,9 +25,19 @@ type SetupRotationStepTwoProps = {
 
 const SetupRotationStepTwo = ({ setActiveTab }: SetupRotationStepTwoProps) => {
   const [formData, setFormData] = useState(initialDays);
+  const [selectAll, setSelectAll] = useState(() => initialDays.every(d => d.selected));
 
   const updateField = (dayName: string, field: 'selected' | 'mode', value: boolean | string) => {
-    setFormData(prev => prev.map(day => (day.name === dayName ? { ...day, [field]: value } : day)));
+    const updated = formData.map(day => (day.name === dayName ? { ...day, [field]: value } : day));
+    setFormData(updated);
+    if (field === 'selected') {
+      setSelectAll(updated.every(day => day.selected));
+    }
+  };
+
+  const handleSelectAllChange = (checked: boolean) => {
+    setSelectAll(checked);
+    setFormData(prev => prev.map(day => ({ ...day, selected: checked })));
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -43,7 +53,11 @@ const SetupRotationStepTwo = ({ setActiveTab }: SetupRotationStepTwoProps) => {
     >
       <div className="grid grid-cols-[30px_1fr_1fr] gap-x-2 text-[12px] font-normal text-[#4B4B4B] mb-3">
         <div>
-          <Checkbox disabled className="cursor-default" />
+          <Checkbox
+            checked={selectAll}
+            onCheckedChange={(checked: boolean) => handleSelectAllChange(checked)}
+            className="mx-auto data-[state=checked]:bg-[#364699] data-[state=checked]:text-[#364699] border cursor-pointer border-[#CCCCCC] rounded-[5px]"
+          />
         </div>
         <div>Day</div>
         <div>Time</div>
@@ -67,8 +81,8 @@ const SetupRotationStepTwo = ({ setActiveTab }: SetupRotationStepTwoProps) => {
 
             <div className="flex space-x-2 items-center">
               <Select
-                disabled={!day.selected}
                 value={day.mode}
+                disabled={!day.selected}
                 onValueChange={val => updateField(day.name, 'mode', val)}
               >
                 <SelectTrigger
