@@ -114,11 +114,11 @@ const UserRole = () => {
   }, [partiallySelected]);
 
   return (
-    <div>
+    <div className="w-full">
       <h4 className="text-[12px] text-[#4f4f4f] font-medium mb-4">USER & ROLE</h4>
 
-      <div className={`grid grid-cols-1 lg:grid-cols-1 gap-6`}>
-        <Table>
+      <div className="w-full">
+        <Table className="w-full">
           <TableHeader>
             <TableRow className="border-b">
               <TableHead className="w-[50px] bg-[#fbfbfb] border-[#f5f5f5]">
