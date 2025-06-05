@@ -57,7 +57,7 @@ const SiteSettings = () => {
   });
 
   return (
-    <div>
+    <div className='w-full'>
       <div className="flex items-center justify-between">
         <h4 className="text-[12px] text-[#4f4f4f] font-medium mb-4">GRADE-SHEET</h4>
 
