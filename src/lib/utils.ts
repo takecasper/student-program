@@ -11,8 +11,8 @@ import {
   isSameWeek,
 } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
-import { DAYS_IN_WEEK, EVENT_TYPES, TWELVE_HOUR, ZERO } from './const';
-import { CalendarEventType, Status } from '@/types/calendar';
+import { DAYS_IN_WEEK, TWELVE_HOUR, ZERO } from './const';
+import { CalendarEventType } from '@/types/calendar';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -155,5 +155,3 @@ export const getEventsForWeekStart = (
       startDate <= event.startDate && endDate >= event.startDate && event.isAllDay === allDay,
   );
 };
-
-

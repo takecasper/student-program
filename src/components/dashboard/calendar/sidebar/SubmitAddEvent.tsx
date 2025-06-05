@@ -1,8 +1,8 @@
 'use client';
 
 import { EVENT_COLORS, EVENT_TYPES, SlideStates } from '@/lib/const';
-import { CalendarEventType, SlideState } from '@/types/calendar';
-import { Calendar, MapPin, User, AlertTriangle, Menu } from 'lucide-react';
+import { CalendarEventType } from '@/types/calendar';
+import { Calendar, MapPin, User, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
 import { useCalendarContext } from '../context/CalendarContext';
 

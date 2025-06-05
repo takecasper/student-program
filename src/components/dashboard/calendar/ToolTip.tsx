@@ -1,5 +1,5 @@
 // components/TooltipMenu.tsx
-import { CalendarEventType, SlideState } from '@/types/calendar';
+import { CalendarEventType } from '@/types/calendar';
 import { Info, XCircle } from 'lucide-react';
 import { useCalendarContext } from './context/CalendarContext';
 import { SlideStates } from '@/lib/const';

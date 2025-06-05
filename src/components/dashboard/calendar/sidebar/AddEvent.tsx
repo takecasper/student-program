@@ -1,5 +1,5 @@
 import { SlideStates } from '@/lib/const';
-import { CalendarEventType, SlideState } from '@/types/calendar';
+import { CalendarEventType } from '@/types/calendar';
 import { Clock, MapPin, Plus, User } from 'lucide-react';
 import { useCalendarContext } from '../context/CalendarContext';
 

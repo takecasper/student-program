@@ -1,5 +1,5 @@
 import { EVENT_COLORS, EVENT_TYPES, SlideStates } from '@/lib/const';
-import { MapPin, User, AlertTriangle, Menu, Clock, Plus } from 'lucide-react';
+import { MapPin, User, AlertTriangle, Clock } from 'lucide-react';
 import { useCalendarContext } from '../context/CalendarContext';
 import { CalendarEventType } from '@/types/calendar';
 import { useState } from 'react';
@@ -94,7 +94,7 @@ export const SwapSubmit = ({ events, setEvents }: SwapSubmitProps) => {
           disabled={!agree}
           onClick={() => {
             if (agree) {
-              let event = events.find(event => event.id === selectedEvent?.id);
+              const event = events.find(event => event.id === selectedEvent?.id);
               if (event) {
                 event.color = EVENT_COLORS.SWAP_REQUESTED;
                 event.status = {

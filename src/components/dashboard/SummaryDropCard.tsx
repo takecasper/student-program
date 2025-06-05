@@ -1,14 +1,11 @@
-import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export interface SummaryCardProps {
   iconSrc: string;
-  title: string; // e.g., "Add/Drop\nScheduling"
-  onClick?: () => void;
 }
 
-export default function SummaryDropCard({ iconSrc, title, onClick }: SummaryCardProps) {
+export default function SummaryDropCard({ iconSrc }: SummaryCardProps) {
   return (
     <div className="flex items-center justify-between p-4 rounded-xl border border-gray-200 shadow-sm bg-white w-full max-w-md">
       <div className="flex items-start gap-4">

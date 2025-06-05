@@ -24,11 +24,9 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ events, setEvents }) => {
   const {
     slideState,
-    setSlideState,
     sidebarOpen,
     setSidebarOpen,
     selectedEvent,
-    setSelectedEvent,
   } = useCalendarContext();
 
   const getContent = (slideState: SlideState) => {
@@ -52,7 +50,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ events, setEvents }) => {
       case SlideStates.INIT_DROP:
         return <DropRequest />;
       case SlideStates.DROP_REQUEST:
-        return <DropSubmit events={events} setEvents={setEvents} />;
+        return <DropSubmit events={events}/>;
       default:
         break;
     }

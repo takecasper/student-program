@@ -1,22 +1,21 @@
 'use client';
 
 import { EVENT_COLORS, EVENT_TYPES, SlideStates } from '@/lib/const';
-import { Calendar, MapPin, User, AlertTriangle, Menu, XCircle } from 'lucide-react';
+import { Calendar, MapPin, User, XCircle } from 'lucide-react';
 import { useCalendarContext } from '../context/CalendarContext';
 import { CalendarEventType } from '@/types/calendar';
 
 interface DropSubmitProps {
   events: CalendarEventType[];
-  setEvents: (events: CalendarEventType[]) => void;
 }
 
-export default function DropSubmit({ events, setEvents }: DropSubmitProps) {
+export default function DropSubmit({ events }: DropSubmitProps) {
   const { setSlideState, selectedEvent, setSidebarOpen } = useCalendarContext();
   return (
     <div className="w-full px-6 pt-6 bg-white">
       <h2 className="text-sm font-semibold text-gray-800 mb-1">Confirm Changes</h2>
       <p className="text-sm text-gray-600 mb-4">
-        You're about to make changes to your schedule. Please review:
+        You&apos;sre about to make changes to your schedule. Please review:
       </p>
 
       <div className="border border-gray-200 rounded-lg p-4 mb-4">
@@ -65,7 +64,7 @@ export default function DropSubmit({ events, setEvents }: DropSubmitProps) {
         <button
           className="px-4 py-2 text-sm text-white bg-[#364699] hover:bg-[#2c3c85] rounded-full"
           onClick={() => {
-            let event = events.find(event => event.id === selectedEvent?.id);
+            const event = events.find(event => event.id === selectedEvent?.id);
 
             if (event) {
               event.color = EVENT_COLORS.DROP_REQUESTED;

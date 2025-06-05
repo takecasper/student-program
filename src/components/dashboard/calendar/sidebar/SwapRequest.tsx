@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Calendar, MapPin, User, Menu, Check } from 'lucide-react';
+import { Calendar, MapPin, User, Check } from 'lucide-react';
 import { useCalendarContext } from '../context/CalendarContext';
 import { EVENT_COLORS, SlideStates } from '@/lib/const';
 
@@ -17,7 +17,7 @@ export default function SwapRequest() {
       <h1 className="text-base font-semibold text-gray-800 mb-2">Request Elective</h1>
 
       <div className="border border-gray-200 rounded-lg p-4 mb-4">
-        <p className="text-sm font-medium text-gray-700 mb-2">You're requesting to add</p>
+        <p className="text-sm font-medium text-gray-700 mb-2">You&apos;re requesting to add</p>
 
         <div className="relative flex flex-col border border-gray-300 rounded-md p-4 pl-5">
           <div
@@ -102,7 +102,7 @@ export default function SwapRequest() {
           {isSwap && (
             <div className="pt-2">
               <label htmlFor="email" className="block text-sm text-gray-600 mb-1">
-                Enter Learner's Email
+                Enter Learner&apos;s Email
               </label>
               <input
                 type="email"

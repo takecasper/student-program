@@ -10,10 +10,9 @@ import Day from '@/components/dashboard/calendar/Day';
 import Month from '@/components/dashboard/calendar/Month';
 import { getCalendarGridDates, getCalendarGridDatesWeek, getTimeSlots } from '@/lib/utils';
 import { START_TIME_OF_DAY, END_TIME_OF_DAY, EVENT_COLORS } from '@/lib/const';
-import { CalendarEventType, SlideState } from '@/types/calendar';
+import { CalendarEventType } from '@/types/calendar';
 import { FloatButton } from '@/components/dashboard/calendar/FloatButton';
 import { Sidebar } from '@/components/dashboard/calendar/sidebar/Sidebar';
-import { useCalendarContext } from '../context/CalendarContext';
 
 interface EventData {
   startDate: string | Date;

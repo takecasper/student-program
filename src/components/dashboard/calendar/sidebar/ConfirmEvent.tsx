@@ -10,7 +10,7 @@ export default function ConfirmEvent() {
     <div className="w-full px-6 pt-6 bg-white">
       <h2 className="text-sm font-semibold text-gray-800 mb-1">Confirm Changes</h2>
       <p className="text-sm text-gray-600 mb-4">
-        You're about to make changes to your schedule. Please review:
+        You&apos;re about to make changes to your schedule. Please review:
       </p>
 
       <div className="border border-gray-200 rounded-lg p-4 mb-4">

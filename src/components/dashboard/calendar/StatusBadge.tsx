@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { CalendarEventType, Status } from '@/types/calendar';
-import { Stamp, XCircle, Hourglass, CheckCircle, SquarePen, Menu } from 'lucide-react';
+import { Stamp, XCircle, Hourglass, CheckCircle, Menu } from 'lucide-react';
 import TooltipMenu from './ToolTip';
 
 const getStatusIcon = (text: Status['text']) => {
@@ -98,8 +98,5 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
     </span>
   );
 };
-
-
-
 
 export default StatusBadge;
