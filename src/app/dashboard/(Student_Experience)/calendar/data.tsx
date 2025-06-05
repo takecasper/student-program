@@ -1,3 +1,5 @@
+import { CalendarEventType } from "@/types/calendar";
+
 export const initialData = [
   {
     id: '1',
@@ -15,9 +17,8 @@ export const initialData = [
     color: '#70c0b8',
     isAllDay: true,
     status: {
-      text: 'Approved',
+      text: 'Editable',
       color: '#8eeee4',
-      dotColor: '#00a59b',
     },
   },
   {
@@ -63,10 +64,8 @@ export const initialData = [
     teacher: 'DR. Geoffrey Blair',
     isAllDay: false,
     status: {
-      text: 'Approved',
+      text: 'Editable',
       color: '#8eeee4',
-      dotColor: '#00a59b',
-      icon: 'icon',
     },
     description: 'This is test!. This is test',
   },
@@ -82,10 +81,8 @@ export const initialData = [
     teacher: 'DR. Geoffrey Blair',
     isAllDay: false,
     status: {
-      text: 'Approved',
+      text: 'Editable',
       color: '#8eeee4',
-      dotColor: '#00a59b',
-      icon: 'icon',
     },
     description: 'This is test!. This is test',
   },
@@ -119,17 +116,11 @@ export const initialWeekData = [
     location: 'H & S 403',
     teacher: 'DR. Geoffrey Blair',
     isAllDay: true,
-    // status: {
-    //   text: 'Approved',
-    //   color: '#8eeee4',
-    //   dotColor: '#00a59b',
-    //   icon: 'icon',
-    // },
     description: 'This is test!. This is test',
   },
 
   {
-    id: '1',
+    id: '2',
     title: 'FP-AddicMed',
     startDate: new Date('2025-06-30'), // Using current month for visibility
     endDate: new Date('2025-07-02'),
@@ -140,14 +131,12 @@ export const initialWeekData = [
     status: {
       text: 'Drop Requested',
       color: '#f38c8d',
-      dotColor: '#00a59b',
-      icon: 'icon',
     },
     description: 'This is test!. This is test',
   },
 
   {
-    id: '1',
+    id: '3',
     title: 'FP-AddicMed',
     startDate: new Date('2025-06-04'), // Using current month for visibility
     endDate: new Date('2025-06-10'),
@@ -156,18 +145,15 @@ export const initialWeekData = [
     teacher: 'DR. Geoffrey Blair',
     startTime: '8 AM',
     endTime: '9:30 AM',
-    isEditable: true,
     isAllDay: false,
     status: {
-      text: 'Approved',
+      text: 'Editable',
       color: '#8eeee4',
-      dotColor: '#00a59b',
-      icon: 'icon',
     },
     description: 'This is test!. This is test',
   },
   {
-    id: '2',
+    id: '4',
     title: 'FP-AddicMed',
     startDate: new Date('2025-06-18'), // Using current month for visibility
     endDate: new Date('2025-06-24'),
@@ -176,16 +162,104 @@ export const initialWeekData = [
     teacher: 'DR. Geoffrey Blair',
     startTime: '8 AM',
     endTime: '9:30 AM',
-    isEditable: false,
     isAllDay: false,
     status: {
       text: 'Pending',
       color: '#a49ee8',
-      dotColor: '#00a59b',
     },
     description: 'This is test!. This is test',
   },
 
+  {
+    id: '5',
+    title: 'FP-AddicMed',
+    startDate: new Date('2025-07-09'), // Using current month for visibility
+    endDate: new Date('2025-07-15'),
+    color: '#60bd8e', // bar color
+    location: 'Vancouver Genral Hospital - Surgical Departmer',
+    teacher: 'DR. Geoffrey Blair',
+    startTime: '8 AM',
+    endTime: '9:30 AM',
+    isAllDay: false,
+    status: {
+      text: 'Confirmed',
+      color: '#60bd8e',
+    },
+    description: 'This is test!. This is test',
+  },
+
+  {
+    id: '6',
+    title: 'FP-AddicMed',
+    startDate: new Date('2025-06-04'), // Using current month for visibility
+    endDate: new Date('2025-06-10'),
+    color: '#60bd8e', // bar color
+    location: 'Vancouver Genral Hospital - Surgical Departmer',
+    teacher: 'DR. Geoffrey Blair',
+    startTime: '9 AM',
+    endTime: '9:30 AM',
+    isAllDay: false,
+    status: {
+      text: 'Editable',
+      color: '#8eeee4',
+    },
+    description: 'This is test!. This is test',
+  },
+  {
+    id: '7',
+    title: 'FP-AddicMed',
+    startDate: new Date('2025-06-04'), // Using current month for visibility
+    endDate: new Date('2025-06-10'),
+    color: '#a49ee8', // bar color
+    location: 'Vancouver Genral Hospital - Surgical Departmer',
+    teacher: 'DR. Geoffrey Blair',
+    startTime: '9 AM',
+    endTime: '9:30 AM',
+    isAllDay: false,
+    status: {
+      text: 'Pending',
+      color: '#a49ee8',
+    },
+    description: 'This is test!. This is test',
+  },
+
+  {
+    id: '8',
+    title: 'FP-AddicMed',
+    startDate: new Date('2025-06-17'), // Using current month for visibility
+    endDate: new Date('2025-07-12'),
+    color: '#f38c8d', // bar color
+    location: 'Vancouver Genral Hospital - Surgical Departmer',
+    teacher: 'DR. Geoffrey Blair',
+    startTime: '9 AM',
+    endTime: '9:30 AM',
+    isAllDay: false,
+    status: {
+      text: 'Drop Requested',
+      color: '#f38c8d',
+    },
+    description: 'This is test!. This is test',
+  },
+];
+
+export const initialWeekData1 = [
+  {
+    id: '1',
+    title: 'FP-AddicMed',
+    startDate: new Date('2025-07-09'), // Using current month for visibility
+    endDate: new Date('2025-07-15'),
+    color: '#60bd8e', // bar color
+    location: 'Vancouver Genral Hospital - Surgical Departmer',
+    teacher: 'DR. Geoffrey Blair',
+    startTime: '8 AM',
+    endTime: '9:30 AM',
+    isAllDay: false,
+    status: {
+      text: 'Confirmed',
+      color: '#60bd8e',
+    },
+    description: 'This is test!. This is test',
+  },
   {
     id: '3',
     title: 'FP-AddicMed',
@@ -196,74 +270,61 @@ export const initialWeekData = [
     teacher: 'DR. Geoffrey Blair',
     startTime: '8 AM',
     endTime: '9:30 AM',
-    isEditable: false,
     isAllDay: false,
     status: {
-      text: 'Confirmed',
+      text: 'Editable',
       color: '#60bd8e',
-      dotColor: '#00a59b',
     },
     description: 'This is test!. This is test',
   },
+];
 
+export const totalWeekData : CalendarEventType[] = [
   {
-    id: '4',
+    id: '1',
     title: 'FP-AddicMed',
-    startDate: new Date('2025-06-04'), // Using current month for visibility
-    endDate: new Date('2025-06-10'),
-    color: '#60bd8e', // bar color
-    location: 'Vancouver Genral Hospital - Surgical Departmer',
-    teacher: 'DR. Geoffrey Blair',
-    startTime: '9 AM',
-    endTime: '9:30 AM',
-    isEditable: true,
-    isAllDay: false,
-    status: {
-      text: 'Approved',
-      color: '#8eeee4',
-      dotColor: '#00a59b',
-      icon: 'icon',
-    },
-    description: 'This is test!. This is test',
-  },
-  {
-    id: '5',
-    title: 'FP-AddicMed',
-    startDate: new Date('2025-06-04'), // Using current month for visibility
-    endDate: new Date('2025-06-10'),
-    color: '#a49ee8', // bar color
-    location: 'Vancouver Genral Hospital - Surgical Departmer',
-    teacher: 'DR. Geoffrey Blair',
-    startTime: '9 AM',
-    endTime: '9:30 AM',
-    isEditable: false,
-    isAllDay: false,
-    status: {
-      text: 'Pending',
-      color: '#a49ee8',
-      dotColor: '#00a59b',
-      icon: 'icon',
-    },
-    description: 'This is test!. This is test',
-  },
-
-  {
-    id: '5',
-    title: 'FP-AddicMed',
-    startDate: new Date('2025-06-17'), // Using current month for visibility
+    startDate: new Date('2025-07-04'), // Using current month for visibility
     endDate: new Date('2025-07-12'),
-    color: '#f38c8d', // bar color
+    color: '#FACC15', // bar color
     location: 'Vancouver Genral Hospital - Surgical Departmer',
     teacher: 'DR. Geoffrey Blair',
-    startTime: '9 AM',
-    endTime: '9:30 AM',
-    isEditable: false,
     isAllDay: false,
+    startTime: '7 AM',
+    endTime: '9:30 AM',
     status: {
-      text: 'Drop Requested',
-      color: '#f38c8d',
-      dotColor: '#00a59b',
-      icon: 'icon',
+      text: 'Waitlisted',
+    },
+    description: 'This is test!. This is test',
+  },
+  {
+    id: '2',
+    title: 'FP-AddicMed',
+    startDate: new Date('2025-07-04'), // Using current month for visibility
+    endDate: new Date('2025-07-12'),
+    color: '#FACC15', // bar color
+    location: 'Vancouver Genral Hospital - Surgical Departmer',
+    teacher: 'DR. Geoffrey Blair',
+    isAllDay: false,
+    startTime: '7 AM',
+    endTime: '9:30 AM',
+    status: {
+      text: 'Waitlisted',
+    },
+    description: 'This is test!. This is test',
+  },
+  {
+    id: '3',
+    title: 'FP-AddicMed',
+    startDate: new Date('2025-07-04'), // Using current month for visibility
+    endDate: new Date('2025-07-12'),
+    color: '#FACC15', // bar color
+    location: 'Vancouver Genral Hospital - Surgical Departmer',
+    teacher: 'DR. Geoffrey Blair',
+    isAllDay: false,
+    startTime: '7 AM',
+    endTime: '9:30 AM',
+    status: {
+      text: 'Waitlisted',
     },
     description: 'This is test!. This is test',
   },

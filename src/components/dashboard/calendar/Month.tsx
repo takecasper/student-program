@@ -2,24 +2,8 @@
 import React from 'react';
 import { format, isToday, isSameDay, isSameMonth } from 'date-fns';
 import CalendarEvent from '@/components/CalendarEvent';
+import { CalendarEventType } from '@/types/calendar';
 
-// Define the event type interface
-interface CalendarEventType {
-  id: string;
-  title: string;
-  startDate: Date;
-  endDate: Date;
-  startTime?: string;
-  endTime?: string;
-  color: string;
-  isAllDay: boolean;
-  location?: string;
-  status?: {
-    text: string;
-    color: string;
-    dotColor: string;
-  };
-}
 
 interface MonthProps {
   weeksOfMonth: Date[][];

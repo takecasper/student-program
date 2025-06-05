@@ -8,6 +8,7 @@ import {
   startOfMonth,
   startOfWeek,
   format,
+  isSameWeek,
 } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 import { DAYS_IN_WEEK, TWELVE_HOUR, ZERO } from './const';
@@ -76,13 +77,13 @@ export const getCalendarGridDatesWeek = (currentDate: Date) => {
 
 //get Seven Weeks Shorten title
 export const getWeeksShortenTitle = (currentDate: Date, num: number = 7) => {
-  const title: string[] = [];
+  const title: { title: string; state: boolean }[] = [];
   for (let i = ZERO; i < num; i++) {
     const startDate = addDays(currentDate, DAYS_IN_WEEK * i);
     const endDate = addDays(startDate, DAYS_IN_WEEK - 1);
     const month = format(startDate, 'MMM');
     const weekStr = `${month} ${startDate.getDate()}-${endDate.getDate()}`;
-    title.push(weekStr);
+    title.push({ title: weekStr, state: isSameWeek(new Date(), startDate) });
   }
 
   return title;

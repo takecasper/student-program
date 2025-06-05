@@ -1,3 +1,4 @@
+import { Status } from '@/types/calendar';
 import { Clock, MapPin, User } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 
@@ -9,11 +10,7 @@ interface DayEventProps {
   location?: string;
   teacher?: string;
   color: string;
-  status?: {
-    text: string;
-    color: string;
-    dotColor?: string;
-  };
+  status?: Status;
   isAllDay?: boolean;
   description?: string;
   size: number;
@@ -69,10 +66,6 @@ export default function DayEvent({
                     style={{ backgroundColor: status.color }}
                     onClick={() => setShowModal(!showModal)}
                   >
-                    <div
-                      className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: status.dotColor || color }}
-                    ></div>
                     {status.text}
                   </span>
                 )}
@@ -154,10 +147,6 @@ export default function DayEvent({
                       className="ml-auto text-[#364699] text-xs py-1 px-2 rounded-full flex items-center gap-1"
                       style={{ backgroundColor: status.color }}
                     >
-                      <div
-                        className="w-2 h-2 rounded-full"
-                        style={{ backgroundColor: status.dotColor || color }}
-                      ></div>
                       {status.text}
                     </span>
                   )}
@@ -185,10 +174,6 @@ export default function DayEvent({
                           style={{ backgroundColor: status.color }}
                           onClick={() => setShowModal(!showModal)}
                         >
-                          <div
-                            className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: status.dotColor || color }}
-                          ></div>
                           {status.text}
                         </span>
                       )}
