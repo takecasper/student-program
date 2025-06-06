@@ -10,7 +10,7 @@ export interface SummaryCardProps {
 export default function SummaryCard({ iconSrc, title, value }: SummaryCardProps) {
   return (
     <div className="flex items-center gap-3">
-      <div className="w-16 h-16 rounded-xl border border-[#D9D9D9] flex items-center justify-center">
+      <div className="w-12 h-12 rounded-xl border border-[#D9D9D9] flex items-center justify-center">
         <Image src={iconSrc} alt={title} width={20} height={20} />
       </div>
       <div className="flex items-start gap-2">

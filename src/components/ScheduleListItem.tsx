@@ -1,5 +1,15 @@
 // components/ScheduleListItem.tsx
-import { CalendarDays, Clock, MapPin } from 'lucide-react';
+import {
+  Book,
+  BookCopy,
+  BookCopyIcon,
+  BookDashed,
+  BookTemplate,
+  CalendarDays,
+  Clock,
+  Contact,
+  MapPin,
+} from 'lucide-react';
 import Image from 'next/image';
 
 interface ScheduleItemProps {
@@ -35,24 +45,24 @@ export default function ScheduleListItem({
 
         <div className="flex items-center text-sm text-gray-600 gap-2 mb-1 ">
           <div className="flex flex-row items-center w-[50%]">
-            <Clock size={14} className="gap-1" />
+            <Clock size={16} className="gap-1" />
             <span>{time}</span>
           </div>
 
-          <span className="flex flex-row items-center w-[50%] gap-1 ml-4">
-            <CalendarDays size={14} className="gap-1" />
+          <span className="flex flex-row items-center w-[50%] gap-1">
+            <BookCopy size={16} className="gap-1" />
             <span>{type}</span>
           </span>
         </div>
 
         <div className="flex items-center text-sm text-gray-600 gap-2">
           <div className="flex flex-row items-center w-[50%]">
-            <MapPin size={14} className="gap-1" />
+            <MapPin size={16} className="gap-1" />
             <span>{location}</span>
           </div>
 
-          <span className="flex flex-row items-center w-[50%] gap-1 ml-5">
-            <MapPin size={14} className="gap-1" />
+          <span className="flex flex-row items-center w-[50%] gap-1">
+            <Contact size={16} className="gap-1" />
             <span>
               With <span className="font-semibold text-gray-800">{instructor}</span>
             </span>

@@ -155,54 +155,60 @@ export default function ProgramContentWithImages() {
   ];
 
   return (
-    <div className="p-6">
-      <h1 className="text-lg font-medium text-[#333333] mb-6">MEDICAL PROGRAM</h1>
+    <div className="py-6 px-12">
+      <h1 className="text-md font-medium text-[#333333] mb-6">My PROGRAM</h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {programCards.map((card, index) => (
-          <div
-            key={index}
-            className={`relative rounded-[20px] cursor-pointer ${
-              hoveredCard === index ? 'p-[2px] bg-gradient-to-r from-[#6A6EEC] to-[#DD99F6]' : 'p-0'
-            }`}
-            onMouseEnter={() => setHoveredCard(index)}
-            onMouseLeave={() => setHoveredCard(null)}
-            onClick={() => handleViewSelection(`year${index + 1}`)}
-          >
-            <Card
-              className={`border-2 ${
-                hoveredCard === index ? 'border-transparent' : 'border-[#D9D9D9]'
-              } overflow-hidden flex flex-col py-0 relative rounded-[18px] shadow-none h-full`}
+      <div className=''>
+        <h1 className="text-lg font-medium text-[#333333] mb-6">MEDICAL PROGRAM</h1>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {programCards.map((card, index) => (
+            <div
+              key={index}
+              className={`relative rounded-[20px] cursor-pointer ${
+                hoveredCard === index
+                  ? 'p-[2px] bg-gradient-to-r from-[#6A6EEC] to-[#DD99F6]'
+                  : 'p-0'
+              }`}
+              onMouseEnter={() => setHoveredCard(index)}
+              onMouseLeave={() => setHoveredCard(null)}
+              onClick={() => handleViewSelection(`year${index + 1}`)}
             >
-              {card.status && (
-                <div
-                  className={`absolute top-3 right-3 text-xs font-medium py-1 px-3 rounded-[10px] z-10 ${
-                    card.status === 'CURRENT'
-                      ? 'bg-white text-[#364699]'
-                      : 'bg-white text-[#6c6c6c]'
-                  }`}
-                >
-                  {card.status}
+              <Card
+                className={`border-2 ${
+                  hoveredCard === index ? 'border-transparent' : 'border-[#D9D9D9]'
+                } overflow-hidden flex flex-col py-0 relative rounded-[18px] shadow-none h-full`}
+              >
+                {card.status && (
+                  <div
+                    className={`absolute top-3 right-3 text-xs font-medium py-1 px-3 rounded-[10px] z-10 ${
+                      card.status === 'CURRENT'
+                        ? 'bg-white text-[#364699]'
+                        : 'bg-white text-[#6c6c6c]'
+                    }`}
+                  >
+                    {card.status}
+                  </div>
+                )}
+                <div className={index === 0 ? 'border-b-2 border-[#D9D9D9] rounded-[20px]' : ''}>
+                  <Image
+                    src="/program.png"
+                    alt="program"
+                    width={500}
+                    height={300}
+                    quality={100}
+                    priority={index < 2}
+                    className="w-full h-40 object-cover rounded-[20px]"
+                  />
                 </div>
-              )}
-              <div className={index === 0 ? 'border-b-2 border-[#D9D9D9] rounded-[20px]' : ''}>
-                <Image
-                  src="/program.png"
-                  alt="program"
-                  width={500}
-                  height={300}
-                  quality={100}
-                  priority={index < 2}
-                  className="w-full h-40 object-cover rounded-[20px]"
-                />
-              </div>
-              <CardContent className="p-4 flex-grow">
-                <h3 className="text-sm font-medium text-[#333333] mb-4">{card.year}</h3>
-                {card.content}
-              </CardContent>
-            </Card>
-          </div>
-        ))}
+                <CardContent className="p-4 flex-grow">
+                  <h3 className="text-sm font-medium text-[#333333] mb-4">{card.year}</h3>
+                  {card.content}
+                </CardContent>
+              </Card>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

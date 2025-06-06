@@ -32,9 +32,8 @@ export default function DashboardContent() {
     <div className="p-6 relative">
       <div className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-6">
         <div className="space-y-6">
-          <h2 className="text-lg font-medium text-[#333333]">DASHBOARD</h2>
           <div className="flex gap-4">
-            <div className="flex items-center justify-center rounded-[16px] border border-[#f0f0f0] bg-white px-2 py-2 shadow-sm">
+            <div className="flex items-center justify-center rounded-[16px] border border-[#f0f0f0] bg-white px-2 py-2">
               <div className="flex-1">
                 <SummaryCard iconSrc="hotel_class.svg" value={1} title="Ongoing Course" />
               </div>
@@ -68,7 +67,7 @@ export default function DashboardContent() {
               </TabsList>
             </Tabs>
 
-            <div className=" grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className=" grid grid-cols-1 sm:grid-cols-3 gap-4">
               <CourseCard
                 number="01"
                 title="Clinical Anatomy"
@@ -89,7 +88,7 @@ export default function DashboardContent() {
           <div className="space-y-4">
             <h2 className="text-lg font-medium text-[#333333]">SUGGESTED COURSES & TESTS</h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="flex flex-col md:flex-row gap-4">
               <SuggestedCourseCard />
 
               <CategoryCard
@@ -150,7 +149,7 @@ export default function DashboardContent() {
             </div>
           </div>
 
-          <ScrollArea className="h-[calc(100vh-300px)]">
+          <ScrollArea className="h-[calc(100vh-250px)]">
             <div className="space-y-3">
               {scheduleState
                 ? [
