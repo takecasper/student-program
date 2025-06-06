@@ -39,7 +39,7 @@ export default function HelpCenter() {
   });
 
   const setData = useProgram(state => state.setData);
-  const setTitle  = useBreadcrumbStore(state => state.setTitle);
+  const setTitle = useBreadcrumbStore(state => state.setTitle);
 
   setTitle?.('Help Center');
 
@@ -50,7 +50,6 @@ export default function HelpCenter() {
 
   return (
     <div className="p-6 px-20">
-      {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-sm font-medium text-[#333333]">MY PROGRAM</h1>
