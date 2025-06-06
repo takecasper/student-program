@@ -91,7 +91,7 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
           <div className="flex w-full justify-between p-4 pr-0 border-b border-[#f5f5f5] items-center gap-3">
             <Link href="/dashboard">
               <Image
-                className="max-h-[40px] object-cover"
+                className="max-h-[40px] object-contain"
                 alt="Program Experience Logo"
                 width={140}
                 height={40}
