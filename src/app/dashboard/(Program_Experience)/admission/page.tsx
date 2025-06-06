@@ -79,7 +79,15 @@ export default function ProgramAdmissionPage() {
                         return (
                           <tr key={index} className="border-b">
                             <td className=" px-4 py-[10px] align-middle">
-                              <div className="flex items-center gap-4 text-[#333333DE] text-[14px] font-normal">
+                              <div
+                                onClick={() =>
+                                  setShowSidebar({
+                                    show: true,
+                                    student: student,
+                                  })
+                                }
+                                className="cursor-pointer flex items-center gap-4 text-[#333333DE] text-[14px] font-normal"
+                              >
                                 <Avatar className="h-[30px] w-[30px] border border-[#D9D9D9]">
                                   <AvatarImage src={student.image} />
                                 </Avatar>

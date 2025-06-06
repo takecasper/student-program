@@ -2,11 +2,11 @@
 
 import React, { useState } from 'react';
 
-interface CheckTabProps {
+interface SpeedTestCheckProps {
   onComplete: () => void;
 }
 
-const CheckTab = ({ onComplete }: CheckTabProps) => {
+const SpeedTestCheck = ({ onComplete }: SpeedTestCheckProps) => {
   const [hasCheckedSpeed, setHasCheckedSpeed] = useState(false);
   const [speedTestPassed, setSpeedTestPassed] = useState(false);
   const [downloadSpeed, setDownloadSpeed] = useState<number | null>(null);
@@ -61,22 +61,13 @@ const CheckTab = ({ onComplete }: CheckTabProps) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 text-[#333333DE]">
       <div className="text-sm text-gray-600">
-        Please complete the speed test below to ensure your internet connection meets the minimum
-        requirements.
+        You will need to have a high speed internet connection with a downlaod bitrate of at least
+        1.5 Mbps..
       </div>
 
       <div className="border rounded-lg p-6 space-y-4">
-        <div className="text-sm text-gray-600">
-          <p>Minimum requirements:</p>
-          <ul className="list-disc pl-5 mt-2">
-            <li>Download speed: 2 Mbps or higher</li>
-            <li>Upload speed: 1 Mbps or higher</li>
-            <li>Ping: Less than 100ms</li>
-          </ul>
-        </div>
-
         {isTestingSpeed ? (
           <div className="space-y-2">
             <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
@@ -90,24 +81,36 @@ const CheckTab = ({ onComplete }: CheckTabProps) => {
             </p>
           </div>
         ) : (
-          <button
-            onClick={testSpeed}
-            className="w-full bg-[#364699] text-white py-3 rounded-full text-sm font-medium hover:bg-[#2a3875] transition-colors"
-            disabled={isTestingSpeed}
-          >
-            Start Speed Test
-          </button>
+          <div className="flex gap-4 items-center">
+            <input
+              type="text"
+              readOnly
+              value={downloadSpeed ? `${downloadSpeed.toFixed(2)} Mbps` : ''}
+              placeholder="Speed test result will appear here"
+              className="flex-1 border rounded-lg px-4 py-2 text-sm bg-gray-50"
+            />
+            <button
+              onClick={testSpeed}
+              className="bg-[#364699] text-white py-[10px] px-[21px] rounded-[12px] text-sm font-medium hover:bg-[#2a3875] transition-colors"
+              disabled={isTestingSpeed}
+            >
+              Check
+            </button>
+          </div>
         )}
 
         {hasCheckedSpeed && (
           <div className="mt-4 space-y-2">
-            <p className="text-sm font-medium">
-              Your download speed: {downloadSpeed?.toFixed(2)} Mbps
-            </p>
             {speedTestPassed ? (
-              <div className="flex items-center gap-2 text-green-600">
-                <span>✓</span>
-                <span className="text-sm">Your internet speed meets the requirements</span>
+              <div className="flex flex-col items-start gap-2 text-[#00A59B]">
+                <div className="flex items-center gap-2">
+                  <span>✓</span>
+                  <span className="text-sm">Download bitrate looks good!</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>✓</span>
+                  <span className="text-sm">Using latest version of Chrome (V1.30)</span>
+                </div>
               </div>
             ) : (
               <div className="flex items-center gap-2 text-red-600">
@@ -139,4 +142,4 @@ const CheckTab = ({ onComplete }: CheckTabProps) => {
   );
 };
 
-export default CheckTab;
+export default SpeedTestCheck;
