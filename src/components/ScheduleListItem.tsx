@@ -5,7 +5,6 @@ import {
   Contact,
   MapPin,
 } from 'lucide-react';
-import Image from 'next/image';
 
 interface ScheduleItemProps {
   day: string;
