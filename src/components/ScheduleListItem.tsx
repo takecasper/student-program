@@ -1,11 +1,6 @@
 // components/ScheduleListItem.tsx
 import {
-  Book,
   BookCopy,
-  BookCopyIcon,
-  BookDashed,
-  BookTemplate,
-  CalendarDays,
   Clock,
   Contact,
   MapPin,

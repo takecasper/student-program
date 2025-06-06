@@ -10,7 +10,6 @@ export interface CategoryCardProps {
 
 export default function CategoryCard({
   imageSrc,
-  category,
   title,
   description,
 }: CategoryCardProps) {

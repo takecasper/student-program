@@ -24,7 +24,7 @@ const ratingOptions = [
 
 export default function DashboardContent() {
   const { user } = useAuth();
-  const [scheduleState, setScheduleState] = useState(false);
+  const [scheduleState] = useState(false);
   if (!user) return null;
   const [viewMode, setViewMode] = useState<string>('day');
 

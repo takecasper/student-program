@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import ProgramDetail from '@/components/ProgramDetail';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Calendar from '@/components/dashboard/calendar/sidebar/Calendar';
 import { Calendar1 } from 'lucide-react';
 
 export default function ProgramContentWithImages() {
