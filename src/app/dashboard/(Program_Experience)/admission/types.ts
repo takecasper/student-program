@@ -13,6 +13,10 @@ export type Student = {
   score2: string;
   score3: string;
   score4: string;
+  formativeScore1: string;
+  formativeScore2: string;
+  formativeScore3: string;
+  formativeScore4: string;
   email: string;
   pastTest?: Course[];
 };

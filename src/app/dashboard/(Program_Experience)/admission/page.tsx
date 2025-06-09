@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 import { useState } from 'react';
-import { Settings, X } from 'lucide-react';
+import { Settings, X, ChevronDownIcon } from 'lucide-react';
 
 import {
   Accordion,
@@ -40,28 +40,35 @@ export default function ProgramAdmissionPage() {
           <div>
             <h1 className="text-sm font-medium text-[#333333]">PROGRAMS</h1>
           </div>
-
-          <div className="flex gap-2">
-            <Button
-              size="icon"
-              variant="outline"
-              className="rounded-[4px] cursor-pointer h-[24px] w-[24px] border-[#d9d9d9]"
-            >
-              <Settings className="h-4 w-4 text-[#6c6c6c]" />
-            </Button>
-          </div>
         </div>
 
         <Accordion type="single" collapsible className="w-full">
           {admissionList.map(item => {
             return (
-              <AccordionItem key={item.id} value={item.name} className="mb-3">
-                <AccordionTrigger className="data-[state=open]:rounded-b-none !no-underline border border-[#F5F5F5] px-4 py-[13px] cursor-pointer bg-[#D9D9D91A] rounded-t-md">
-                  <div className="flex justify-between w-full">
+              <AccordionItem key={item.id} value={item.name} className="mb-3 relative">
+                <AccordionTrigger className="data-[state=open]:rounded-b-none !no-underline border border-[#F5F5F5] px-4 py-[13px] cursor-pointer bg-[#D9D9D91A] rounded-t-md pr-14">
+                  <div className="flex justify-between items-center w-full">
                     <span className="text-[#4d4d4d] text-[12px]">{item.name}</span>
-                    <span className="text-[12px] text-[#364699]">{item.applied} Applied</span>
+                    <div className="flex items-center gap-4">
+                      <span className="text-[12px] text-[#364699]">{item.applied} Applied</span>
+                    </div>
                   </div>
                 </AccordionTrigger>
+                <div className="absolute right-6 top-[13px]">
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="rounded-[4px] cursor-pointer h-[24px] w-[24px] border-[#d9d9d9]"
+                    onClick={() =>
+                      setShowSidebar({
+                        show: true,
+                        student: item.students[0],
+                      })
+                    }
+                  >
+                    <Settings className="h-4 w-4 text-[#6c6c6c]" />
+                  </Button>
+                </div>
                 <AccordionContent className="overflow-x-auto ">
                   <table className="w-full text-left text-sm">
                     <thead className="">
@@ -77,55 +84,76 @@ export default function ProgramAdmissionPage() {
                     <tbody>
                       {item.students.map((student, index) => {
                         return (
-                          <tr key={index} className="border-b">
-                            <td className=" px-4 py-[10px] align-middle">
-                              <div
-                                onClick={() =>
-                                  setShowSidebar({
-                                    show: true,
-                                    student: student,
-                                  })
-                                }
-                                className="cursor-pointer flex items-center gap-4 text-[#333333DE] text-[14px] font-normal"
-                              >
-                                <Avatar className="h-[30px] w-[30px] border border-[#D9D9D9]">
-                                  <AvatarImage src={student.image} />
-                                </Avatar>
-                                {student.name}
-                              </div>
-                            </td>
-                            <td className="px-4 py-[10px] align-middle text-[#333333DE] text-[14px] font-bold">
-                              {student.program}
-                            </td>
-                            <td className="text-[#333333DE] text-[14px] font-normal px-4 py-[10px] align-middle">
-                              {student.score1}
-                            </td>
-                            <td className="text-[#333333DE] text-[14px] font-normal px-4 py-[10px] align-middle">
-                              {student.score2}
-                            </td>
-                            <td className="text-[#333333DE] text-[14px] font-normal px-4 py-[10px] align-middle">
-                              {student.score3}
-                            </td>
-                            <td className=" px-4 py-[10px] align-middle">
-                              <div className="flex items-center gap-4 text-[#333333DE] text-[14px] font-normal">
-                                {student.score4}
+                          <>
+                            <tr key={`${index}-casper`} className="">
+                              <td className=" px-4 py-[10px] align-middle">
+                                <div
+                                  onClick={() =>
+                                    setShowSidebar({
+                                      show: true,
+                                      student: student,
+                                    })
+                                  }
+                                  className="cursor-pointer flex items-center gap-4 text-[#333333DE] text-[14px] font-normal"
+                                >
+                                  <Avatar className="h-[30px] w-[30px] border border-[#D9D9D9]">
+                                    <AvatarImage src={student.image} />
+                                  </Avatar>
+                                  {student.name}
+                                </div>
+                              </td>
+                              <td className="px-4 py-[10px] align-middle text-[#333333DE] text-[14px] font-bold">
+                                Casper
+                              </td>
+                              <td className="text-[#333333DE] text-[14px] font-normal px-4 py-[10px] align-middle">
+                                {student.score1}
+                              </td>
+                              <td className="text-[#333333DE] text-[14px] font-normal px-4 py-[10px] align-middle">
+                                {student.score2}
+                              </td>
+                              <td className="text-[#333333DE] text-[14px] font-normal px-4 py-[10px] align-middle">
+                                {student.score3}
+                              </td>
+                              <td className=" px-4 py-[10px] align-middle">
+                                <div className="flex items-center gap-4 text-[#333333DE] text-[14px] font-normal">
+                                  {student.score4}
 
-                                {student.canEnroll && (
-                                  <Button
-                                    onClick={() =>
-                                      setShowSidebar({
-                                        show: true,
-                                        student: student,
-                                      })
-                                    }
-                                    className="p-0 bg-transparent hover:bg-transparent cursor-pointer text-[#364699] text-[14px] hover:underline ml-auto"
-                                  >
-                                    Enroll
-                                  </Button>
-                                )}
-                              </div>
-                            </td>
-                          </tr>
+                                  {student.canEnroll && (
+                                    <Button
+                                      onClick={() =>
+                                        setShowSidebar({
+                                          show: true,
+                                          student: student,
+                                        })
+                                      }
+                                      className="p-0 bg-transparent hover:bg-transparent cursor-pointer text-[#364699] text-[14px] hover:underline ml-auto"
+                                      disabled
+                                    >
+                                      Enroll
+                                    </Button>
+                                  )}
+                                </div>
+                              </td>
+                            </tr>
+                            <tr key={`${index}-formative`} className="border-b bg-white">
+                              <td className="px-4 py-[10px] align-middle"></td>
+                              <td className="px-4 py-[10px] align-middle text-[#333333DE] text-[14px] font-bold">
+                                Formative
+                              </td>
+                              <td className="text-[#333333DE] text-[14px] font-normal px-4 py-[10px] align-middle">
+                                {student.formativeScore1}
+                              </td>
+                              <td className="text-[#333333DE] text-[14px] font-normal px-4 py-[10px] align-middle">
+                                {student.formativeScore2}
+                              </td>
+                              <td className="text-[#333333DE] text-[14px] font-normal px-4 py-[10px] align-middle">
+                                {student.formativeScore3}
+                              </td>
+                              <td className="text-[#333333DE] text-[14px] font-normal px-4 py-[10px] align-middle">
+                                {student.formativeScore4}
+                              </td>
+                            </tr>
+                          </>
                         );
                       })}
                     </tbody>
