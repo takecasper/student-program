@@ -8,7 +8,6 @@ import { SettingsTab } from './tabs/SettingsTab';
 import { TabIcon } from './TabIcon';
 
 import { MSPETab } from './tabs/MSPETab';
-import { EvalTab } from './tabs/Evaltab';
 
 type UserProfileProps = {
   user: {
@@ -45,7 +44,6 @@ export default function UserProfile({ user, activeTab, setActiveTab }: UserProfi
         <TabsList className="flex gap-2 bg-white overflow-x-auto p-1">
           <TabTrigger value="account" activeTab={activeTab} icon="user" label="MY ACCOUNT" />
           <TabTrigger value="grades" activeTab={activeTab} icon="calendar" label="MY GRADES" />
-          <TabTrigger value="eval" activeTab={activeTab} icon="calendar" label="MY EVAL" />
           <TabTrigger value="mspe" activeTab={activeTab} icon="calendar" label="MSPE LETTER" />
           <TabTrigger value="wallet" activeTab={activeTab} icon="wallet" label="MY WALLET" />
           <TabTrigger value="settings" activeTab={activeTab} icon="settings" label="SETTINGS" />
@@ -63,10 +61,6 @@ export default function UserProfile({ user, activeTab, setActiveTab }: UserProfi
 
         <TabsContent value="grades">
           <GradesTab />
-        </TabsContent>
-
-        <TabsContent value="eval" className="mt-0">
-          <EvalTab />
         </TabsContent>
 
         <TabsContent value="wallet">

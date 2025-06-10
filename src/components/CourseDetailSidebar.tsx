@@ -183,7 +183,80 @@ export default function CourseDetailSidebar({
           </div>
         );
       case 'EVAL':
-        return <p className="text-sm text-gray-500">Evaluation content will display here</p>;
+        return (
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              {
+                id: 1,
+                title: 'Form Name',
+                sentDate: 'Mar 20, 2023',
+                courseName: courseName,
+                imageUrl: '/mspe.png',
+                completed: true,
+              },
+              {
+                id: 2,
+                title: 'Form Name',
+                sentDate: 'Not Started',
+                courseName: courseName,
+                imageUrl: '/mspe.png',
+                completed: false,
+              },
+              {
+                id: 3,
+                title: 'Form Name',
+                sentDate: 'Not Started',
+                courseName: courseName,
+                imageUrl: '/mspe.png',
+                completed: false,
+              },
+              {
+                id: 4,
+                title: 'Form Name',
+                sentDate: 'Not Started',
+                courseName: courseName,
+                imageUrl: '/mspe.png',
+                completed: false,
+              },
+            ].map(evaluation => (
+              <div
+                key={evaluation.id}
+                className="border border-[#d9d9d9] rounded-[20px] flex flex-col p-4"
+              >
+                <div className="bg-[#F6F8FF] p-4 rounded-lg mb-4">
+                  <Image src={evaluation.imageUrl} alt={evaluation.title} width={100} height={50} />
+                </div>
+
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-[#333333] mb-2">{evaluation.title}</h3>
+                  <div className="flex flex-col gap-2">
+                    <p className="text-sm text-[#6C6C6C]">Sent Date: {evaluation.sentDate}</p>
+                    <div className="h-[1px] w-full bg-[#E0E0E0]" />
+                    <div className="flex items-center gap-2 text-sm text-[#6C6C6C]">
+                      <Image src="/hotel_class.svg" alt="Course Icon" width={18} height={18} />
+                      <span>{evaluation.courseName}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between mt-4">
+                  <div className="flex -space-x-3">
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <Avatar key={i} className="w-8 h-8 border-2 border-white">
+                        <AvatarImage src="/avatar.png" alt="avatar" />
+                      </Avatar>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <div className="border-[0.125rem] border-white bg-gray-200 text-gray-800 text-xs font-bold rounded-full px-2 py-0.5">
+                      +50
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        );
       default:
         return <p className="text-sm text-gray-500">Select a tab to view content</p>;
     }
@@ -275,7 +348,7 @@ export default function CourseDetailSidebar({
             </div>
 
             {/* Right side tabs and content */}
-            <div className="w-1/2 px-4 flex flex-col">
+            <div className="w-[60%] px-4 flex flex-col">
               <div className="flex gap-2 mb-4">
                 <Button
                   variant="ghost"
@@ -287,7 +360,7 @@ export default function CourseDetailSidebar({
                     setIsExpanded(true);
                   }}
                 >
-                  <Image src="/svgs/session.svg" alt="session" width={14} height={14} />
+                  <Image src="/svgs/Session-icon.svg" alt="session" width={14} height={14} />
                   SESSION
                 </Button>
                 <Button
