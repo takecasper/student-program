@@ -107,7 +107,10 @@ export default function ProgramPage() {
                         >
                           {subMenu.year}
 
-                          <Switch className='data-[state=checked]:bg-[#364699]' id="airplane-mode" />
+                          <Switch
+                            className="data-[state=checked]:bg-[#364699]"
+                            id="airplane-mode"
+                          />
 
                           {/* {subMenu.status === 'COMPLETE' && (
                             <span className="text-[#70C0B8] text-xs font-bold px-2 py-2 rounded-[10px] bg-white border-[1px] border-[#D9D9D9]">
