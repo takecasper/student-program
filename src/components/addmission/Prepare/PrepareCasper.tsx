@@ -4,7 +4,7 @@ interface PrepareCasperProps {
 
 export default function PrepareCasper({ setState }: PrepareCasperProps) {
   return (
-    <div className=" bg-white space-y-6 text-gray-800 shrink-0 pt-[60px]">
+    <div className=" bg-white space-y-6 text-gray-800 shrink-0 pt-[60px] pr-20">
       <h1 className="text-xl font-semibold">How to Prepare for Casper</h1>
       <p className="text-sm text-gray-600">
         Please use the items listed below as guidance to help you prepare for your Casper test, we

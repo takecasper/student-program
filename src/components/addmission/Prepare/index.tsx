@@ -195,7 +195,7 @@ export default function CasperPrepare() {
 
       {/* Right Section - Preparation Steps */}
       {state === 'prepare' && (
-        <div className="w-full md:w-96 py-6 bg-white space-y-6 text-gray-800 shrink-0">
+        <div className="w-full md:w-[550px] py-6 bg-white space-y-6 text-gray-800 shrink-0">
           <div className="overflow-auto h-[calc(100vh-270px)]">
             <PrepareCasper setState={setState} />
           </div>

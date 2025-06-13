@@ -360,7 +360,7 @@ export default function CourseDetailSidebar({
                     setIsExpanded(true);
                   }}
                 >
-                  <Image src="/svgs/Session-icon.svg" alt="session" width={14} height={14} />
+                  <Image src="/svgs/Session-Icon.svg" alt="session" width={14} height={14} />
                   SESSION
                 </Button>
                 <Button
@@ -386,7 +386,7 @@ export default function CourseDetailSidebar({
                     setIsExpanded(true);
                   }}
                 >
-                  <Image src="/svgs/Handout-icon.svg" alt="handouts" width={14} height={14} />
+                  <Image src="/svgs/Handout-Icon.svg" alt="handouts" width={14} height={14} />
                   HANDOUTS
                 </Button>
                 <Button
