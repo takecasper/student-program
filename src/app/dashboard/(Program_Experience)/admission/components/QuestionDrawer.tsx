@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import {
@@ -8,60 +8,53 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface QuestionDrawerProps {
   open: boolean;
   onClose: () => void;
+  numberOfQuestions: number;
 }
 
-const QuestionDrawer = ({ open, onClose }: QuestionDrawerProps) => {
-  const [activeView, setActiveView] = useState<'text' | 'video'>('text');
-
+const QuestionDrawer = ({ open, onClose, numberOfQuestions }: QuestionDrawerProps) => {
   return (
     <Sheet open={open} onOpenChange={onClose}>
       <SheetContent className="w-[600px] sm:w-[600px]">
         <SheetHeader className="mb-6">
-          <SheetTitle className="text-left">QUESTION 1</SheetTitle>
+          <SheetTitle className="text-left">From Question Bank</SheetTitle>
           <div className="flex items-center gap-2">
-            <p className="text-sm">Standard Question Bank</p>
+            <Tabs defaultValue="english">
+              <TabsList className="w-full">
+                <TabsTrigger value="english" className="w-full">
+                  English
+                </TabsTrigger>
+                <TabsTrigger value="french" className="w-full">
+                  French
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+          <div className="flex items-center justify-between">
             <Select defaultValue="all">
               <SelectTrigger className="w-[100px]">
-                <SelectValue placeholder="Filter" />
+                <SelectValue placeholder="Select Scenario" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="text">Text</SelectItem>
-                <SelectItem value="video">Video</SelectItem>
+                <SelectItem value="all">Scenario 1</SelectItem>
+                <SelectItem value="text">Scenario 2</SelectItem>
+                <SelectItem value="video">Scenario 3</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-          <div className="flex gap-2 w-[200px]">
-            <Button
-              variant="outline"
-              className={cn(
-                'flex-1 rounded-full border',
-                activeView === 'text' && 'bg-[#364699] text-white border-[#364699]',
-              )}
-              onClick={() => setActiveView('text')}
-            >
-              Text Based
-            </Button>
-            <Button
-              variant="outline"
-              className={cn(
-                'flex-1 rounded-full border',
-                activeView === 'video' && 'bg-[#364699] text-white border-[#364699]',
-              )}
-              onClick={() => setActiveView('video')}
-            >
-              Videos
+            <Button variant="outline" className="bg-[#364699] text-white">
+              Add Custom
+              <Image src="/svgs/plus.svg" alt="plus" width={16} height={16} />
             </Button>
           </div>
         </SheetHeader>
 
         <div className="space-y-4">
-          {Array.from({ length: 6 }).map((_, index) => (
+          {Array.from({ length: numberOfQuestions }).map((_, index) => (
             <div key={index} className="border rounded-lg p-4 bg-white">
               <div className="flex items-center gap-4">
                 <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">

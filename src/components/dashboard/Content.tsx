@@ -4,6 +4,7 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/context/AuthContext';
+import { useUserStore } from '@/store/user';
 import TodoListItem from '../ToDoListItem';
 import SummaryCard from './SummaryCard';
 import CourseCard from './CourseCard';
@@ -24,6 +25,7 @@ const ratingOptions = [
 
 export default function DashboardContent() {
   const { user } = useAuth();
+  const userStore = useUserStore();
   const [scheduleState] = useState(false);
   if (!user) return null;
   const [viewMode, setViewMode] = useState<string>('day');
@@ -246,9 +248,11 @@ export default function DashboardContent() {
             </div>
           </ScrollArea>
 
-          <div className="fixed bottom-6 right-6 z-50">
-            <ChatbotInterface />
-          </div>
+          {userStore.user?.type === 'program_experience' && (
+            <div className="fixed bottom-6 right-6 z-50">
+              <ChatbotInterface />
+            </div>
+          )}
         </div>
       </div>
     </div>

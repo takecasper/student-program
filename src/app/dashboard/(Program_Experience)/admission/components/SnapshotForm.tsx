@@ -69,7 +69,11 @@ const SnapshotForm = () => {
 
   return (
     <div className="w-full h-screen">
-      <QuestionDrawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+      <QuestionDrawer
+        open={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        numberOfQuestions={parseInt(numberOfQuestions)}
+      />
       <div className="space-y-4 pb-4  pl-4">
         <h1 className="text-[16px] font-semibold">PROGRAM 1 SETTINGS</h1>
         <div className="flex gap-2">
