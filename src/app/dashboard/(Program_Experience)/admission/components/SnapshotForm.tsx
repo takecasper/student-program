@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import {
@@ -23,6 +23,10 @@ const SnapshotForm = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedQuestionIndex, setSelectedQuestionIndex] = useState<number | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [introVideo, setIntroVideo] = useState<File | null>(null);
+  const [videoPreview, setVideoPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleTestClick = (index: number) => {
     setEditingTest(index);
@@ -47,6 +51,19 @@ const SnapshotForm = () => {
   const handleQuestionClick = (index: number) => {
     setSelectedQuestionIndex(index);
     setIsDrawerOpen(true);
+  };
+
+  const handleVideoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setIntroVideo(file);
+      const videoUrl = URL.createObjectURL(file);
+      setVideoPreview(videoUrl);
+    }
+  };
+
+  const handleVideoClick = () => {
+    fileInputRef.current?.click();
   };
 
   const renderStandardQuestions = () => {
@@ -209,7 +226,7 @@ const SnapshotForm = () => {
               </div>
 
               <div className="flex items-center justify-between space-y-2 pt-4">
-                <Label className="text-sm text-[#333333DE] font-normal">Pause/Break Options</Label>
+                <Label className="text-sm text-[#333333DE] font-normal">Break Options</Label>
                 <Select defaultValue="15">
                   <SelectTrigger className="w-[120px]">
                     <SelectValue placeholder="Select time" />
@@ -233,20 +250,53 @@ const SnapshotForm = () => {
               </Button>
             </div>
             {selectedTest === 'SNAPSHOT' ? (
-              <div className="flex items-start gap-10 space-y-6">
-                {/* Question Grid */}
+              <div className="flex flex-col items-start gap-10 space-y-6">
                 <div className="flex flex-col gap-2  flex-1">
-                  <h1>Snapshot Standard Questions</h1>
+                  <h1>Intro</h1>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleVideoUpload}
+                    accept="video/*"
+                    className="hidden"
+                  />
+                  {videoPreview ? (
+                    <div className="relative w-[400px]">
+                      <video src={videoPreview} controls className="w-full rounded-[10px]" />
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="absolute top-2 right-2"
+                        onClick={() => {
+                          setVideoPreview(null);
+                          setIntroVideo(null);
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  ) : (
+                    <div
+                      className="flex items-center justify-center border-2 border-dashed rounded-[10px] w-[350px] h-[150px] bg-gray-100 cursor-pointer hover:bg-gray-50"
+                      onClick={handleVideoClick}
+                    >
+                      <div className="text-center">
+                        <Image
+                          src="/svgs/plus.svg"
+                          alt="plus"
+                          width={24}
+                          height={24}
+                          className="mx-auto mb-2"
+                        />
+                        <p className="text-gray-500">Upload Intro Video</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-col gap-2  flex-1">
+                  <h1>Add Questions</h1>
                   {renderStandardQuestions()}
                 </div>
-                {/* <div className="flex flex-col gap-2 pt-6 flex-1">
-                  <h1>Program Questions</h1>
-                  <div className="flex gap-2 items-center justify-center border-2 border-dashed rounded-[10px]">
-                    <Button variant="link">
-                      <Image src="/svgs/plus.svg" alt="plus" width={16} height={16} />
-                    </Button>
-                  </div>
-                </div> */}
               </div>
             ) : (
               <div className="space-y-6">{/* CASPER content */}</div>
