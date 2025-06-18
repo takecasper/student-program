@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CalendarDays, Pencil } from 'lucide-react';
+import { CalendarDays, Pencil, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AddCalendarEventModal from '@/components/AddEvent';
-import { format, startOfWeek, endOfWeek, parseISO } from 'date-fns';
+import { format, startOfWeek, endOfWeek, parseISO, addMonths, subMonths } from 'date-fns';
 import Week from '@/components/dashboard/calendar/Week';
 import Day from '@/components/dashboard/calendar/Day';
 import Month from '@/components/dashboard/calendar/Month';
@@ -35,8 +35,15 @@ export default function Calendar({ initialData, initialWeekData }: CalendarProps
   const [viewMode, setViewMode] = useState('week');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [events, setEvents] = useState<CalendarEventType[]>(initialData);
-
   const [weekEvents, setWeekEvents] = useState<CalendarEventType[]>(initialWeekData);
+
+  const handlePreviousMonth = () => {
+    setCurrentDate(subMonths(currentDate, 1));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate(addMonths(currentDate, 1));
+  };
 
   const handleAddEvent = (eventData: EventData) => {
     const startDate =
@@ -70,12 +77,18 @@ export default function Calendar({ initialData, initialWeekData }: CalendarProps
     <div className="p-6 relative">
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-4">
+          <Button variant="ghost" className="p-2 hover:bg-gray-100" onClick={handlePreviousMonth}>
+            <ChevronLeft className="w-5 h-5" />
+          </Button>
           <h1 className="text-xl font-medium text-[#333333]">
             {format(startOfWeek(currentDate), 'MMMM d, yyyy')} -{' '}
             {format(endOfWeek(currentDate), 'MMMM d, yyyy')}
           </h1>
+          <Button variant="ghost" className="p-2 hover:bg-gray-100" onClick={handleNextMonth}>
+            <ChevronRight className="w-5 h-5" />
+          </Button>
           <Button
-            className="bg-white border rounded-md p-2 hover:bg-gray-50 "
+            className="bg-white border rounded-md p-2 hover:bg-gray-50"
             onClick={() => setIsAddModalOpen(true)}
           >
             <div className="relative w-5 h-5">
