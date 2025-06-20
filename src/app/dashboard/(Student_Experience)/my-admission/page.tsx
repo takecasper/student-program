@@ -10,783 +10,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Check, Database, Plus, Scissors, SendHorizonal, X } from 'lucide-react';
-import { Label } from '@/components/ui/label';
+import { Check, Plus, X } from 'lucide-react';
 import Image from 'next/image';
-import { countries } from '@/lib/countries';
-import Flag from 'react-world-flags';
 import CasperPrepare from '@/components/addmission/Prepare';
-
-interface Step {
-  id: number;
-  title: string;
-  description: string;
-  infoText?: string;
-  component: React.FC<StepProps>;
-}
-
-interface StepProps {
-  formData: FormData;
-  onChange: (value: string) => void;
-  currentStep: number;
-}
-
-interface FormData {
-  country: string;
-  admissionCycle: string;
-  programType: string;
-  schools: string[];
-  testDate?: {
-    CASPER?: { date: string; time: string };
-    DUET?: { date: string; time: string };
-  };
-  payment?: PaymentFormData;
-}
-
-// Create separate components for each step
-const CountryStep: React.FC<StepProps> = ({ formData, onChange }) => (
-  <Select value={formData.country} onValueChange={onChange}>
-    <SelectTrigger className="w-full bg-white border-gray-200 focus:ring-2 focus:ring-[#00a59b] focus:border-transparent">
-      <SelectValue placeholder="Select a country" />
-    </SelectTrigger>
-    <SelectContent>
-      {countries.map(country => (
-        <SelectItem key={country.code} value={country.code}>
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-4 flex items-center overflow-hidden">
-              <Flag
-                code={country.code}
-                height={16}
-                width={24}
-                className="object-cover rounded-[2px]"
-                fallback={<span className="text-gray-400">🏳️</span>}
-              />
-            </div>
-            <span>{country.name}</span>
-          </div>
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
-);
-
-const AdmissionCycleStep: React.FC<StepProps> = ({ formData, onChange }) => {
-  const handleCycleChange = (value: string) => {
-    // If the same value is clicked again, deselect it
-    if (formData.admissionCycle === value) {
-      onChange('');
-    } else {
-      onChange(value);
-    }
-  };
-
-  return (
-    <div className="space-y-4">
-      <div className="bg-[#EC7A000D] p-4 rounded-[10px] text-xs">
-        <p>
-          If you&apos;re applying to Medicine programs (Including Osteopathic). Select the
-          admissions cycle ending in the year of your program start date.
-        </p>
-      </div>
-
-      <div className="flex items-start gap-2">
-        {['2025-2026', '2026-2027'].map(cycle => (
-          <div
-            key={cycle}
-            className={`border rounded-md p-3 cursor-pointer hover:border-[#00a59b] transition-colors ${
-              formData.admissionCycle === cycle
-                ? 'border-[#00a59b] bg-[#00a59b]/5'
-                : 'border-[#d9d9d9]'
-            }`}
-            onClick={() => handleCycleChange(cycle)}
-          >
-            <div className="flex items-center space-x-2">
-              <div
-                className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                  formData.admissionCycle === cycle
-                    ? 'border-[#00a59b] bg-[#00a59b]'
-                    : 'border-gray-300'
-                }`}
-              >
-                {formData.admissionCycle === cycle && <Check className="h-3 w-3 text-white" />}
-              </div>
-              <Label className="cursor-pointer select-none">{cycle}</Label>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// Add these components after the existing step components
-
-interface ProgramOptionProps {
-  id: string;
-  label: string;
-  selected: boolean;
-  onSelect: (value: string) => void;
-}
-
-const ProgramOption: React.FC<ProgramOptionProps> = ({ id, label, selected, onSelect }) => {
-  const handleClick = () => {
-    // If already selected, deselect it, otherwise select it
-    onSelect(selected ? '' : id);
-  };
-
-  return (
-    <div
-      className={`border rounded-md p-3 cursor-pointer hover:border-[#00a59b] transition-colors ${
-        selected ? 'border-[#00a59b] bg-[#00a59b]/5' : 'border-[#d9d9d9]'
-      }`}
-      onClick={handleClick}
-    >
-      <div className="flex items-center space-x-2">
-        <div
-          className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-            selected ? 'border-[#00a59b] bg-[#00a59b]' : 'border-gray-300'
-          }`}
-        >
-          {selected && <Check className="h-3 w-3 text-white" />}
-        </div>
-        <Label className="cursor-pointer select-none">{label}</Label>
-      </div>
-    </div>
-  );
-};
-
-const ProgramTypeStep: React.FC<StepProps> = ({ formData, onChange }) => {
-  const handleProgramChange = (value: string) => {
-    // If the same value is clicked again, deselect it
-    if (formData.programType === value) {
-      onChange('');
-    } else {
-      onChange(value);
-    }
-  };
-
-  return (
-    <div className="space-y-6">
-      <div>
-        <h4 className="font-medium text-[#333333] mb-3">GRADUATE MEDICAL EDUCATION</h4>
-        <div className="grid grid-cols-2 gap-3">
-          {[
-            { id: 'anesthesiology', label: 'Anesthesiology' },
-            { id: 'obgyn', label: 'OBGYN' },
-            { id: 'internal-medicine', label: 'Internal Medicine' },
-            { id: 'surgery', label: 'Surgery' },
-          ].map(program => (
-            <ProgramOption
-              key={program.id}
-              id={program.id}
-              label={program.label}
-              selected={formData.programType === program.id}
-              onSelect={handleProgramChange}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const SchoolStep: React.FC<StepProps> = ({ formData, onChange }) => {
-  const handleSchoolChange = (schoolId: string) => {
-    let newSchools = [...formData.schools];
-
-    if (schoolId === 'all') {
-      // Toggle all schools
-      const allSchoolIds = ['sam-houston', 'san-juan'];
-      if (formData.schools.length === allSchoolIds.length) {
-        newSchools = []; // Deselect all
-      } else {
-        newSchools = allSchoolIds; // Select all
-      }
-    } else {
-      // Toggle individual school
-      if (newSchools.includes(schoolId)) {
-        newSchools = newSchools.filter(id => id !== schoolId);
-      } else {
-        newSchools.push(schoolId);
-      }
-    }
-
-    onChange(JSON.stringify(newSchools));
-  };
-
-  const allSchoolIds = ['sam-houston', 'san-juan'];
-  const isAllSelected = allSchoolIds.every(id => formData.schools.includes(id));
-
-  return (
-    <div className="space-y-4">
-      <div className="bg-[#fcedca] p-4 rounded-md text-sm">
-        <p>
-          The program type you have selected includes up to 8 distributions as part of the base fee.
-          Additional distributions beyond that are $ 15.00.
-        </p>
-      </div>
-
-      <div className="space-y-3">
-        {[
-          { id: 'all', name: 'Select All Schools', selected: isAllSelected },
-          {
-            id: 'sam-houston',
-            name: 'Sam Houston State University',
-            selected: formData.schools.includes('sam-houston'),
-          },
-          {
-            id: 'san-juan',
-            name: 'San Juan Bautista School of Medicine',
-            selected: formData.schools.includes('san-juan'),
-          },
-        ].map(school => (
-          <div
-            key={school.id}
-            className={`border rounded-md p-3 cursor-pointer hover:border-[#00a59b] transition-colors ${
-              school.selected ? 'border-[#00a59b] bg-[#00a59b]/5' : 'border-[#d9d9d9]'
-            }`}
-            onClick={() => handleSchoolChange(school.id)}
-          >
-            <div className="flex items-center space-x-2">
-              <div
-                className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                  school.selected ? 'border-[#00a59b] bg-[#00a59b]' : 'border-gray-300'
-                }`}
-              >
-                {school.selected && <Check className="h-3 w-3 text-white" />}
-              </div>
-              <Label className="cursor-pointer select-none">{school.name}</Label>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// Add these interfaces first
-interface TimeSlot {
-  time: string;
-  available: boolean;
-}
-
-interface DaySlot {
-  day: string;
-  date: number;
-  slots: number;
-}
-
-// Add the TestDateStep component after other step components
-const TestDateStep: React.FC<StepProps> = ({ formData, onChange }) => {
-  const [selectedTest, setSelectedTest] = useState<'CASPER' | 'DUET'>('CASPER');
-  const [selectedMonth, setSelectedMonth] = useState('March 2025');
-  const [selectedDate, setSelectedDate] = useState<number | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
-
-  const days: DaySlot[] = [
-    { day: 'Mon', date: 11, slots: 3 },
-    { day: 'Tue', date: 12, slots: 7 },
-    { day: 'Wed', date: 13, slots: 7 },
-    { day: 'Thur', date: 14, slots: 7 },
-  ];
-
-  const timeSlots: TimeSlot[] = [
-    { time: '7:00 AM - 8:00 AM', available: true },
-    { time: '9:00 AM - 10:00 AM', available: true },
-    { time: '11:00 AM - 12 PM', available: true },
-  ];
-
-  // Handle date/time selection
-  const handleDateTimeSelection = () => {
-    if (selectedDate && selectedTime) {
-      const currentTestDates = formData.testDate || {};
-      const testDate = {
-        ...currentTestDates,
-        [selectedTest]: {
-          date: `${selectedMonth} ${selectedDate}`,
-          time: selectedTime,
-        },
-      };
-      onChange(JSON.stringify(testDate));
-
-      // Reset selections after saving
-      setSelectedDate(null);
-      setSelectedTime(null);
-    }
-  };
-
-  return (
-    <div className="space-y-6">
-      <div className="bg-[#FFF9F0] p-4 rounded-[10px] text-xs">
-        <p>
-          For this program which you have applied request to take Casper and Duet, Please select the
-          tests you want to take and choose Date & Time for each.
-        </p>
-      </div>
-
-      <div className="flex gap-2">
-        <Button
-          variant={selectedTest === 'CASPER' ? 'default' : 'outline'}
-          className={`rounded-full ${
-            formData.testDate?.CASPER
-              ? 'bg-[#70C0B8] text-white border-[#00A59B] border-2' // Saved state - teal
-              : selectedTest === 'CASPER'
-                ? 'bg-[#364699] text-white' // Active state - blue
-                : 'border-[#d9d9d9] text-[#333333]' // Default state
-          }`}
-          onClick={() => {
-            setSelectedTest('CASPER');
-            setSelectedDate(null);
-            setSelectedTime(null);
-          }}
-        >
-          {formData.testDate?.CASPER && <Check className="h-4 w-4 mr-2" />}
-          CASPER
-        </Button>
-        <Button
-          variant={selectedTest === 'DUET' ? 'default' : 'outline'}
-          className={`rounded-full ${
-            formData.testDate?.DUET
-              ? 'bg-[#70C0B8] text-white border-[#00A59B] border-2' // Saved state - teal
-              : selectedTest === 'DUET'
-                ? 'bg-[#364699] text-white' // Active state - blue
-                : 'border-[#d9d9d9] text-[#333333]' // Default state
-          }`}
-          onClick={() => {
-            setSelectedTest('DUET');
-            setSelectedDate(null);
-            setSelectedTime(null);
-          }}
-        >
-          {formData.testDate?.DUET && <Check className="h-4 w-4 mr-2" />}
-          DUET
-        </Button>
-      </div>
-
-      {/* Show current selections */}
-      {(formData.testDate?.CASPER || formData.testDate?.DUET) && (
-        <div className="bg-gray-50 p-3 rounded-lg text-sm">
-          <h4 className="font-medium mb-2">Selected Tests:</h4>
-          {formData.testDate?.CASPER && (
-            <div>
-              CASPER: {formData.testDate.CASPER.date} - {formData.testDate.CASPER.time}
-            </div>
-          )}
-          {formData.testDate?.DUET && (
-            <div>
-              DUET: {formData.testDate.DUET.date} - {formData.testDate.DUET.time}
-            </div>
-          )}
-        </div>
-      )}
-
-      <div className="space-y-4">
-        <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-          <SelectTrigger className="w-[200px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="March 2025">March 2025</SelectItem>
-            <SelectItem value="April 2025">April 2025</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <div className="grid grid-cols-4 gap-3">
-          {days.map(day => (
-            <div
-              key={day.date}
-              className={`border rounded-lg p-3 text-center cursor-pointer hover:border-[#00a59b] ${
-                selectedDate === day.date ? 'border-[#00a59b] bg-[#00a59b]/5' : ''
-              }`}
-              onClick={() => setSelectedDate(day.date)}
-            >
-              <div className="text-sm font-medium">{day.day}</div>
-              <div className="text-lg font-medium">{day.date}</div>
-              <div className="text-xs text-[#00a59b]">{day.slots} Slot</div>
-            </div>
-          ))}
-        </div>
-
-        {selectedDate && (
-          <div className="space-y-2">
-            {timeSlots.map(slot => (
-              <div
-                key={slot.time}
-                className={`border rounded-lg p-3 cursor-pointer hover:border-[#00a59b] flex justify-between items-center ${
-                  selectedTime === slot.time ? 'border-[#00a59b] bg-[#00a59b]/5' : ''
-                }`}
-                onClick={() => setSelectedTime(slot.time)}
-              >
-                <span>{slot.time}</span>
-                <span className="text-sm text-[#00a59b]">Available</span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {selectedDate && selectedTime && (
-          <Button
-            onClick={handleDateTimeSelection}
-            className="w-full bg-[#364699] hover:bg-[#253170]"
-          >
-            Save {selectedTest} Schedule
-          </Button>
-        )}
-      </div>
-    </div>
-  );
-};
-
-// Add this interface for payment form
-interface PaymentFormData {
-  cardNumber: string;
-  cardholderName: string;
-  expiryDate: string;
-  cvv: string;
-  saveCard: boolean;
-}
-
-// Update the PaymentStep component
-const PaymentStep: React.FC<StepProps> = ({ formData, onChange }) => {
-  const [paymentData, setPaymentData] = useState<PaymentFormData>({
-    cardNumber: '',
-    cardholderName: '',
-    expiryDate: '',
-    cvv: '',
-    saveCard: false,
-  });
-
-  // Initialize from form data
-  useEffect(() => {
-    if (formData.payment) {
-      setPaymentData(formData.payment);
-    }
-  }, [formData.payment]);
-
-  const handleInputChange = (field: keyof PaymentFormData) => (value: string | boolean) => {
-    const newPaymentData = {
-      ...paymentData,
-      [field]: value,
-    };
-    setPaymentData(newPaymentData);
-    onChange(JSON.stringify(newPaymentData));
-  };
-
-  return (
-    <div className="space-y-4">
-      <div className="space-y-4">
-        <div>
-          <Label htmlFor="cardNumber">Card Number</Label>
-          <input
-            id="cardNumber"
-            type="text"
-            placeholder="1234 5678 9012 3456"
-            value={paymentData.cardNumber}
-            onChange={e => handleInputChange('cardNumber')(e.target.value)}
-            className="w-full p-3 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#00a59b] focus:border-transparent"
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="cardholderName">Cardholder Name</Label>
-          <input
-            id="cardholderName"
-            type="text"
-            placeholder="John Doe"
-            value={paymentData.cardholderName}
-            onChange={e => handleInputChange('cardholderName')(e.target.value)}
-            className="w-full p-3 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#00a59b] focus:border-transparent"
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="expiryDate">Expiry Date</Label>
-            <input
-              id="expiryDate"
-              type="text"
-              placeholder="MM/YY"
-              value={paymentData.expiryDate}
-              onChange={e => handleInputChange('expiryDate')(e.target.value)}
-              className="w-full p-3 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#00a59b] focus:border-transparent"
-            />
-          </div>
-          <div>
-            <Label htmlFor="cvv">CVV</Label>
-            <input
-              id="cvv"
-              type="text"
-              placeholder="123"
-              value={paymentData.cvv}
-              onChange={e => handleInputChange('cvv')(e.target.value)}
-              className="w-full p-3 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#00a59b] focus:border-transparent"
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <input
-            id="saveCard"
-            type="checkbox"
-            checked={paymentData.saveCard}
-            onChange={e => handleInputChange('saveCard')(e.target.checked)}
-            className="rounded border-gray-300 text-[#00a59b] focus:ring-[#00a59b]"
-          />
-          <Label htmlFor="saveCard" className="text-sm">
-            Save card for future payments
-          </Label>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Add a new component for the final success screen
-const PurchaseSuccessScreen: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  return (
-    <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-      {/* Success Icon */}
-      <div className="w-16 h-16 bg-[#00a59b] rounded-full flex items-center justify-center mb-6">
-        <Check className="w-8 h-8 text-white" />
-      </div>
-
-      {/* Title */}
-      <h2 className="text-xl font-semibold text-[#333333] mb-2">Altus Suite Test</h2>
-      <h3 className="text-xl font-semibold text-[#333333] mb-4">Reservation Complete</h3>
-
-      {/* Description */}
-      <p className="text-sm text-gray-600 mb-6 max-w-sm leading-relaxed">
-        A confirmation email and receipt will be sent to your inbox. You will now be taken to the
-        Altus Suite Homepage with information on your assessments.
-      </p>
-
-      {/* Purchase Summary */}
-      <div className="w-full mb-6">
-        <h4 className="text-sm font-medium text-left mb-3">Purchase Summary:</h4>
-
-        {/* Test Items */}
-        <div className="space-y-3 mb-4">
-          <div className="flex items-center gap-3">
-            <div className="w-5 h-5 bg-[#F5F5F5] rounded-full flex items-center justify-center">
-              <span className="text-xs">📅</span>
-            </div>
-            <div className="text-left">
-              <p className="text-sm">12 Oct 2025 10:30 AM - 12:30 PM</p>
-              <p className="text-sm font-medium">Casper</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="w-5 h-5 bg-[#F5F5F5] rounded-full flex items-center justify-center">
-              <span className="text-xs">📅</span>
-            </div>
-            <div className="text-left">
-              <p className="text-sm">24 Oct 2025 10:30 AM - 12:30 PM</p>
-              <p className="text-sm font-medium">Duet</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Total Amount */}
-        <div className="bg-[#EBEBFF] p-4 rounded-lg">
-          <p className="text-sm text-gray-600">TOTAL AMOUNT</p>
-          <p className="text-xl font-semibold">85.00 USD</p>
-        </div>
-      </div>
-
-      {/* Accommodation Note */}
-      <p className="text-xs text-gray-500 mb-6 max-w-sm">
-        If you require accommodations for your test, please visit accommodations for more
-        information.
-      </p>
-
-      {/* Done Button */}
-      <Button className="w-32 rounded-full bg-[#364699] hover:bg-[#253170]" onClick={onClose}>
-        DONE
-      </Button>
-    </div>
-  );
-};
-
-// Update the ReservationComplete component to accept the setter as a prop
-const ReservationComplete: React.FC<{
-  onClose: () => void;
-  onPurchase: () => void;
-  onGoBack: () => void;
-}> = ({ onClose, onPurchase, onGoBack }) => {
-  const handlePurchase = () => {
-    onPurchase();
-  };
-
-  return (
-    <div>
-      <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold text-[#364699]">Apply New</h2>
-        <Button variant="ghost" size="sm" onClick={onClose}>
-          <X className="h-4 w-4" />
-        </Button>
-      </div>
-      <div className="bg-white  rounded-lg p-6 space-y-6">
-        <div className="space-y-4 border rounded-t-2xl rounded-b-2xl">
-          <div>
-            <div className="space-y-3 border-b border-l border-r rounded-b-2xl rounded-t-2xl">
-              <div className="flex flex-col items-start border-b p-2">
-                <h3 className="font-medium text-[#333333]">Altus Suite Test Reservation Summary</h3>
-                <p className="text-sm text-gray-600">US - Medicine (CSP - 10111)</p>
-              </div>
-
-              {/* Show scheduled tests */}
-              <div className="flex items-center gap-3 p-2 border-b">
-                <div className="w-5 h-5 bg-[#F5F5F5] rounded-full flex items-center justify-center">
-                  <span className="text-xs">📅</span>
-                </div>
-                <div>
-                  <p className="text-sm">12 Oct 2025 10:30 AM - 12:30 PM</p>
-                  <p className="text-sm font-medium">Casper</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 p-2">
-                <div className="w-5 h-5 bg-[#F5F5F5] rounded-full flex items-center justify-center">
-                  <span className="text-xs">📅</span>
-                </div>
-                <div>
-                  <p className="text-sm">24 Oct 2025 10:30 AM - 12:30 PM</p>
-                  <p className="text-sm font-medium">Duet</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Fee Breakdown */}
-          <div className="space-y-4 px-4 ">
-            <div className="bg-[#EBEBFF] p-4 rounded-lg text-center">
-              <p className="text-sm text-gray-600">TOTAL AMOUNT</p>
-              <p className="text-xl font-semibold">85.00 USD</p>
-            </div>
-
-            <div className="rounded-lg overflow-hidden">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="text-left text-sm font-medium text-gray-600 p-3">
-                      Fee Breakdown
-                    </th>
-                    <th className="text-right text-sm font-medium text-gray-600 p-3">Amount</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y">
-                  <tr>
-                    <td className="p-3">
-                      <div className="flex items-center gap-2 text-sm">
-                        <span>
-                          <Database className="w-4 h-4" />
-                        </span>
-                        Base Test Fee
-                      </div>
-                      <div className="text-xs text-gray-600 mt-1 ml-6">
-                        US - Medicine (CSP - 10111)
-                      </div>
-                    </td>
-                    <td className="text-right p-3 text-sm">85.00 USD</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3">
-                      <div className="text-sm flex items-center gap-2">
-                        <span>
-                          <SendHorizonal className="w-4 h-4" />
-                        </span>
-                        Included Distribution (s)
-                      </div>
-                      <div className="text-xs text-gray-600 mt-1 ml-6">
-                        US - Alabama College of Osteopathic Medicine
-                      </div>
-                    </td>
-                    <td className="text-right p-3 text-sm">00.00 USD</td>
-                  </tr>
-                  <tr>
-                    <td className="p-3">
-                      <div className="text-sm flex items-center gap-2">
-                        <span>
-                          <Scissors className="w-4 h-4" />
-                        </span>
-                        Discount (s)
-                      </div>
-                      <div className="text-xs text-gray-600 mt-1 ml-6">
-                        Fee Assistance Program Discount
-                      </div>
-                    </td>
-                    <td className="text-right p-3 text-sm">-00.00 USD</td>
-                  </tr>
-                  <tr className="flex items-end font-medium ">
-                    <td className="p-3 text-sm">TOTAL</td>
-                    <td className=" p-3 text-sm">85.00 USD</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex gap-3 pt-4">
-          <Button
-            variant="outline"
-            className="flex-1 rounded-full border-gray-300"
-            onClick={onGoBack}
-          >
-            Go Back
-          </Button>
-          <Button
-            className="flex-1 rounded-full bg-[#364699] hover:bg-[#253170]"
-            onClick={handlePurchase}
-          >
-            Purchase
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Remove the SummaryStep component and keep only 6 steps
-const ADMISSION_STEPS: Step[] = [
-  {
-    id: 1,
-    title: 'Select Country',
-    description: 'Choose your country of residence',
-    component: CountryStep,
-  },
-  {
-    id: 2,
-    title: 'Admission Cycle',
-    description: 'Select your admission cycle',
-    component: AdmissionCycleStep,
-  },
-  {
-    id: 3,
-    title: 'Program Type',
-    description: 'Choose your program type',
-    component: ProgramTypeStep,
-  },
-  {
-    id: 4,
-    title: 'Schools',
-    description: 'Select schools to send your results',
-    component: SchoolStep,
-  },
-  {
-    id: 5,
-    title: 'Test Date & Time',
-    description: 'Schedule your test sessions',
-    component: TestDateStep,
-  },
-  {
-    id: 6,
-    title: 'Payment',
-    description: 'Enter payment information',
-    component: PaymentStep,
-  },
-];
+import { FormData, Step } from './types';
+import { ADMISSION_STEPS } from './constants/steps';
+import { filters, tests } from './data/mockData';
+import PurchaseSuccessScreen from './components/PurchaseSuccessScreen';
+import ReservationComplete from './components/ReservationComplete';
+import DocumentReviewScreen from './components/DocumentReviewScreen';
 
 export default function AdmissionContent() {
   const [activeFilter, setActiveFilter] = useState('ALL');
@@ -796,7 +28,6 @@ export default function AdmissionContent() {
   const [hideSteps, setHideSteps] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     country: '',
-    admissionCycle: '',
     programType: '',
     schools: [],
     testDate: undefined,
@@ -805,29 +36,7 @@ export default function AdmissionContent() {
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
   const [showPrepare, setShowPrepare] = useState<boolean>(false);
   const [showFinalSuccess, setShowFinalSuccess] = useState(false);
-
-  const filters = ['ALL', 'CASPER', 'DUET', 'SNAPSHOT'];
-
-  const tests = [
-    {
-      id: 1,
-      type: 'CASPER',
-      date: 'March 25, 2025',
-      startTime: '11:00 AM',
-      endTime: '12:00 PM',
-      status: 'NOT STARTED',
-      image: '/category1.png',
-    },
-    {
-      id: 2,
-      type: 'DUET',
-      date: 'March 25, 2025',
-      startTime: '11:00 AM',
-      endTime: '12:00 PM',
-      status: 'NOT STARTED',
-      image: '/category1.png',
-    },
-  ];
+  const [showDocumentReview, setShowDocumentReview] = useState(false);
 
   // Filter tests based on active filter
   const filteredTests =
@@ -843,6 +52,7 @@ export default function AdmissionContent() {
     setShowSuccessScreen(false);
     setShowFinalSuccess(false);
     setHideSteps(false);
+    setShowDocumentReview(false);
   };
 
   const handleStepChange = (field: keyof FormData) => (value: string) => {
@@ -863,10 +73,9 @@ export default function AdmissionContent() {
     const StepComponent = step.component;
     const fieldKey = {
       1: 'country',
-      2: 'admissionCycle',
-      3: 'programType',
-      4: 'schools',
-      5: 'testDate',
+      2: 'programType',
+      3: 'schools',
+      4: 'testDate',
       6: 'payment',
     }[step.id] as keyof FormData;
 
@@ -876,25 +85,36 @@ export default function AdmissionContent() {
         case 1:
           return !!formData.country && formData.country.trim() !== '';
         case 2:
-          return !!formData.admissionCycle && formData.admissionCycle.trim() !== '';
-        case 3:
           return !!formData.programType && formData.programType.trim() !== '';
-        case 4:
+        case 3:
           return formData.schools.length > 0;
-        case 5:
+        case 4:
           if (!formData.testDate) return false;
           const hasValidTest = Object.values(formData.testDate).some(
             test => test && test.date && test.time,
           );
           return hasValidTest;
+        case 5:
+          // Order Summary step - always valid since it's just showing summary
+          return true;
         case 6:
-          return (
-            !!formData.payment &&
-            formData.payment.cardNumber.trim() !== '' &&
-            formData.payment.cardholderName.trim() !== '' &&
-            formData.payment.expiryDate.trim() !== '' &&
-            formData.payment.cvv.trim() !== ''
-          );
+          // Payment Type step - check if payment data exists and is valid
+          if (!formData.payment) return false;
+
+          const paymentData = formData.payment;
+          if (paymentData.type === 'credit') {
+            // For credit card, check if all required fields are filled
+            return (
+              paymentData.cardNumber?.trim() !== '' &&
+              paymentData.cardholderName?.trim() !== '' &&
+              paymentData.expiryDate?.trim() !== '' &&
+              paymentData.cvv?.trim() !== ''
+            );
+          } else if (paymentData.type === 'assistance') {
+            // For fee assistance, check if file is uploaded
+            return !!paymentData.file;
+          }
+          return false;
         default:
           return false;
       }
@@ -904,7 +124,11 @@ export default function AdmissionContent() {
     const handleStepComplete = () => {
       if (step.id === ADMISSION_STEPS.length) {
         // After payment step, show summary and hide steps
-        setShowSuccessScreen(true);
+        if (formData.payment?.type === 'credit') {
+          setShowDocumentReview(true);
+        } else {
+          setShowSuccessScreen(true);
+        }
         setHideSteps(true);
       } else {
         setCurrentStep(prev => prev + 1);
@@ -962,7 +186,7 @@ export default function AdmissionContent() {
               <div className={`pt-4 ${isCurrentStep ? 'border-[#00a59b]' : 'border-[#d9d9d9]'}`}>
                 <StepComponent
                   formData={formData}
-                  onChange={handleStepChange(fieldKey)}
+                  onChange={fieldKey ? handleStepChange(fieldKey) : () => {}}
                   currentStep={currentStep}
                 />
               </div>
@@ -974,7 +198,7 @@ export default function AdmissionContent() {
                   onClick={handleStepComplete}
                   disabled={!isStepValid()}
                 >
-                  Next
+                  {step.id === 5 ? 'Checkout' : 'Next'}
                 </Button>
               </div>
             </>
@@ -1007,7 +231,7 @@ export default function AdmissionContent() {
   const handleGoBackToPayment = () => {
     setShowSuccessScreen(false);
     setHideSteps(false);
-    setCurrentStep(6); // Go back to payment step
+    setCurrentStep(5); // Go back to payment step
   };
 
   return showPrepare ? (
@@ -1099,6 +323,8 @@ export default function AdmissionContent() {
             <div className="p-6">
               {showFinalSuccess ? (
                 <PurchaseSuccessScreen onClose={handleCloseSidebar} />
+              ) : showDocumentReview ? (
+                <DocumentReviewScreen onClose={handleCloseSidebar} formData={formData} />
               ) : showSuccessScreen ? (
                 <ReservationComplete
                   onClose={handleCloseSidebar}
@@ -1122,7 +348,7 @@ export default function AdmissionContent() {
                         </Button>
                       </div>
 
-                      <div className="space-y-6">
+                      <div className="space-y-6 pr-10">
                         {ADMISSION_STEPS.map(step => renderStep(step))}
                       </div>
                     </div>

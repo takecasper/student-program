@@ -10,13 +10,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { cn } from '@/lib/utils';
-// import { standardQuestions } from '../constants/questions';
 import Image from 'next/image';
 import QuestionDrawer from './QuestionDrawer';
+import CasperDrawer from './CasperDrawer';
 
 const SnapshotForm = () => {
-  const [selectedTest, setSelectedTest] = useState<'CASPER' | 'SNAPSHOT'>('CASPER');
+  const [isCasperDrawerOpen, setIsCasperDrawerOpen] = useState(false);
   const [editingTest, setEditingTest] = useState<number | null>(null);
   const [testNames, setTestNames] = useState(['Test 1', 'Test 2']);
   const [numberOfQuestions, setNumberOfQuestions] = useState('3');
@@ -91,35 +90,24 @@ const SnapshotForm = () => {
         onClose={() => setIsDrawerOpen(false)}
         numberOfQuestions={parseInt(numberOfQuestions)}
       />
-      <div className="space-y-4 pb-4  pl-4">
-        <h1 className="text-[16px] font-semibold">PROGRAM 1 SETTINGS</h1>
-        <div className="flex gap-2">
+      <CasperDrawer
+        open={isCasperDrawerOpen}
+        onClose={() => setIsCasperDrawerOpen(false)}
+        onComplete={() => setIsCasperDrawerOpen(false)}
+      />
+      <div className="space-y-4 pb-4 pl-4">
+        <div className="flex items-center justify-between">
+          <h1 className="text-[16px] font-semibold">PROGRAM 1 SETTINGS</h1>
           <Button
-            variant={selectedTest === 'CASPER' ? 'default' : 'outline'}
-            className={cn(
-              'h-[30px] hover:bg-[#364699] cursor-pointer hover:text-white rounded-full px-6',
-              {
-                'bg-[#364699] text-white': selectedTest === 'CASPER',
-              },
-            )}
-            onClick={() => setSelectedTest('CASPER')}
+            variant="outline"
+            className="h-[30px] hover:bg-[#364699] cursor-pointer hover:text-white rounded-full px-6"
+            onClick={() => setIsCasperDrawerOpen(true)}
           >
-            CASPER
-          </Button>
-          <Button
-            variant={selectedTest === 'SNAPSHOT' ? 'default' : 'outline'}
-            className={cn(
-              'h-[30px] hover:bg-[#364699] cursor-pointer hover:text-white rounded-full px-6',
-              {
-                'bg-[#364699] text-white': selectedTest === 'SNAPSHOT',
-              },
-            )}
-            onClick={() => setSelectedTest('SNAPSHOT')}
-          >
-            SNAPSHOT
+            Configure CASPER
           </Button>
         </div>
-        <div className="flex w-full ">
+
+        <div className="flex w-full">
           {/* left content */}
           <div className="w-[350px] min-w-[350px] py-4 pr-6 border-r border-gray-200">
             <div className="font-medium text-[#333333DE] text-sm">
@@ -249,96 +237,56 @@ const SnapshotForm = () => {
                 Preview
               </Button>
             </div>
-            {selectedTest === 'SNAPSHOT' ? (
-              <div className="flex flex-col items-start gap-10 space-y-6">
-                <div className="flex flex-col gap-2  flex-1">
-                  <h1>Intro</h1>
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleVideoUpload}
-                    accept="video/*"
-                    className="hidden"
-                  />
-                  {videoPreview ? (
-                    <div className="relative w-[400px]">
-                      <video src={videoPreview} controls className="w-full rounded-[10px]" />
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        className="absolute top-2 right-2"
-                        onClick={() => {
-                          setVideoPreview(null);
-                          setIntroVideo(null);
-                        }}
-                      >
-                        Remove
-                      </Button>
-                    </div>
-                  ) : (
-                    <div
-                      className="flex items-center justify-center border-2 border-dashed rounded-[10px] w-[350px] h-[150px] bg-gray-100 cursor-pointer hover:bg-gray-50"
-                      onClick={handleVideoClick}
+            <div className="flex flex-col items-start gap-10 space-y-6">
+              <div className="flex flex-col gap-2 flex-1">
+                <h1>Intro</h1>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleVideoUpload}
+                  accept="video/*"
+                  className="hidden"
+                />
+                {videoPreview ? (
+                  <div className="relative w-[400px]">
+                    <video src={videoPreview} controls className="w-full rounded-[10px]" />
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="absolute top-2 right-2"
+                      onClick={() => {
+                        setVideoPreview(null);
+                        setIntroVideo(null);
+                      }}
                     >
-                      <div className="text-center">
-                        <Image
-                          src="/svgs/plus.svg"
-                          alt="plus"
-                          width={24}
-                          height={24}
-                          className="mx-auto mb-2"
-                        />
-                        <p className="text-gray-500">Upload Intro Video</p>
-                      </div>
+                      Remove
+                    </Button>
+                  </div>
+                ) : (
+                  <div
+                    className="flex items-center justify-center border-2 border-dashed rounded-[10px] w-[350px] h-[150px] bg-gray-100 cursor-pointer hover:bg-gray-50"
+                    onClick={handleVideoClick}
+                  >
+                    <div className="text-center">
+                      <Image
+                        src="/svgs/plus.svg"
+                        alt="plus"
+                        width={24}
+                        height={24}
+                        className="mx-auto mb-2"
+                      />
+                      <p className="text-gray-500">Upload Intro Video</p>
                     </div>
-                  )}
-                </div>
-                <div className="flex flex-col gap-2  flex-1">
-                  <h1>Add Questions</h1>
-                  {renderStandardQuestions()}
-                </div>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="space-y-6">{/* CASPER content */}</div>
-            )}
+              <div className="flex flex-col gap-2 flex-1">
+                <h1>Add Questions</h1>
+                {renderStandardQuestions()}
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* right content - question details */}
-        {/* {selectedQuestion && selectedSource !== 'mix' && (
-          <aside className="w-[300px] p-4 border-l border-gray-200">
-            <div className="space-y-4">
-              <h2 className="text-[16px] font-semibold">Select Question {selectedQuestion.id}</h2>
-              <p>Standard Question Bank (6)</p>
-              {Array.from({ length: 6 }).map((_, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-center py-2 pl-2 gap-2 border border-gray-200 rounded-lg bg-white"
-                >
-                  <div className="flex items-center justify-center h-[46px] w-[56px] bg-[#F5F5F5] rounded-md">
-                    <Image src="/svgs/play.svg" alt="Play video" width={32} height={32} />
-                  </div>
-                  <div>
-                    <p className="text-sm text-[#333333DE]">{selectedQuestion.question}</p>
-                    <div className="flex gap-1">
-                      {selectedQuestion.tags.map((tag, tagIndex) => (
-                        <span
-                          key={tagIndex}
-                          className={cn(
-                            'text-white text-xs px-2 py-0.5 rounded',
-                            tag === 'Communication' ? 'bg-[#00BFB3]' : 'bg-[#F5A623]',
-                          )}
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </aside>
-        )} */}
       </div>
     </div>
   );
