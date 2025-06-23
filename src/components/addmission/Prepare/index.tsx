@@ -17,7 +17,7 @@ export default function CasperPrepare() {
   const [showCheckTab, setShowCheckTab] = useState<boolean>(false);
   const [showTestInterface, setShowTestInterface] = useState<boolean>(false);
   const [showCongratulations, setShowCongratulations] = useState(false);
-  const [checkStage, setCheckStage] = useState(1);
+  const [checkStage, setCheckStage] = useState(0);
 
   const [completedChecks, setCompletedChecks] = useState<(boolean | string)[]>([
     false, // Browser & Internet Speed Test
@@ -39,7 +39,8 @@ export default function CasperPrepare() {
     const newChecks = [...completedChecks];
     newChecks[0] = true;
     setCompletedChecks(newChecks);
-    setCheckStage(1); // Move to next stage
+    // Remove the automatic stage advancement - let user click manually
+    // setCheckStage(1); // Move to next stage
   };
 
   // If showing test interface, render it instead
@@ -208,7 +209,7 @@ export default function CasperPrepare() {
             <div className="w-full md:w-96 py-6 bg-white text-gray-800 shrink-0 mr-5">
               <h1 className="mt-2  text-xl font-semibold mb-4 text-[#333333DE]">System Check</h1>
               {checkSteps.map((title, i) => {
-                const isCompleted = i + 1 <= checkStage; // mark only first step as completed
+                const isCompleted = completedChecks[i] === true;
                 return (
                   <div key={i} className="flex flex-col">
                     <div className="flex gap-4.5 items-center">
@@ -239,7 +240,7 @@ export default function CasperPrepare() {
                         <SpeedTestCheck onComplete={handleSpeedTestComplete} />
                       )}
 
-                      {i === 0 && isCompleted && checkStage !== 0 && (
+                      {i === 0 && isCompleted && (
                         <p className="text-[#33333399] text-xs ml-2">
                           Video recorder works just fine!
                         </p>
@@ -263,7 +264,7 @@ export default function CasperPrepare() {
                           )}
                         </div>
                       )}
-                      {i === 1 && isCompleted && checkStage !== 1 && (
+                      {i === 1 && isCompleted && (
                         <p className="text-[#33333399] text-xs ml-2">Submitted Photo! </p>
                       )}
 
@@ -285,7 +286,7 @@ export default function CasperPrepare() {
                           )}
                         </div>
                       )}
-                      {i === 2 && isCompleted && checkStage !== 2 && (
+                      {i === 2 && isCompleted && (
                         <p className="text-[#33333399] text-xs ml-2">
                           Microphone is functioning properly!
                         </p>
@@ -309,7 +310,7 @@ export default function CasperPrepare() {
                           )}
                         </div>
                       )}
-                      {i === 3 && isCompleted && checkStage !== 3 && (
+                      {i === 3 && isCompleted && (
                         <p className="text-[#33333399] text-xs ml-2">
                           Video player is working perfectly!
                         </p>
