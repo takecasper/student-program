@@ -61,7 +61,9 @@ const SpeedTestCheck = ({ onComplete }: SpeedTestCheckProps) => {
 
   return (
     <div className="space-y-4 text-[#333333DE]">
-      <h2 className="text-xl font-semibold">Internet Speed Check</h2>
+      <h2 className="text-xs">
+        We&apos;re testing your download and uplaod speeds. Please wait...
+      </h2>
 
       {isTestingSpeed && (
         <p className="text-sm text-gray-500">

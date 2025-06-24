@@ -28,7 +28,7 @@ export default function CasperPrepare() {
   ]);
 
   const checkSteps = [
-    'Browser & Internet Speed Test',
+    'Internet Speed Check',
     'Webcam Check',
     'Microphone Check',
     'Video Player Check',
@@ -39,8 +39,8 @@ export default function CasperPrepare() {
     const newChecks = [...completedChecks];
     newChecks[0] = true;
     setCompletedChecks(newChecks);
-    // Remove the automatic stage advancement - let user click manually
-    // setCheckStage(1); // Move to next stage
+    // Automatically advance to the next step
+    setCheckStage(1); // Move to next stage
   };
 
   // If showing test interface, render it instead
@@ -242,7 +242,7 @@ export default function CasperPrepare() {
 
                       {i === 0 && isCompleted && (
                         <p className="text-[#33333399] text-xs ml-2">
-                          Video recorder works just fine!
+                          Your internet speed looks good!
                         </p>
                       )}
 

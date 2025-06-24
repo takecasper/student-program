@@ -318,8 +318,8 @@ export default function AdmissionContent() {
 
       {/* Application Sidebar - Modified to show success screen */}
       {showSidebar && (
-        <div className="absolute top-0 right-0 bottom-0 z-40 flex justify-end">
-          <div className="bg-white w-[500px] h-[750px] overflow-y-auto shadow-lg border-l border-[#f5f5f5] animate-in slide-in-from-right">
+        <div className="absolute top-0 right-0  bottom-0 z-40 flex justify-end">
+          <div className="bg-white w-[500px] h-screen overflow-y-auto shadow-lg border-l border-[#f5f5f5] animate-in slide-in-from-right">
             <div className="p-6">
               {showFinalSuccess ? (
                 <PurchaseSuccessScreen onClose={handleCloseSidebar} />
@@ -335,7 +335,7 @@ export default function AdmissionContent() {
                 <>
                   {/* Steps indicator - only show when not hideSteps */}
                   {!hideSteps && (
-                    <div className="mb-6">
+                    <div className="mb-6 h-full">
                       <div className="flex items-center justify-between mb-4">
                         <h2 className="text-lg font-semibold text-[#333333]">Apply New</h2>
                         <Button
