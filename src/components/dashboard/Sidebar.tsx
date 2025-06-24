@@ -232,7 +232,7 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
                 />
                 <SidebarNavItem
                   label="Workflow"
-                  href="/dashboard/work"
+                  href="/dashboard/workflow"
                   icon={
                     <WorkflowIcon
                       className={`${pathname === '/dashboard/work' ? 'fill-[#364799]' : 'fill-[#818181]'}`}
