@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 
 import { Button } from '../ui/button';
@@ -55,6 +55,7 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
 
   const [selected, setSelected] = useState('Queen University');
   const [isOpen, setIsOpen] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   if (userStore === null) return null;
 
@@ -262,7 +263,21 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
             }
           />
 
-          <div className="relative" onMouseEnter={() => setIsOpen(true)}>
+          <div
+            className="relative"
+            onMouseEnter={() => {
+              if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = null;
+              }
+              setIsOpen(true);
+            }}
+            onMouseLeave={() => {
+              timeoutRef.current = setTimeout(() => {
+                setIsOpen(false);
+              }, 500);
+            }}
+          >
             <SidebarNavItem
               label="Marketplace"
               isFooterItem={true}
