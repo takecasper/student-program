@@ -18,6 +18,14 @@ import { AdmissionData, SidebarProps } from './types';
 
 import { initialData } from './data';
 
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from '@/components/ui/dropdown-menu';
+import FileIcon from '@/../public/file.svg';
+import AddIcon from '@/../public/svgs/add.svg';
+
 export default function ProgramAdmissionPage() {
   const [showSidebar, setShowSidebar] = useState<SidebarProps>({ show: false, student: null });
   const [admissionList, setAdmissionList] = useState<AdmissionData[]>(initialData);
@@ -64,19 +72,35 @@ export default function ProgramAdmissionPage() {
                   </div>
                 </AccordionTrigger>
                 <div className="absolute right-6 top-[13px]">
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    className="rounded-[4px] cursor-pointer h-[24px] w-[24px] border-[#d9d9d9]"
-                    onClick={() =>
-                      setShowSidebar({
-                        show: true,
-                        student: item.students[0],
-                      })
-                    }
-                  >
-                    <Settings className="h-4 w-4 text-[#6c6c6c]" />
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="rounded-[4px] cursor-pointer h-[24px] w-[24px] border-[#d9d9d9]"
+                      >
+                        <Settings className="h-4 w-4 text-[#6c6c6c]" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent side="left" className="w-[180px] p-0 mt-20 shadow-none">
+                      <div className="flex flex-col">
+                        <button
+                          className="flex items-center gap-2 px-4 py-2 hover:bg-[#F5F5F5] text-[#333333DE] text-[14px]"
+                          onClick={() => {
+                            window.location.href = `/dashboard/admission/test-config`;
+                          }}
+                        >
+                          <FileIcon className="w-5 h-5" />
+                          Test Configuration
+                        </button>
+                        <div className="border-t border-[#F5F5F5] my-1"></div>
+                        <button className="flex items-center gap-2 px-4 py-2 hover:bg-[#F5F5F5] text-[#333333DE] text-[14px]">
+                          <AddIcon className="w-5 h-5" />
+                          Add Test
+                        </button>
+                      </div>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
                 <AccordionContent className="overflow-x-auto">
                   <table className="w-full text-left text-sm">
@@ -122,25 +146,8 @@ export default function ProgramAdmissionPage() {
                             <td className="text-[#333333DE] text-[14px] font-normal px-4 py-[10px] align-middle">
                               {student.score3}
                             </td>
-                            <td className="px-4 py-[10px] align-middle">
-                              <div className="flex items-center gap-4 text-[#333333DE] text-[14px] font-normal">
-                                {student.score4}
-
-                                {student.canEnroll && (
-                                  <Button
-                                    onClick={() =>
-                                      setShowSidebar({
-                                        show: true,
-                                        student: student,
-                                      })
-                                    }
-                                    className="p-0 bg-transparent hover:bg-transparent cursor-pointer text-[#364699] text-[14px] hover:underline ml-auto"
-                                    disabled
-                                  >
-                                    Enroll
-                                  </Button>
-                                )}
-                              </div>
+                            <td className="text-[#333333DE] text-[14px] font-normal px-4 py-[10px] align-middle">
+                              {student.score4}
                             </td>
                           </tr>
                           <tr key={`${index}-formative`} className="border-b bg-white">

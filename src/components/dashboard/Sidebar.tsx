@@ -47,7 +47,7 @@ const universities = [
   },
 ];
 
-export default function DashboardSidebar({ children }: DashboardSidebarProps) {
+export default function DashboardSidebar({ children, logout }: DashboardSidebarProps) {
   const pathname = usePathname();
 
   const userStore = useUserStore(state => state.user);
@@ -285,6 +285,29 @@ export default function DashboardSidebar({ children }: DashboardSidebarProps) {
 
             {isOpen && <MarketPlacePopover setIsOpen={setIsOpen} />}
           </div>
+
+          <SidebarNavItem
+            label="Logout"
+            isFooterItem={true}
+            onClick={logout}
+            icon={
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-[#818181]"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16,17 21,12 16,7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+            }
+          />
         </div>
 
         <HelpCenterCard />
