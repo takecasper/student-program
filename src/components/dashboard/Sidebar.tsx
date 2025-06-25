@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ReactNode, useState, useRef } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 import { Button } from '../ui/button';
 import { SidebarNavItem } from './SidebarNavItem';
@@ -47,8 +47,7 @@ const universities = [
   },
 ];
 
-export default function DashboardSidebar({ logout, children }: DashboardSidebarProps) {
-  const router = useRouter();
+export default function DashboardSidebar({ children }: DashboardSidebarProps) {
   const pathname = usePathname();
 
   const userStore = useUserStore(state => state.user);
@@ -58,11 +57,6 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   if (userStore === null) return null;
-
-  const handleLogout = async () => {
-    await logout();
-    router.push('/'); // Redirect to homepage after logout
-  };
 
   const userType = userStore?.type;
 
@@ -291,30 +285,6 @@ export default function DashboardSidebar({ logout, children }: DashboardSidebarP
 
             {isOpen && <MarketPlacePopover setIsOpen={setIsOpen} />}
           </div>
-
-          <SidebarNavItem
-            label="Logout"
-            isFooterItem={true}
-            onClick={handleLogout}
-            icon={
-              <svg
-                width="16"
-                height="16"
-                fill="none"
-                viewBox="0 0 24 24"
-                className="h-4 w-4"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17 16L21 12M21 12L17 8M21 12H9M9 22C7.34315 22 6 20.6569 6 19V16M9 2C7.34315 2 6 3.34315 6 5V8"
-                />
-              </svg>
-            }
-          />
         </div>
 
         <HelpCenterCard />

@@ -6,11 +6,11 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import ProgramDetail from '@/components/ProgramDetail';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Calendar1 } from 'lucide-react';
 
 export default function ProgramContentWithImages() {
   const [selectedView, setSelectedView] = useState<string | null>(null);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [isCalendarLoading, setIsCalendarLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -31,6 +31,18 @@ export default function ProgramContentWithImages() {
     const params = new URLSearchParams(searchParams.toString());
     params.set('view', view);
     router.push(`?${params.toString()}`);
+  };
+
+  const handleCalendarClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsCalendarLoading(true);
+    try {
+      await router.push('/dashboard/calendar');
+    } catch (error) {
+      console.error('Navigation error:', error);
+    } finally {
+      setIsCalendarLoading(false);
+    }
   };
 
   if (selectedView) {
@@ -208,9 +220,14 @@ export default function ProgramContentWithImages() {
                       variant="outline"
                       size="sm"
                       className="rounded-[10px] text-xs h-7 p-2 border-[#d9d9d9] text-black font-bold ml-auto"
-                      onClick={() => handleViewSelection('year2-s4')}
+                      onClick={handleCalendarClick}
+                      disabled={isCalendarLoading}
                     >
-                      <Calendar1 />
+                      {isCalendarLoading ? (
+                        <div className="w-4 h-4 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
+                      ) : (
+                        <Image src="/svgs/calendar.svg" alt="calendar" width={16} height={16} />
+                      )}
                     </Button>
                   </div>
                 </CardContent>
