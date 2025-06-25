@@ -3,12 +3,57 @@ import { MessageSquareText } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 
+function getRandomHeight(min = 6, max = 28) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Permission status type
+const PERMISSION_PENDING = 'pending';
+const PERMISSION_ALLOWED = 'allowed';
+const PERMISSION_DENIED = 'denied';
+type PermissionStatus =
+  | typeof PERMISSION_PENDING
+  | typeof PERMISSION_ALLOWED
+  | typeof PERMISSION_DENIED;
+
 export default function SnapshotTestPage() {
   const [started, setStarted] = useState(false);
   const [thinkingTime, setThinkingTime] = useState(80); // 1:20 in seconds
   const [answering, setAnswering] = useState(false);
   const [recording, setRecording] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Permission states: 'allowed' | 'denied'
+  const [signalStatus, setSignalStatus] = useState<PermissionStatus>(PERMISSION_PENDING);
+  const [cameraStatus, setCameraStatus] = useState<PermissionStatus>(PERMISSION_PENDING);
+  const [micStatus, setMicStatus] = useState<PermissionStatus>(PERMISSION_PENDING);
+
+  // Animated waveform state
+  const [waveHeights, setWaveHeights] = useState<number[]>(Array(30).fill(12));
+  const waveAnimRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<'signal' | 'camera' | 'mic' | null>(null);
+
+  // Animate waveform when recording
+  useEffect(() => {
+    if (recording) {
+      waveAnimRef.current = setInterval(() => {
+        setWaveHeights(
+          Array(30)
+            .fill(0)
+            .map(() => getRandomHeight()),
+        );
+      }, 120);
+    } else {
+      setWaveHeights(Array(30).fill(12));
+      if (waveAnimRef.current) clearInterval(waveAnimRef.current);
+    }
+    return () => {
+      if (waveAnimRef.current) clearInterval(waveAnimRef.current);
+    };
+  }, [recording]);
 
   // Start timer when started and not answering
   useEffect(() => {
@@ -45,6 +90,26 @@ export default function SnapshotTestPage() {
 
   // Progress bar width (percentage)
   const progress = ((80 - thinkingTime) / 80) * 100;
+
+  // Modal handler
+  function handleFABClick(type: 'signal' | 'camera' | 'mic') {
+    setModalType(type);
+    setModalOpen(true);
+  }
+  function handleModalAllow() {
+    if (modalType === 'signal') setSignalStatus(PERMISSION_ALLOWED);
+    if (modalType === 'camera') setCameraStatus(PERMISSION_ALLOWED);
+    if (modalType === 'mic') setMicStatus(PERMISSION_ALLOWED);
+    setModalOpen(false);
+    setModalType(null);
+  }
+  function handleModalDeny() {
+    if (modalType === 'signal') setSignalStatus(PERMISSION_DENIED);
+    if (modalType === 'camera') setCameraStatus(PERMISSION_DENIED);
+    if (modalType === 'mic') setMicStatus(PERMISSION_DENIED);
+    setModalOpen(false);
+    setModalType(null);
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fafbfc]">
@@ -178,68 +243,15 @@ export default function SnapshotTestPage() {
               <>
                 {/* Waveform Bar */}
                 <div className="mt-4 w-[480px] flex items-center gap-2 bg-white border rounded-[14px] px-4 py-2">
-                  {/* Static waveform placeholder */}
-                  <div className="flex-1 flex items-center">
-                    <svg
-                      width="220"
-                      height="32"
-                      viewBox="0 0 220 32"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect x="2" y="12" width="4" height="8" rx="2" fill="#C7C7C7" />
-                      <rect x="10" y="8" width="4" height="16" rx="2" fill="#C7C7C7" />
-                      <rect x="18" y="16" width="4" height="4" rx="2" fill="#C7C7C7" />
-                      <rect x="26" y="6" width="4" height="20" rx="2" fill="#C7C7C7" />
-                      <rect x="34" y="10" width="4" height="12" rx="2" fill="#C7C7C7" />
-                      <rect x="42" y="14" width="4" height="6" rx="2" fill="#C7C7C7" />
-                      <rect x="50" y="8" width="4" height="16" rx="2" fill="#C7C7C7" />
-                      <rect x="58" y="12" width="4" height="8" rx="2" fill="#C7C7C7" />
-                      <rect x="66" y="16" width="4" height="4" rx="2" fill="#C7C7C7" />
-                      <rect x="74" y="10" width="4" height="12" rx="2" fill="#C7C7C7" />
-                      <rect x="82" y="6" width="4" height="20" rx="2" fill="#C7C7C7" />
-                      <rect x="90" y="14" width="4" height="6" rx="2" fill="#C7C7C7" />
-                      <rect x="98" y="8" width="4" height="16" rx="2" fill="#C7C7C7" />
-                      <rect x="106" y="12" width="4" height="8" rx="2" fill="#C7C7C7" />
-                      <rect x="114" y="16" width="4" height="4" rx="2" fill="#C7C7C7" />
-                      <rect x="122" y="10" width="4" height="12" rx="2" fill="#C7C7C7" />
-                      <rect x="130" y="6" width="4" height="20" rx="2" fill="#C7C7C7" />
-                      <rect x="138" y="14" width="4" height="6" rx="2" fill="#C7C7C7" />
-                      <rect x="146" y="8" width="4" height="16" rx="2" fill="#C7C7C7" />
-                      <rect x="154" y="12" width="4" height="8" rx="2" fill="#C7C7C7" />
-                      <rect x="162" y="16" width="4" height="4" rx="2" fill="#C7C7C7" />
-                      <rect x="170" y="10" width="4" height="12" rx="2" fill="#C7C7C7" />
-                      <rect x="178" y="6" width="4" height="20" rx="2" fill="#C7C7C7" />
-                      <rect x="186" y="14" width="4" height="6" rx="2" fill="#C7C7C7" />
-                      <rect x="194" y="8" width="4" height="16" rx="2" fill="#C7C7C7" />
-                      <rect x="202" y="12" width="4" height="8" rx="2" fill="#C7C7C7" />
-                      <rect x="2" y="12" width="4" height="8" rx="2" fill="#C7C7C7" />
-                      <rect x="10" y="8" width="4" height="16" rx="2" fill="#C7C7C7" />
-                      <rect x="18" y="16" width="4" height="4" rx="2" fill="#C7C7C7" />
-                      <rect x="26" y="6" width="4" height="20" rx="2" fill="#C7C7C7" />
-                      <rect x="34" y="10" width="4" height="12" rx="2" fill="#C7C7C7" />
-                      <rect x="42" y="14" width="4" height="6" rx="2" fill="#C7C7C7" />
-                      <rect x="50" y="8" width="4" height="16" rx="2" fill="#C7C7C7" />
-                      <rect x="58" y="12" width="4" height="8" rx="2" fill="#C7C7C7" />
-                      <rect x="66" y="16" width="4" height="4" rx="2" fill="#C7C7C7" />
-                      <rect x="74" y="10" width="4" height="12" rx="2" fill="#C7C7C7" />
-                      <rect x="82" y="6" width="4" height="20" rx="2" fill="#C7C7C7" />
-                      <rect x="90" y="14" width="4" height="6" rx="2" fill="#C7C7C7" />
-                      <rect x="98" y="8" width="4" height="16" rx="2" fill="#C7C7C7" />
-                      <rect x="106" y="12" width="4" height="8" rx="2" fill="#C7C7C7" />
-                      <rect x="114" y="16" width="4" height="4" rx="2" fill="#C7C7C7" />
-                      <rect x="122" y="10" width="4" height="12" rx="2" fill="#C7C7C7" />
-                      <rect x="130" y="6" width="4" height="20" rx="2" fill="#C7C7C7" />
-                      <rect x="138" y="14" width="4" height="6" rx="2" fill="#C7C7C7" />
-                      <rect x="146" y="8" width="4" height="16" rx="2" fill="#C7C7C7" />
-                      <rect x="154" y="12" width="4" height="8" rx="2" fill="#C7C7C7" />
-                      <rect x="162" y="16" width="4" height="4" rx="2" fill="#C7C7C7" />
-                      <rect x="170" y="10" width="4" height="12" rx="2" fill="#C7C7C7" />
-                      <rect x="178" y="6" width="4" height="20" rx="2" fill="#C7C7C7" />
-                      <rect x="186" y="14" width="4" height="6" rx="2" fill="#C7C7C7" />
-                      <rect x="194" y="8" width="4" height="16" rx="2" fill="#C7C7C7" />
-                      <rect x="202" y="12" width="4" height="8" rx="2" fill="#C7C7C7" />
-                    </svg>
+                  {/* Animated sound wave */}
+                  <div className="flex-1 flex items-end h-8 gap-[2px]">
+                    {waveHeights.map((h, i) => (
+                      <div
+                        key={i}
+                        className="w-[4px] rounded bg-[#C7C7C7] transition-all duration-100"
+                        style={{ height: `${h}px` }}
+                      />
+                    ))}
                   </div>
                   <span className="font-medium text-gray-600 ml-2">01:20</span>
                 </div>
@@ -286,10 +298,51 @@ export default function SnapshotTestPage() {
 
       {/* Floating Action Buttons */}
       <div className="fixed bottom-6 right-6 flex gap-3 z-50">
-        <FABImage src="/svgs/signal.svg" alt="Signal" />
-        <FABImage src="/svgs/camera.svg" alt="Camera" />
-        <FABImage src="/svgs/mic.svg" alt="Mic" />
+        <FABVerify
+          src="/svgs/signal.svg"
+          alt="Signal"
+          status={signalStatus}
+          onClick={() => handleFABClick('signal')}
+        />
+        <FABVerify
+          src="/svgs/camera.svg"
+          alt="Camera"
+          status={cameraStatus}
+          onClick={() => handleFABClick('camera')}
+        />
+        <FABVerify
+          src="/svgs/mic.svg"
+          alt="Mic"
+          status={micStatus}
+          onClick={() => handleFABClick('mic')}
+        />
       </div>
+      {/* Modal for permission confirmation */}
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 min-w-[320px] flex flex-col items-center">
+            <div className="mb-4 text-lg font-semibold text-[#364699]">
+              {modalType === 'signal' && 'Allow access to signal?'}
+              {modalType === 'camera' && 'Allow access to camera?'}
+              {modalType === 'mic' && 'Allow access to microphone?'}
+            </div>
+            <div className="flex gap-4 mt-2">
+              <button
+                className="px-4 py-2 rounded bg-[#00A59B] text-white font-semibold hover:bg-[#00897B]"
+                onClick={handleModalAllow}
+              >
+                Allow
+              </button>
+              <button
+                className="px-4 py-2 rounded bg-[#B71C1C] text-white font-semibold hover:bg-[#a31515]"
+                onClick={handleModalDeny}
+              >
+                Deny
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -357,27 +410,56 @@ function StepLine() {
   return <div className="w-4 h-0.5 bg-gray-300" />;
 }
 
-function FABImage({ src, alt }: { src: string; alt: string }) {
+function FABVerify({
+  src,
+  alt,
+  status,
+  onClick,
+}: {
+  src: string;
+  alt: string;
+  status: PermissionStatus;
+  onClick?: () => void;
+}) {
   return (
-    <button className="w-10 h-10 rounded-full bg-[#F5F5F5] flex items-center justify-center hover:bg-gray-100 transition relative">
+    <button
+      className="w-10 h-10 rounded-full bg-[#F5F5F5] flex items-center justify-center hover:bg-gray-100 transition relative border border-gray-200"
+      onClick={onClick}
+      type="button"
+    >
       <Image src={src} alt={alt} width={16} height={16} />
-      <span className="absolute top-6 -right-1 w-4 h-4 bg-[#00A59B] rounded-full flex items-center justify-center border-2 border-white">
-        <svg
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M3 6.5L5.2 8.7L9 5"
-            stroke="white"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </span>
+      {status === PERMISSION_ALLOWED ? (
+        <span className="absolute top-6 -right-1 w-4 h-4 bg-[#00A59B] rounded-full flex items-center justify-center border-2 border-white">
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 12 12"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M3 6.5L5.2 8.7L9 5"
+              stroke="white"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+      ) : status === PERMISSION_DENIED ? (
+        <span className="absolute top-6 -right-1 w-4 h-4 bg-[#B71C1C] rounded-full flex items-center justify-center border-2 border-white">
+          <svg
+            width="10"
+            height="10"
+            viewBox="0 0 10 10"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M5 2.5V5.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+            <circle cx="5" cy="7" r="0.7" fill="white" />
+          </svg>
+        </span>
+      ) : null}
     </button>
   );
 }
