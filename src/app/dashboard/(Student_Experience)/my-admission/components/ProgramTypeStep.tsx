@@ -31,6 +31,27 @@ const ProgramOption: React.FC<ProgramOptionProps> = ({ id, label, selected, onSe
   );
 };
 
+const programTypeLabels: { [key: string]: string } = {
+  medicine: 'Medicine',
+  law: 'Law',
+  'health-science': 'Health Science',
+  engineering: 'Engineering',
+};
+
+const ProgramTypeSummary: React.FC<{ programType: string }> = ({ programType }) => {
+  if (!programType) return null;
+  return (
+    <div className="w-full bg-white border-2 border-[#00a59b] rounded-[12px] flex items-center px-4 py-3 gap-3">
+      <span className="text-base font-medium text-[#333]">
+        {programTypeLabels[programType] || programType}
+      </span>
+      <div className="ml-auto flex items-center justify-center w-7 h-7 rounded-full bg-[#00a59b]">
+        <Check className="h-4 w-4 text-white" />
+      </div>
+    </div>
+  );
+};
+
 const ProgramTypeStep: React.FC<StepProps> = ({ formData, onChange }) => {
   const handleProgramChange = (value: string) => {
     // If the same value is clicked again, deselect it
@@ -67,3 +88,4 @@ const ProgramTypeStep: React.FC<StepProps> = ({ formData, onChange }) => {
 };
 
 export default ProgramTypeStep;
+export { ProgramTypeSummary };

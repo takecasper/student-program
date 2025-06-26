@@ -19,6 +19,71 @@ import { filters, tests } from './data/mockData';
 import PurchaseSuccessScreen from './components/PurchaseSuccessScreen';
 import ReservationComplete from './components/ReservationComplete';
 import DocumentReviewScreen from './components/DocumentReviewScreen';
+import { countries } from '@/lib/countries';
+import { CountrySummary } from './components/CountryStep';
+import { ProgramTypeSummary } from './components/ProgramTypeStep';
+import { SchoolSummary } from './components/SchoolStep';
+import { TestDateSummary } from './components/TestDateStep';
+
+// Helper function to format selected answers
+const formatSelectedAnswer = (stepId: number, formData: FormData): string => {
+  switch (stepId) {
+    case 1: // Country
+      if (!formData.country) return '';
+      const country = countries.find(c => c.code === formData.country);
+      return country ? country.name : formData.country;
+
+    case 2: // Program Type
+      if (!formData.programType) return '';
+      const programLabels: { [key: string]: string } = {
+        medicine: 'Medicine',
+        law: 'Law',
+        'health-science': 'Health Science',
+        engineering: 'Engineering',
+      };
+      return programLabels[formData.programType] || formData.programType;
+
+    case 3: // Schools
+      if (!formData.schools.length) return '';
+      const schoolLabels: { [key: string]: string } = {
+        'u-of-t-medicine': 'U of T Medicine',
+        'mc-master-medicine': 'McMaster Medicine',
+        'queens-medicine': "Queen's Medicine",
+        'ottawa-medicine': 'Ottawa Medicine',
+        'sam-houston': 'Sam Houston',
+        'san-juan': 'San Juan',
+      };
+      const selectedSchools = formData.schools.map(school => schoolLabels[school] || school);
+      return selectedSchools.join(', ');
+
+    case 4: // Test Date
+      if (!formData.testDate) return '';
+      const testSelections = [];
+      if (formData.testDate.CASPER) {
+        testSelections.push(
+          `CASPER: ${formData.testDate.CASPER.date} ${formData.testDate.CASPER.time}`,
+        );
+      }
+      if (formData.testDate.VIDEO_INTERVIEW) {
+        testSelections.push(
+          `Video Interview: ${formData.testDate.VIDEO_INTERVIEW.date} ${formData.testDate.VIDEO_INTERVIEW.time}`,
+        );
+      }
+      return testSelections.join(', ');
+
+    case 6: // Payment
+      if (!formData.payment) return '';
+      if (formData.payment.type === 'credit') {
+        return `Credit Card: ${formData.payment.cardholderName || 'Card details entered'}`;
+      } else if (formData.payment.type === 'assistance') {
+        return `Fee Assistance: ${formData.payment.file || 'Document uploaded'}`;
+      }
+      return '';
+
+    default:
+      return '';
+  }
+};
 
 export default function AdmissionContent() {
   const [activeFilter, setActiveFilter] = useState('ALL');
@@ -207,7 +272,35 @@ export default function AdmissionContent() {
           {/* Show completed step summary */}
           {isCompletedStep && (
             <div className="pt-2 pb-4">
-              <div className="text-xs text-[#00a59b] bg-[#00a59b]/5 p-2 rounded">✓ Completed</div>
+              <div className="text-xs text-[#00a59b] bg-[#00a59b]/5 p-2 rounded">
+                {(() => {
+                  if (step.id === 1 && formData.country) {
+                    return <CountrySummary countryCode={formData.country} />;
+                  }
+                  if (step.id === 2 && formData.programType) {
+                    return <ProgramTypeSummary programType={formData.programType} />;
+                  }
+                  if (step.id === 3 && formData.schools && formData.schools.length > 0) {
+                    return <SchoolSummary schools={formData.schools} />;
+                  }
+                  if (
+                    step.id === 4 &&
+                    formData.testDate &&
+                    (formData.testDate.CASPER || formData.testDate.VIDEO_INTERVIEW)
+                  ) {
+                    return <TestDateSummary testDate={formData.testDate} />;
+                  }
+                  const selectedAnswer = formatSelectedAnswer(step.id, formData);
+                  return selectedAnswer ? (
+                    <div>
+                      <div className="font-medium mb-1">✓ Completed</div>
+                      <div className="text-[#333333]">{selectedAnswer}</div>
+                    </div>
+                  ) : (
+                    <div>✓ Completed</div>
+                  );
+                })()}
+              </div>
             </div>
           )}
         </div>

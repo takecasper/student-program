@@ -52,7 +52,7 @@ const SchoolStep: React.FC<StepProps> = ({ formData, onChange }) => {
           },
           {
             id: 'queens-medicine',
-            name: 'Queen’s Medicine ',
+            name: "Queen's Medicine",
             selected: formData.schools.includes('queens-medicine'),
           },
           {
@@ -86,4 +86,31 @@ const SchoolStep: React.FC<StepProps> = ({ formData, onChange }) => {
   );
 };
 
+const schoolLabels: { [key: string]: string } = {
+  'u-of-t-medicine': 'U of T Medicine',
+  'mc-master-medicine': 'McMaster Medicine',
+  'queens-medicine': "Queen's Medicine",
+  'ottawa-medicine': 'Ottawa Medicine',
+  'sam-houston': 'Sam Houston',
+  'san-juan': 'San Juan',
+};
+
+const SchoolSummary: React.FC<{ schools: string[] }> = ({ schools }) => {
+  if (!schools.length) return null;
+  return (
+    <div className="w-full bg-white border-2 border-[#00a59b] rounded-[12px] flex flex-wrap items-center px-4 py-3 gap-2">
+      {schools.map((school, idx) => (
+        <span key={school} className="text-base font-medium text-[#333] mr-2">
+          {schoolLabels[school] || school}
+          {idx < schools.length - 1 && <span className="mx-1">,</span>}
+        </span>
+      ))}
+      <div className="ml-auto flex items-center justify-center w-7 h-7 rounded-full bg-[#00a59b]">
+        <Check className="h-4 w-4 text-white" />
+      </div>
+    </div>
+  );
+};
+
 export default SchoolStep;
+export { SchoolSummary };

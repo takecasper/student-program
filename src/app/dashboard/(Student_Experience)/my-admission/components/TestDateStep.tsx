@@ -171,4 +171,31 @@ const TestDateStep: React.FC<StepProps> = ({ formData, onChange }) => {
   );
 };
 
+const TestDateSummary: React.FC<{
+  testDate?: {
+    CASPER?: { date: string; time: string };
+    VIDEO_INTERVIEW?: { date: string; time: string };
+  };
+}> = ({ testDate }) => {
+  if (!testDate || (!testDate.CASPER && !testDate.VIDEO_INTERVIEW)) return null;
+  return (
+    <div className="w-full bg-white border-2 border-[#00a59b] rounded-[12px] flex flex-col px-4 py-3 gap-1 relative">
+      {testDate.CASPER && (
+        <span className="text-base font-medium text-[#333]">
+          CASPER: {testDate.CASPER.date} - {testDate.CASPER.time}
+        </span>
+      )}
+      {testDate.VIDEO_INTERVIEW && (
+        <span className="text-base font-medium text-[#333]">
+          Video Interview: {testDate.VIDEO_INTERVIEW.date} - {testDate.VIDEO_INTERVIEW.time}
+        </span>
+      )}
+      <div className="absolute top-1 right-3 flex items-center justify-center w-7 h-7 rounded-full bg-[#00a59b]">
+        <Check className="h-4 w-4 text-white" />
+      </div>
+    </div>
+  );
+};
+
 export default TestDateStep;
+export { TestDateSummary };
