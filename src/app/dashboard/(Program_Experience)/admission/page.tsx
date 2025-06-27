@@ -94,9 +94,23 @@ export default function ProgramAdmissionPage() {
                           Test Configuration
                         </button>
                         <div className="border-t border-[#F5F5F5] my-1"></div>
-                        <button className="flex items-center gap-2 px-4 py-2 hover:bg-[#F5F5F5] text-[#333333DE] text-[14px]">
+                        <button
+                          className="flex items-center gap-2 px-4 py-2 hover:bg-[#F5F5F5] text-[#333333DE] text-[14px]"
+                          onClick={() => {
+                            window.location.href = `/dashboard/admission/add-test-config`;
+                          }}
+                        >
                           <AddIcon className="w-5 h-5" />
                           Add Test
+                        </button>
+                        <button
+                          className="flex items-center gap-2 px-4 py-2 hover:bg-[#F5F5F5] text-[#333333DE] text-[14px]"
+                          onClick={() => {
+                            window.location.href = `/dashboard/admission/video-interview`;
+                          }}
+                        >
+                          <AddIcon className="w-5 h-5" />
+                          VIDEO INTERVIEW
                         </button>
                       </div>
                     </DropdownMenuContent>
