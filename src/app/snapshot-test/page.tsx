@@ -21,7 +21,9 @@ export default function SnapshotTestPage() {
   const [thinkingTime, setThinkingTime] = useState(80); // 1:20 in seconds
   const [answering, setAnswering] = useState(false);
   const [recording, setRecording] = useState(false);
+  const [totalTimeLeft, setTotalTimeLeft] = useState(600); // 10:00 in seconds
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const totalTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Permission states: 'allowed' | 'denied'
   const [signalStatus, setSignalStatus] = useState<PermissionStatus>(PERMISSION_PENDING);
@@ -35,6 +37,27 @@ export default function SnapshotTestPage() {
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'signal' | 'camera' | 'mic' | null>(null);
+
+  // Total timer countdown (10:00 to 0:00)
+  useEffect(() => {
+    if (totalTimeLeft > 0) {
+      totalTimerRef.current = setInterval(() => {
+        setTotalTimeLeft(prev => {
+          if (prev <= 0) {
+            clearInterval(totalTimerRef.current!);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => {
+      if (totalTimerRef.current) {
+        clearInterval(totalTimerRef.current);
+        totalTimerRef.current = null;
+      }
+    };
+  }, [totalTimeLeft]);
 
   // Animate waveform when recording
   useEffect(() => {
@@ -59,18 +82,33 @@ export default function SnapshotTestPage() {
   useEffect(() => {
     if (started && !answering && thinkingTime > 0) {
       timerRef.current = setInterval(() => {
-        setThinkingTime(prev => (prev > 0 ? prev - 1 : 0));
+        setThinkingTime(prev => {
+          if (prev <= 0) {
+            clearInterval(timerRef.current!);
+            return 0;
+          }
+          return prev - 1;
+        });
       }, 1000);
+    } else {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
     }
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
     };
-  }, [started, answering]);
+  }, [started, answering, thinkingTime]);
 
   // Stop timer when time runs out
   useEffect(() => {
     if (thinkingTime === 0 && timerRef.current) {
       clearInterval(timerRef.current);
+      timerRef.current = null;
     }
   }, [thinkingTime]);
 
@@ -89,7 +127,7 @@ export default function SnapshotTestPage() {
   }
 
   // Progress bar width (percentage)
-  const progress = ((80 - thinkingTime) / 80) * 100;
+  const progress = Math.max(0, Math.min(100, ((80 - thinkingTime) / 80) * 100));
 
   // Modal handler
   function handleFABClick(type: 'signal' | 'camera' | 'mic') {
@@ -121,23 +159,20 @@ export default function SnapshotTestPage() {
           </div>
           <Image src="/toro.png" alt="UofT Logo" width={120} height={32} className="h-8 w-auto" />
         </div>
-        <div className="flex-1 flex justify-center">
-          <div className="flex items-center gap-2 bg-[#EDEEF6] px-4 py-1 rounded-full">
-            <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10" stroke="#3b4cca" strokeWidth="2" />
-              <path
-                d="M12 6v6l4 2"
-                stroke="#3b4cca"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span className="text-[#3b4cca] font-medium">Time Left:</span>
-            <span className="text-[#3b4cca] font-semibold">10:00</span>
-          </div>
+        <div className="flex items-center gap-2 bg-[#EDEEF6] px-4 py-1 rounded-full">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke="#3b4cca" strokeWidth="2" />
+            <path
+              d="M12 6v6l4 2"
+              stroke="#3b4cca"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span className="text-[#3b4cca] font-medium">Time Left:</span>
+          <span className="text-[#3b4cca] font-semibold">{formatTime(totalTimeLeft)}</span>
         </div>
-        <div className="text-sm text-gray-700 font-medium">Question 1 of 5</div>
       </div>
 
       {/* Main Content */}

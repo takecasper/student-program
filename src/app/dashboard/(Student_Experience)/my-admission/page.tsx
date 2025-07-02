@@ -13,6 +13,7 @@ import {
 import { Check, Plus, X } from 'lucide-react';
 import Image from 'next/image';
 import CasperPrepare from '@/components/addmission/Prepare';
+import VideoInterview from '@/components/addmission/Prepare/VideoInterview';
 import { FormData, Step } from './types';
 import { ADMISSION_STEPS } from './constants/steps';
 import { filters, tests } from './data/mockData';
@@ -100,6 +101,7 @@ export default function AdmissionContent() {
   });
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
   const [showPrepare, setShowPrepare] = useState<boolean>(false);
+  const [selectedTestType, setSelectedTestType] = useState<string>('');
   const [showFinalSuccess, setShowFinalSuccess] = useState(false);
   const [showDocumentReview, setShowDocumentReview] = useState(false);
 
@@ -328,7 +330,16 @@ export default function AdmissionContent() {
   };
 
   return showPrepare ? (
-    <CasperPrepare />
+    selectedTestType === 'VIDEO INTERVIEW' ? (
+      <VideoInterview
+        onBack={() => {
+          setShowPrepare(false);
+          setSelectedTestType('');
+        }}
+      />
+    ) : (
+      <CasperPrepare />
+    )
   ) : (
     <div className="p-6 relative">
       {/* Apply for a new program section */}
@@ -382,7 +393,10 @@ export default function AdmissionContent() {
           {filteredTests.map(test => (
             <Card
               key={test.id}
-              onClick={() => setShowPrepare(true)}
+              onClick={() => {
+                setSelectedTestType(test.type);
+                setShowPrepare(true);
+              }}
               className="w-[234px] h-[240px] border border-[#D9D9D9] shadow-none rounded-[20px] overflow-hidden py-3 cursor-pointer"
             >
               <div className="relative h-[150px] bg-white">

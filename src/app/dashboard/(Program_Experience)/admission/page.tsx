@@ -25,6 +25,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import FileIcon from '@/../public/file.svg';
 import AddIcon from '@/../public/svgs/add.svg';
+import { Badge } from '@/components/ui/badge';
+import Image from 'next/image';
 
 export default function ProgramAdmissionPage() {
   const [showSidebar, setShowSidebar] = useState<SidebarProps>({ show: false, student: null });
@@ -63,23 +65,31 @@ export default function ProgramAdmissionPage() {
           {admissionList.map(item => {
             return (
               <AccordionItem key={item.id} value={item.name} className="mb-3 relative">
-                <AccordionTrigger className="data-[state=open]:rounded-b-none !no-underline border border-[#F5F5F5] px-4 py-[13px] cursor-pointer bg-[#D9D9D91A] rounded-t-md pr-14">
-                  <div className="flex justify-between items-center w-full">
-                    <span className="text-[#4d4d4d] text-[12px]">{item.name}</span>
-                    <div className="flex items-center gap-4">
-                      <span className="text-[12px] text-[#364699]">{item.applied} Applied</span>
+                <div className="relative">
+                  <AccordionTrigger className="data-[state=open]:rounded-b-none !no-underline border border-[#F5F5F5] px-4 py-[15px] cursor-pointer bg-[#D9D9D91A] rounded-t-[10px] pr-14">
+                    <div className="flex flex-col items-start w-full">
+                      <span className="text-[#4d4d4d] text-[12px]">{item.name}</span>
+                      <Badge className="bg-[#6A6EEC] text-white text-[12px] px-4 py-1 rounded-full mt-1">
+                        Casper Test
+                      </Badge>
                     </div>
-                  </div>
-                </AccordionTrigger>
-                <div className="absolute right-6 top-[13px]">
+                  </AccordionTrigger>
+                </div>
+                <div className="absolute right-6 top-[18px]">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
-                        size="icon"
-                        variant="outline"
-                        className="rounded-[4px] cursor-pointer h-[24px] w-[24px] border-[#d9d9d9]"
+                        variant="default"
+                        className="rounded-[6px] text-[#333333DE] text-[12px] bg-white border-2 shadow-none hover:bg-[#3333331A] border-[#3333331A]"
                       >
-                        <Settings className="h-4 w-4 text-[#6c6c6c]" />
+                        <Image
+                          src="/svgs/test.svg"
+                          alt="settings"
+                          width={14}
+                          height={14}
+                          className="w-4 h-4"
+                        />
+                        Test Configure
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent side="left" className="w-[180px] p-0 mt-20 shadow-none">
