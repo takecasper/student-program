@@ -47,8 +47,6 @@ function Step1({
   setTestName,
   numQuestions,
   setNumQuestions,
-  timeBetween,
-  setTimeBetween,
   thinkingTime,
   setThinkingTime,
   responseTime,
@@ -62,8 +60,6 @@ function Step1({
   setTestName: (v: string) => void;
   numQuestions: string;
   setNumQuestions: (v: string) => void;
-  timeBetween: string;
-  setTimeBetween: (v: string) => void;
   thinkingTime: string;
   setThinkingTime: (v: string) => void;
   responseTime: string;
@@ -106,12 +102,15 @@ function Step1({
         </div>
         <div className="flex-1">
           <label className="block text-xs font-semibold mb-1">SESSION MODE</label>
-          <input
-            className="w-full border rounded-[12px] px-3 py-2 text-sm"
-            value={timeBetween}
-            onChange={e => setTimeBetween(e.target.value)}
-            placeholder="0:00 min"
-          />
+          <Select>
+            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+              <SelectValue placeholder="Select session mode" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1">Continuous (One Sitting)</SelectItem>
+              <SelectItem value="2">Multiple Sessions</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <div className="flex gap-4 mb-4">
@@ -169,15 +168,11 @@ function Step1({
               <SelectValue placeholder="Select break duration" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">1</SelectItem>
-              <SelectItem value="2">2</SelectItem>
-              <SelectItem value="3">3</SelectItem>
-              <SelectItem value="4">4</SelectItem>
-              <SelectItem value="5">5</SelectItem>
-              <SelectItem value="6">6</SelectItem>
-              <SelectItem value="7">7</SelectItem>
-              <SelectItem value="8">8</SelectItem>
-              <SelectItem value="9">9</SelectItem>
+              <SelectItem value="1">Question 1</SelectItem>
+              <SelectItem value="2">Question 2</SelectItem>
+              <SelectItem value="3">Question 3</SelectItem>
+              <SelectItem value="4">Question 4</SelectItem>
+              <SelectItem value="5">Question 5</SelectItem>
             </SelectContent>
           </Select>
         </SelectGroup>
@@ -244,12 +239,33 @@ function Step2({
     setIsDragOver(false);
 
     const data = e.dataTransfer.getData('text/plain');
+    const files = e.dataTransfer.files;
+
     if (data === 'default-intro') {
       // Create a mock file object for the default intro
       const defaultIntroFile = new File([''], 'default-intro-video.jpg', { type: 'image/jpeg' });
       setCustomIntro(defaultIntroFile);
       setCustomIntroPreview('/video.jpg'); // Set the actual image preview
       setUseDefaultIntro(false);
+    } else if (files && files.length > 0) {
+      // Handle direct file drop
+      const file = files[0];
+      if (file.type.startsWith('video/') || file.type.startsWith('image/')) {
+        setCustomIntro(file);
+
+        // Use same logic as handleFileChange
+        if (file.type.startsWith('video/')) {
+          const videoUrl = URL.createObjectURL(file);
+          setCustomIntroPreview(videoUrl);
+        } else {
+          const reader = new FileReader();
+          reader.onload = e => {
+            setCustomIntroPreview(e.target?.result as string);
+          };
+          reader.readAsDataURL(file);
+        }
+        setUseDefaultIntro(false);
+      }
     }
   };
 
@@ -258,14 +274,25 @@ function Step2({
     setCustomIntro(file);
 
     if (file) {
-      const reader = new FileReader();
-      reader.onload = e => {
-        setCustomIntroPreview(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+      // For videos, use URL.createObjectURL for better performance
+      if (file.type.startsWith('video/')) {
+        const videoUrl = URL.createObjectURL(file);
+        setCustomIntroPreview(videoUrl);
+      } else {
+        // For images, use FileReader
+        const reader = new FileReader();
+        reader.onload = e => {
+          setCustomIntroPreview(e.target?.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
     } else {
       setCustomIntroPreview(null);
     }
+  };
+
+  const isVideoFile = (file: File | null) => {
+    return file && file.type.startsWith('video/');
   };
 
   return (
@@ -392,8 +419,51 @@ function Step2({
                   </div>
                 )}
                 {activeTab === 'video' && (
-                  <div className="flex flex-col items-center justify-center h-64 text-gray-400">
-                    Video preview here
+                  <div className="flex flex-col gap-4">
+                    {customIntro && isVideoFile(customIntro) ? (
+                      <video
+                        src={customIntroPreview || ''}
+                        className="w-full h-64 object-cover rounded-lg border"
+                        controls
+                        preload="metadata"
+                      />
+                    ) : (
+                      <label className="w-full h-64 bg-gray-100 rounded-xl flex flex-col items-center justify-center border border-dashed border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors">
+                        <div className="flex flex-col items-center">
+                          <svg
+                            width="32"
+                            height="32"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            className="mb-2 text-gray-400"
+                          >
+                            <path
+                              d="M12 16V4m0 0l-4 4m4-4l4 4"
+                              stroke="#A0AEC0"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <rect x="4" y="20" width="16" height="2" rx="1" fill="#A0AEC0" />
+                          </svg>
+                          <span className="text-gray-400 text-sm font-medium">
+                            Upload Intro Video
+                          </span>
+                        </div>
+                        <input
+                          type="file"
+                          accept="video/*"
+                          className="hidden"
+                          onChange={handleFileChange}
+                        />
+                      </label>
+                    )}
+                    <input
+                      className="border rounded px-3 py-2 text-sm mb-2"
+                      placeholder="Video Title"
+                      value={editorTitle}
+                      onChange={e => setEditorTitle(e.target.value)}
+                    />
                   </div>
                 )}
                 {activeTab === 'image' && (
@@ -469,9 +539,9 @@ function Step2({
         {/* Custom Intro */}
         <div className="flex-1 flex flex-col">
           <div className="font-semibold text-xs mb-1">CUSTOM INTRO</div>
-          <div className="text-xs mb-2">Upload/Add your own intro</div>
+          <div className="text-xs mb-2">Upload video or image intro</div>
           <div className="flex-grow flex items-center">
-            <label
+            <div
               className={`block border-2 border-dashed rounded-lg w-full h-48 flex flex-col items-center justify-center cursor-pointer transition-colors overflow-hidden ${
                 isDragOver
                   ? 'border-blue-500 bg-blue-50'
@@ -482,31 +552,49 @@ function Step2({
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
+              onClick={() => {
+                setSheetOpen(true);
+              }}
             >
               {customIntroPreview ? (
                 <div className="relative w-full h-full">
-                  <img
-                    src={customIntroPreview}
-                    alt="Custom Intro Preview"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
-                    <div className="bg-white rounded-full p-2 shadow">
-                      <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" fill="#364699" />
-                      </svg>
-                    </div>
-                  </div>
+                  {isVideoFile(customIntro) ? (
+                    <video
+                      src={customIntroPreview}
+                      className="w-full h-full object-cover rounded-lg"
+                      controls
+                      preload="metadata"
+                    />
+                  ) : (
+                    <>
+                      <img
+                        src={customIntroPreview}
+                        alt="Custom Intro Preview"
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                      <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                        <div className="bg-white rounded-full p-2 shadow">
+                          <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z" fill="#364699" />
+                          </svg>
+                        </div>
+                      </div>
+                    </>
+                  )}
                   <div className="absolute top-2 left-2 bg-green-500 text-white rounded-[8px] px-2 py-1 text-xs font-semibold">
                     Added
                   </div>
                   <div className="absolute top-2 right-2 bg-white text-gray-700 rounded-[8px] px-2 py-1 text-xs font-semibold">
-                    {customIntro?.name || 'Default Intro'}
+                    {customIntro?.name || 'Default Intro'} {isVideoFile(customIntro) && '(Video)'}
                   </div>
                   <button
                     type="button"
                     onClick={e => {
                       e.preventDefault();
+                      // Clean up object URL if it's a video
+                      if (customIntroPreview && customIntro && isVideoFile(customIntro)) {
+                        URL.revokeObjectURL(customIntroPreview);
+                      }
                       setCustomIntro(null);
                       setCustomIntroPreview(null);
                     }}
@@ -519,18 +607,21 @@ function Step2({
               ) : (
                 <>
                   <span className="text-4xl text-gray-300">+</span>
-                  <span className="text-xs text-gray-400 mt-2">Upload/Add your own intro</span>
-                  <span className="text-xs text-blue-500 mt-1">or drag from default intro</span>
+                  <span className="text-xs text-gray-400 mt-2">Upload video or image</span>
+                  <span className="text-xs text-blue-500 mt-1">
+                    Click to browse or drag files here
+                  </span>
                 </>
               )}
-              <input
-                type="file"
-                accept="video/*,image/*"
-                className="hidden"
-                onChange={handleFileChange}
-                disabled={useDefaultIntro}
-              />
-            </label>
+            </div>
+            <input
+              id="custom-intro-upload"
+              type="file"
+              accept="video/*,image/*"
+              className="hidden"
+              onChange={handleFileChange}
+              disabled={useDefaultIntro}
+            />
           </div>
         </div>
       </div>
@@ -551,25 +642,31 @@ function Step3({ questions }: { questions: string[]; setQuestions: (q: string[])
   };
 
   return (
-    <div className="w-full max-w-3xl">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <h3 className="text-xl font-bold mb-2">Question Bank</h3>
       <p className="text-gray-500 mb-6">Add and arrange the questions for your interview test.</p>
       <div className="font-semibold text-xs mb-2">ADD QUESTION</div>
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6">
         {questions.map((q, idx) => (
           <button
             key={idx}
             type="button"
-            className="border-2 border-dashed border-gray-300 rounded-lg h-24 w-[320px] flex items-center justify-center text-4xl text-gray-300 focus:outline-none"
+            className="border-2 border-dashed border-gray-300 rounded-lg h-16 sm:h-20 lg:h-24 w-full flex items-center justify-center text-2xl sm:text-3xl lg:text-4xl text-gray-300 focus:outline-none hover:border-gray-400 transition-colors"
             onClick={() => handleCardClick()}
           >
-            {q ? <span className="text-base text-gray-700">{q}</span> : <span>+</span>}
+            {q ? (
+              <span className="text-sm sm:text-base text-gray-700 px-2 text-center overflow-hidden overflow-ellipsis whitespace-nowrap max-w-full">
+                {q}
+              </span>
+            ) : (
+              <span>+</span>
+            )}
           </button>
         ))}
         {/* Plus Card for Add Custom Question */}
         <button
           type="button"
-          className="border-2 border-dashed border-gray-300 rounded-lg h-24 w-[320px] flex items-center justify-center text-4xl text-gray-300 focus:outline-none"
+          className="border-2 border-dashed border-gray-300 rounded-lg h-16 sm:h-20 lg:h-24 w-full flex items-center justify-center text-2xl sm:text-3xl lg:text-4xl text-gray-300 focus:outline-none hover:border-gray-400 transition-colors"
           onClick={handleAddClick}
         >
           <span>+</span>
@@ -784,29 +881,23 @@ function Step5({
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-xs font-semibold mb-1">Start Date</label>
-          <Select value={startDate} onValueChange={setStartDate}>
-            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
-              <SelectValue placeholder="Select Date" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="2024-07-01">July 1, 2024</SelectItem>
-              <SelectItem value="2024-07-02">July 2, 2024</SelectItem>
-              <SelectItem value="2024-07-03">July 3, 2024</SelectItem>
-            </SelectContent>
-          </Select>
+          <input
+            type="date"
+            value={startDate}
+            onChange={e => setStartDate(e.target.value)}
+            className="w-full border rounded-[12px] px-3 py-2 text-sm"
+            min={new Date().toISOString().split('T')[0]}
+          />
         </div>
         <div>
           <label className="block text-xs font-semibold mb-1">End Date</label>
-          <Select value={endDate} onValueChange={setEndDate}>
-            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
-              <SelectValue placeholder="Select Date" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="2024-07-01">July 1, 2024</SelectItem>
-              <SelectItem value="2024-07-02">July 2, 2024</SelectItem>
-              <SelectItem value="2024-07-03">July 3, 2024</SelectItem>
-            </SelectContent>
-          </Select>
+          <input
+            type="date"
+            value={endDate}
+            onChange={e => setEndDate(e.target.value)}
+            className="w-full border rounded-[12px] px-3 py-2 text-sm"
+            min={startDate || new Date().toISOString().split('T')[0]}
+          />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4 mb-4">
@@ -887,9 +978,6 @@ function Step5({
             </svg>
           </span>
         </div>
-        <button className="bg-[#364699] text-white rounded-full py-2 font-semibold w-[100px] ml-4">
-          Done
-        </button>
       </div>
     </div>
   );
@@ -1020,9 +1108,6 @@ function Step6({
             </svg>
           </span>
         </div>
-        <button className="bg-[#364699] text-white rounded-full py-2 font-semibold w-[100px] ml-4">
-          Next
-        </button>
       </div>
     </div>
   );
@@ -1034,7 +1119,6 @@ export default function VideoInterviewConfigPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [testName, setTestName] = useState('Interview Cycle 1');
   const [numQuestions, setNumQuestions] = useState('5');
-  const [timeBetween, setTimeBetween] = useState('0:00 min');
   const [thinkingTime, setThinkingTime] = useState('0:00 min');
   const [responseTime, setResponseTime] = useState('0:00 min');
   const [breakOption, setBreakOption] = useState(false);
@@ -1067,8 +1151,6 @@ export default function VideoInterviewConfigPage() {
         setTestName={setTestName}
         numQuestions={numQuestions}
         setNumQuestions={setNumQuestions}
-        timeBetween={timeBetween}
-        setTimeBetween={setTimeBetween}
         thinkingTime={thinkingTime}
         setThinkingTime={setThinkingTime}
         responseTime={responseTime}
@@ -1292,14 +1374,30 @@ export default function VideoInterviewConfigPage() {
           {/* Right Form */}
           <div className="flex-1 flex flex-col items-start justify-center w-full px-20">
             {stepContent}
-            {currentStep < steps.length - 1 && (
-              <button
-                className="mt-8 bg-[#364699] text-white rounded-full py-2 font-semibold w-[100px]"
-                onClick={() => setCurrentStep(currentStep + 1)}
-              >
-                Next
-              </button>
-            )}
+            {/* Navigation Buttons */}
+            <div className="flex items-center gap-4 mt-8 justify-end w-full">
+              {currentStep > 0 && (
+                <button
+                  className="px-6 py-2 rounded-full border border-gray-300 text-gray-600 font-semibold"
+                  onClick={() => setCurrentStep(currentStep - 1)}
+                >
+                  Back
+                </button>
+              )}
+              {currentStep < steps.length - 1 && (
+                <button
+                  className="bg-[#364699] text-white rounded-full py-2 font-semibold w-[100px]"
+                  onClick={() => setCurrentStep(currentStep + 1)}
+                >
+                  Next
+                </button>
+              )}
+              {currentStep === steps.length - 1 && (
+                <button className="bg-[#364699] text-white rounded-full py-2 font-semibold w-[100px]">
+                  Done
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

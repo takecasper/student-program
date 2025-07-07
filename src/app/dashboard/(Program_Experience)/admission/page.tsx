@@ -96,8 +96,11 @@ export default function ProgramAdmissionPage() {
                       <div className="flex flex-col">
                         <button
                           className="flex items-center gap-2 px-4 py-2 hover:bg-[#F5F5F5] text-[#333333DE] text-[14px]"
+                          // onClick={() => {
+                          //   window.location.href = `/dashboard/admission/test-config`;
+                          // }}
                           onClick={() => {
-                            window.location.href = `/dashboard/admission/test-config`;
+                            window.location.href = `/dashboard/admission/program-type`;
                           }}
                         >
                           <FileIcon className="w-5 h-5" />
@@ -113,7 +116,7 @@ export default function ProgramAdmissionPage() {
                           <AddIcon className="w-5 h-5" />
                           Add Test
                         </button>
-                        <button
+                        {/* <button
                           className="flex items-center gap-2 px-4 py-2 hover:bg-[#F5F5F5] text-[#333333DE] text-[14px]"
                           onClick={() => {
                             window.location.href = `/dashboard/admission/video-interview`;
@@ -121,7 +124,7 @@ export default function ProgramAdmissionPage() {
                         >
                           <AddIcon className="w-5 h-5" />
                           VIDEO INTERVIEW
-                        </button>
+                        </button> */}
                       </div>
                     </DropdownMenuContent>
                   </DropdownMenu>
