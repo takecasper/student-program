@@ -28,7 +28,7 @@ const QuestionDrawer = ({ open, onClose, numberOfQuestions }: QuestionDrawerProp
 
   return (
     <Sheet open={open} onOpenChange={onClose}>
-      <SheetContent className="w-[600px] sm:w-[600px]">
+      <SheetContent className="w-[550px] !max-w-none">
         <SheetHeader className="mb-6">
           <SheetTitle className="text-left">
             {isCustomMode ? 'ADD CUSTOM QUESTION' : 'From Question Bank'}
@@ -39,23 +39,23 @@ const QuestionDrawer = ({ open, onClose, numberOfQuestions }: QuestionDrawerProp
                 <Tabs defaultValue="english">
                   <TabsList className="w-full">
                     <TabsTrigger value="english" className="w-full">
-                      EN
+                      ENLISH
                     </TabsTrigger>
                     <TabsTrigger value="french" className="w-full">
-                      FR
+                      FRENCH
                     </TabsTrigger>
                   </TabsList>
                 </Tabs>
               </div>
               <div className="flex items-center justify-between">
                 <Select defaultValue="all">
-                  <SelectTrigger className="w-[100px]">
-                    <SelectValue placeholder="Select Scenario" />
+                  <SelectTrigger className="w-[200px]">
+                    <SelectValue placeholder="Competency Focus" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Scenario 1</SelectItem>
-                    <SelectItem value="text">Scenario 2</SelectItem>
-                    <SelectItem value="video">Scenario 3</SelectItem>
+                    <SelectItem value="all">Competency Focus</SelectItem>
+                    <SelectItem value="text">Professional Context</SelectItem>
+                    <SelectItem value="video">Skill Focus</SelectItem>
                   </SelectContent>
                 </Select>
                 <Button

@@ -2,6 +2,17 @@
 'use client';
 import { useState } from 'react';
 import { Check } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { SelectGroup } from '@radix-ui/react-select';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet';
+import QuestionDrawer from '../components/QuestionDrawer';
 
 const steps = [
   {
@@ -44,6 +55,8 @@ function Step1({
   setResponseTime,
   breakOption,
   setBreakOption,
+  breakDuration,
+  setBreakDuration,
 }: {
   testName: string;
   setTestName: (v: string) => void;
@@ -57,6 +70,8 @@ function Step1({
   setResponseTime: (v: string) => void;
   breakOption: boolean;
   setBreakOption: (v: boolean) => void;
+  breakDuration: string;
+  setBreakDuration: (v: string) => void;
 }) {
   const numOptions = ['3', '4', '5', '6', '7', '8', '9', '10'];
   const timeOptions = ['0:00 min', '0:30 min', '1:00 min', '2:00 min', '3:00 min'];
@@ -76,20 +91,21 @@ function Step1({
       <div className="flex gap-4 mb-4">
         <div className="flex-1">
           <label className="block text-xs font-semibold mb-1">NUMBER OF QUESTIONS</label>
-          <select
-            className="w-full border rounded-[12px] px-3 py-2 text-sm"
-            value={numQuestions}
-            onChange={e => setNumQuestions(e.target.value)}
-          >
-            {numOptions.map(opt => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
-          </select>
+          <Select value={numQuestions} onValueChange={setNumQuestions}>
+            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+              <SelectValue placeholder="Select number of questions" />
+            </SelectTrigger>
+            <SelectContent>
+              {numOptions.map(opt => (
+                <SelectItem key={opt} value={opt}>
+                  {opt}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <div className="flex-1">
-          <label className="block text-xs font-semibold mb-1">TIME BETWEEN EACH QUESTION</label>
+          <label className="block text-xs font-semibold mb-1">SESSION MODE</label>
           <input
             className="w-full border rounded-[12px] px-3 py-2 text-sm"
             value={timeBetween}
@@ -101,31 +117,33 @@ function Step1({
       <div className="flex gap-4 mb-4">
         <div className="flex-1">
           <label className="block text-xs font-semibold mb-1">THINKING TIME PER QUESTION</label>
-          <select
-            className="w-full border rounded-[12px] px-3 py-2 text-sm"
-            value={thinkingTime}
-            onChange={e => setThinkingTime(e.target.value)}
-          >
-            {timeOptions.map(opt => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
-          </select>
+          <Select value={thinkingTime} onValueChange={setThinkingTime}>
+            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+              <SelectValue placeholder="Select thinking time" />
+            </SelectTrigger>
+            <SelectContent>
+              {timeOptions.map(opt => (
+                <SelectItem key={opt} value={opt}>
+                  {opt}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <div className="flex-1">
           <label className="block text-xs font-semibold mb-1">RESPONSE TIME PER QUESTION</label>
-          <select
-            className="w-full border rounded-[12px] px-3 py-2 text-sm"
-            value={responseTime}
-            onChange={e => setResponseTime(e.target.value)}
-          >
-            {timeOptions.map(opt => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
-          </select>
+          <Select value={responseTime} onValueChange={setResponseTime}>
+            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+              <SelectValue placeholder="Select response time" />
+            </SelectTrigger>
+            <SelectContent>
+              {timeOptions.map(opt => (
+                <SelectItem key={opt} value={opt}>
+                  {opt}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <div className="flex items-center gap-3 mb-6">
@@ -140,6 +158,42 @@ function Step1({
             className={`block w-4 h-4 rounded-full bg-white shadow transform transition-transform duration-200 ${breakOption ? 'translate-x-4' : 'translate-x-1'}`}
           ></span>
         </button>
+      </div>
+      <div className="flex gap-4 w-full">
+        <SelectGroup>
+          <Select value={breakDuration} onValueChange={setBreakDuration}>
+            <SelectLabel className="text-xs font-semibold mb-1 text-black">
+              BREAK DURATION
+            </SelectLabel>
+            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+              <SelectValue placeholder="Select break duration" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1">1</SelectItem>
+              <SelectItem value="2">2</SelectItem>
+              <SelectItem value="3">3</SelectItem>
+              <SelectItem value="4">4</SelectItem>
+              <SelectItem value="5">5</SelectItem>
+              <SelectItem value="6">6</SelectItem>
+              <SelectItem value="7">7</SelectItem>
+              <SelectItem value="8">8</SelectItem>
+              <SelectItem value="9">9</SelectItem>
+            </SelectContent>
+          </Select>
+        </SelectGroup>
+        <SelectGroup>
+          <Select>
+            <SelectLabel className="text-xs font-semibold mb-1 text-black">
+              BREAK OPTIONS
+            </SelectLabel>
+            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+              <SelectValue placeholder="Select break options" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1">1</SelectItem>
+            </SelectContent>
+          </Select>
+        </SelectGroup>
       </div>
     </div>
   );
@@ -156,6 +210,64 @@ function Step2({
   customIntro: File | null;
   setCustomIntro: (f: File | null) => void;
 }) {
+  const [isDragging, setIsDragging] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [customIntroPreview, setCustomIntroPreview] = useState<string | null>(null);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'video' | 'text' | 'image'>('text');
+  const [editorValue, setEditorValue] = useState(
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultrices leo in molestie malesuada. Maecenas vitae suscipit lectus. Aliquam tempor metus nec semper interdum.\n\nMauris pretium lacus vitae orci sollicitudin viverra. Quisque blandit tempus urna, mollis molestie odio fringilla et.',
+  );
+  const [editorTitle, setEditorTitle] = useState('Interview - Cycle 1');
+
+  const handleDragStart = (e: React.DragEvent) => {
+    setIsDragging(true);
+    e.dataTransfer.setData('text/plain', 'default-intro');
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+
+    const data = e.dataTransfer.getData('text/plain');
+    if (data === 'default-intro') {
+      // Create a mock file object for the default intro
+      const defaultIntroFile = new File([''], 'default-intro-video.jpg', { type: 'image/jpeg' });
+      setCustomIntro(defaultIntroFile);
+      setCustomIntroPreview('/video.jpg'); // Set the actual image preview
+      setUseDefaultIntro(false);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setCustomIntro(file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        setCustomIntroPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setCustomIntroPreview(null);
+    }
+  };
+
   return (
     <div className="w-full max-w-2xl">
       <h3 className="text-xl font-bold mb-2">Introductory Material</h3>
@@ -165,12 +277,20 @@ function Step2({
       <div className="flex gap-8">
         {/* Default Intro */}
         <div className="flex-1 flex flex-col">
-          <div className="font-semibold text-xs mb-1">DEFAULT INTRO</div>
+          <div className="font-semibold text-xs mb-1 flex items-center gap-2">
+            <span>DEFAULT INTRO</span>
+          </div>
           <div className="text-xs mb-2 flex items-center justify-between">
             <p>Introductory Video</p>
             <button
               type="button"
-              onClick={() => setUseDefaultIntro(true)}
+              onClick={() => {
+                setUseDefaultIntro(true);
+                if (customIntroPreview) {
+                  setCustomIntro(null);
+                  setCustomIntroPreview(null);
+                }
+              }}
               className={`w-10 h-6 rounded-full border transition-colors duration-200 ${useDefaultIntro ? 'bg-[#364699] border-[#364699]' : 'bg-gray-200 border-gray-300'}`}
             >
               <span
@@ -183,9 +303,13 @@ function Step2({
             <img
               src="/video.jpg"
               alt="Default Intro"
-              className="rounded-lg w-full h-48 object-cover"
+              className={`rounded-lg w-full h-48 object-cover cursor-pointer transition-opacity ${isDragging ? 'opacity-50' : 'opacity-100'}`}
+              draggable
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+              onClick={() => setSheetOpen(true)}
             />
-            <button className="absolute inset-0 flex items-center justify-center">
+            <button className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <span className="bg-white rounded-full p-2 shadow">
                 <svg width="32" height="32" fill="none" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z" fill="#364699" />
@@ -198,27 +322,212 @@ function Step2({
                 <span className="ml-2 w-3 h-3 bg-[#70C0B8] rounded-full inline-block"></span>
               )}
             </div>
+            {customIntroPreview && (
+              <div className="absolute bottom-2 left-2 bg-blue-500 text-white rounded-[8px] px-2 py-1 text-xs font-semibold">
+                Copied ✓
+              </div>
+            )}
+            <div className="absolute top-2 right-2 bg-blue-500 text-white rounded-[8px] px-2 py-1 text-xs font-semibold">
+              Drag to copy
+            </div>
           </div>
+          {/* Sheet Sidebar */}
+          <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+            <SheetContent side="right" className="w-[650px] !max-w-none flex flex-col h-full">
+              <SheetHeader>
+                <SheetTitle>INTRODUCTORY</SheetTitle>
+              </SheetHeader>
+              {/* Tabs */}
+              <div className="flex border-b mb-4 mt-2">
+                {['video', 'text', 'image'].map(tab => (
+                  <button
+                    key={tab}
+                    className={`px-4 py-2 text-sm font-medium capitalize border-b-2 transition-colors duration-150 ${
+                      activeTab === tab
+                        ? 'border-[#364699] text-[#364699] bg-white'
+                        : 'border-transparent text-gray-500 bg-gray-50'
+                    }`}
+                    onClick={() => setActiveTab(tab as 'video' | 'text' | 'image')}
+                  >
+                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  </button>
+                ))}
+              </div>
+              {/* Tab Content */}
+              <div className="flex-1 overflow-y-auto pb-32">
+                {activeTab === 'text' && (
+                  <div className="flex flex-col gap-4">
+                    <input
+                      className="border rounded px-3 py-2 text-sm mb-2"
+                      value={editorTitle}
+                      onChange={e => setEditorTitle(e.target.value)}
+                    />
+                    {/* Toolbar */}
+                    <div className="flex items-center gap-2 mb-2">
+                      <select className="border rounded px-2 py-1 text-xs">
+                        <option>Lato</option>
+                        <option>Arial</option>
+                        <option>Roboto</option>
+                      </select>
+                      <select className="border rounded px-2 py-1 text-xs">
+                        <option>14</option>
+                        <option>16</option>
+                        <option>18</option>
+                      </select>
+                      <button className="px-1 font-bold">A</button>
+                      <button className="px-1 font-bold">B</button>
+                      <button className="px-1 font-bold">U</button>
+                      <button className="px-1">•</button>
+                      <button className="px-1">1.</button>
+                      <button className="px-1">≡</button>
+                      <button className="px-1">≡</button>
+                      <button className="px-1">≡</button>
+                      <button className="px-1">🖼️</button>
+                    </div>
+                    <textarea
+                      className="border rounded px-3 py-2 text-sm min-h-[120px]"
+                      value={editorValue}
+                      onChange={e => setEditorValue(e.target.value)}
+                    />
+                  </div>
+                )}
+                {activeTab === 'video' && (
+                  <div className="flex flex-col items-center justify-center h-64 text-gray-400">
+                    Video preview here
+                  </div>
+                )}
+                {activeTab === 'image' && (
+                  <div className="flex flex-col gap-6">
+                    {/* Upload Area */}
+                    <div className="w-full h-40 bg-gray-100 rounded-xl flex flex-col items-center justify-center border border-dashed border-gray-300 cursor-pointer mb-2">
+                      <div className="flex flex-col items-center">
+                        <svg
+                          width="32"
+                          height="32"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          className="mb-2 text-gray-400"
+                        >
+                          <path
+                            d="M12 16V4m0 0l-4 4m4-4l4 4"
+                            stroke="#A0AEC0"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <rect x="4" y="20" width="16" height="2" rx="1" fill="#A0AEC0" />
+                        </svg>
+                        <span className="text-gray-400 text-sm font-medium">
+                          Upload Question Video
+                        </span>
+                      </div>
+                    </div>
+                    {/* Question Title */}
+                    <input
+                      className="border rounded-xl px-4 py-2 text-sm w-full"
+                      placeholder="Question Title"
+                    />
+                    {/* Competency Focus */}
+                    <div>
+                      <label className="block text-xs font-semibold mb-1">Competency Focus</label>
+                      <div className="flex items-center gap-2 w-full">
+                        {/* Simple multi-select mockup */}
+                        <div className="flex flex-wrap gap-2">
+                          <span className="bg-gray-100 rounded-full px-3 py-1 text-xs flex items-center">
+                            Communication <span className="ml-1 cursor-pointer">×</span>
+                          </span>
+                          <span className="bg-gray-100 rounded-full px-3 py-1 text-xs flex items-center">
+                            Empathy <span className="ml-1 cursor-pointer">×</span>
+                          </span>
+                        </div>
+                        <button className="ml-auto border rounded-xl px-2 py-1 text-xs text-gray-500 flex items-center">
+                          <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+                            <path
+                              d="M7 10l5 5 5-5"
+                              stroke="#A0AEC0"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              {/* Bottom Buttons */}
+              <div className="flex justify-between items-center py-4 px-2 border-t bg-white absolute bottom-0 left-0 w-full">
+                <SheetClose asChild>
+                  <button className="px-4 py-2 rounded-full border text-gray-600">Back</button>
+                </SheetClose>
+                <button className="px-4 py-2 rounded-full bg-[#364699] text-white">Next</button>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
         {/* Custom Intro */}
         <div className="flex-1 flex flex-col">
           <div className="font-semibold text-xs mb-1">CUSTOM INTRO</div>
           <div className="text-xs mb-2">Upload/Add your own intro</div>
           <div className="flex-grow flex items-center">
-            <label className="block border-2 border-dashed border-gray-300 rounded-lg w-full h-48 flex flex-col items-center justify-center cursor-pointer">
-              {customIntro ? (
-                <span className="text-xs">{customIntro.name}</span>
+            <label
+              className={`block border-2 border-dashed rounded-lg w-full h-48 flex flex-col items-center justify-center cursor-pointer transition-colors overflow-hidden ${
+                isDragOver
+                  ? 'border-blue-500 bg-blue-50'
+                  : customIntro
+                    ? 'border-green-500 bg-green-50'
+                    : 'border-gray-300'
+              }`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              {customIntroPreview ? (
+                <div className="relative w-full h-full">
+                  <img
+                    src={customIntroPreview}
+                    alt="Custom Intro Preview"
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+                    <div className="bg-white rounded-full p-2 shadow">
+                      <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" fill="#364699" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="absolute top-2 left-2 bg-green-500 text-white rounded-[8px] px-2 py-1 text-xs font-semibold">
+                    Added
+                  </div>
+                  <div className="absolute top-2 right-2 bg-white text-gray-700 rounded-[8px] px-2 py-1 text-xs font-semibold">
+                    {customIntro?.name || 'Default Intro'}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={e => {
+                      e.preventDefault();
+                      setCustomIntro(null);
+                      setCustomIntroPreview(null);
+                    }}
+                    className="absolute bottom-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                    title="Remove intro"
+                  >
+                    ×
+                  </button>
+                </div>
               ) : (
                 <>
                   <span className="text-4xl text-gray-300">+</span>
                   <span className="text-xs text-gray-400 mt-2">Upload/Add your own intro</span>
+                  <span className="text-xs text-blue-500 mt-1">or drag from default intro</span>
                 </>
               )}
               <input
                 type="file"
-                accept="video/*"
+                accept="video/*,image/*"
                 className="hidden"
-                onChange={e => setCustomIntro(e.target.files?.[0] || null)}
+                onChange={handleFileChange}
                 disabled={useDefaultIntro}
               />
             </label>
@@ -229,13 +538,18 @@ function Step2({
   );
 }
 
-function Step3({
-  questions,
-  setQuestions,
-}: {
-  questions: string[];
-  setQuestions: (q: string[]) => void;
-}) {
+function Step3({ questions }: { questions: string[]; setQuestions: (q: string[]) => void }) {
+  const [sheetOpen, setSheetOpen] = useState(false);
+
+  // Open Sheet for editing or adding
+  const handleCardClick = () => {
+    setSheetOpen(true);
+  };
+  // Open Sheet for adding
+  const handleAddClick = () => {
+    setSheetOpen(true);
+  };
+
   return (
     <div className="w-full max-w-3xl">
       <h3 className="text-xl font-bold mb-2">Question Bank</h3>
@@ -247,30 +561,42 @@ function Step3({
             key={idx}
             type="button"
             className="border-2 border-dashed border-gray-300 rounded-lg h-24 w-[320px] flex items-center justify-center text-4xl text-gray-300 focus:outline-none"
-            onClick={() => {
-              const newQ = prompt('Enter your question:', q);
-              if (newQ !== null) {
-                const updated = [...questions];
-                updated[idx] = newQ;
-                setQuestions(updated);
-              }
-            }}
+            onClick={() => handleCardClick()}
           >
             {q ? <span className="text-base text-gray-700">{q}</span> : <span>+</span>}
           </button>
         ))}
+        {/* Plus Card for Add Custom Question */}
+        <button
+          type="button"
+          className="border-2 border-dashed border-gray-300 rounded-lg h-24 w-[320px] flex items-center justify-center text-4xl text-gray-300 focus:outline-none"
+          onClick={handleAddClick}
+        >
+          <span>+</span>
+        </button>
       </div>
+      {/* Use the actual QuestionDrawer component for add/edit */}
+      <QuestionDrawer
+        open={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        numberOfQuestions={questions.length}
+        // Optionally, pass more props for editing/adding
+      />
     </div>
   );
 }
 
 function Step4({
   concludingMaterial,
-  setConcludingMaterial,
 }: {
   concludingMaterial: string | null;
   setConcludingMaterial: (v: string | null) => void;
 }) {
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'video' | 'text' | 'image'>('text');
+  const [editorValue, setEditorValue] = useState('');
+  const [editorTitle, setEditorTitle] = useState('');
+
   return (
     <div className="w-full max-w-2xl">
       <h3 className="text-xl font-bold mb-2">Concluding Material</h3>
@@ -278,10 +604,7 @@ function Step4({
       <button
         type="button"
         className="border-2 border-dashed border-gray-300 rounded-lg w-64 h-64 flex flex-col items-center justify-center bg-gray-50"
-        onClick={() => {
-          const msg = prompt('Enter your concluding message:', concludingMaterial || '');
-          if (msg !== null) setConcludingMaterial(msg);
-        }}
+        onClick={() => setSheetOpen(true)}
       >
         {concludingMaterial ? (
           <span className="text-base text-gray-700 text-center">{concludingMaterial}</span>
@@ -289,6 +612,140 @@ function Step4({
           <span className="text-5xl text-gray-300">+</span>
         )}
       </button>
+      {/* Sheet for Add/Edit Concluding Material (like INTRODUCTORY) */}
+      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+        <SheetContent side="right" className="w-[650px] !max-w-none flex flex-col h-full">
+          <SheetHeader>
+            <SheetTitle>CONCLUDING MATERIAL</SheetTitle>
+          </SheetHeader>
+          {/* Tabs */}
+          <div className="flex border-b mb-4 mt-2">
+            {['video', 'text', 'image'].map(tab => (
+              <button
+                key={tab}
+                className={`px-4 py-2 text-sm font-medium capitalize border-b-2 transition-colors duration-150 ${
+                  activeTab === tab
+                    ? 'border-[#364699] text-[#364699] bg-white'
+                    : 'border-transparent text-gray-500 bg-gray-50'
+                }`}
+                onClick={() => setActiveTab(tab as 'video' | 'text' | 'image')}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
+          </div>
+          {/* Tab Content */}
+          <div className="flex-1 overflow-y-auto pb-32">
+            {activeTab === 'text' && (
+              <div className="flex flex-col gap-4">
+                <input
+                  className="border rounded px-3 py-2 text-sm mb-2"
+                  value={editorTitle}
+                  onChange={e => setEditorTitle(e.target.value)}
+                  placeholder="Concluding Title"
+                />
+                {/* Toolbar */}
+                <div className="flex items-center gap-2 mb-2">
+                  <select className="border rounded px-2 py-1 text-xs">
+                    <option>Lato</option>
+                    <option>Arial</option>
+                    <option>Roboto</option>
+                  </select>
+                  <select className="border rounded px-2 py-1 text-xs">
+                    <option>14</option>
+                    <option>16</option>
+                    <option>18</option>
+                  </select>
+                  <button className="px-1 font-bold">A</button>
+                  <button className="px-1 font-bold">B</button>
+                  <button className="px-1 font-bold">U</button>
+                  <button className="px-1">•</button>
+                  <button className="px-1">1.</button>
+                  <button className="px-1">≡</button>
+                  <button className="px-1">≡</button>
+                  <button className="px-1">≡</button>
+                  <button className="px-1">🖼️</button>
+                </div>
+                <textarea
+                  className="border rounded px-3 py-2 text-sm min-h-[120px]"
+                  value={editorValue}
+                  onChange={e => setEditorValue(e.target.value)}
+                  placeholder="Enter concluding message..."
+                />
+              </div>
+            )}
+            {activeTab === 'video' && (
+              <div className="flex flex-col items-center justify-center h-64 text-gray-400">
+                Video preview here
+              </div>
+            )}
+            {activeTab === 'image' && (
+              <div className="flex flex-col gap-6">
+                {/* Upload Area */}
+                <div className="w-full h-40 bg-gray-100 rounded-xl flex flex-col items-center justify-center border border-dashed border-gray-300 cursor-pointer mb-2">
+                  <div className="flex flex-col items-center">
+                    <svg
+                      width="32"
+                      height="32"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      className="mb-2 text-gray-400"
+                    >
+                      <path
+                        d="M12 16V4m0 0l-4 4m4-4l4 4"
+                        stroke="#A0AEC0"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <rect x="4" y="20" width="16" height="2" rx="1" fill="#A0AEC0" />
+                    </svg>
+                    <span className="text-gray-400 text-sm font-medium">Upload Question Video</span>
+                  </div>
+                </div>
+                {/* Question Title */}
+                <input
+                  className="border rounded-xl px-4 py-2 text-sm w-full"
+                  placeholder="Concluding Title"
+                />
+                {/* Competency Focus */}
+                <div>
+                  <label className="block text-xs font-semibold mb-1">Competency Focus</label>
+                  <div className="flex items-center gap-2 w-full">
+                    {/* Simple multi-select mockup */}
+                    <div className="flex flex-wrap gap-2">
+                      <span className="bg-gray-100 rounded-full px-3 py-1 text-xs flex items-center">
+                        Communication <span className="ml-1 cursor-pointer">×</span>
+                      </span>
+                      <span className="bg-gray-100 rounded-full px-3 py-1 text-xs flex items-center">
+                        Empathy <span className="ml-1 cursor-pointer">×</span>
+                      </span>
+                    </div>
+                    <button className="ml-auto border rounded-xl px-2 py-1 text-xs text-gray-500 flex items-center">
+                      <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+                        <path
+                          d="M7 10l5 5 5-5"
+                          stroke="#A0AEC0"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          {/* Bottom Buttons */}
+          <div className="flex justify-between items-center py-4 px-2 border-t bg-white absolute bottom-0 left-0 w-full">
+            <SheetClose asChild>
+              <button className="px-4 py-2 rounded-full border text-gray-600">Back</button>
+            </SheetClose>
+            <button className="px-4 py-2 rounded-full bg-[#364699] text-white">Next</button>
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
@@ -319,8 +776,6 @@ function Step5({
   setCapacity: (v: string) => void;
   slotDuration: string;
   setSlotDuration: (v: string) => void;
-  previewTest: boolean;
-  setPreviewTest: (v: boolean) => void;
 }) {
   return (
     <div className="w-full max-w-2xl">
@@ -329,90 +784,92 @@ function Step5({
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-xs font-semibold mb-1">Start Date</label>
-          <select
-            className="w-full border rounded-[12px] px-3 py-2 text-sm"
-            value={startDate}
-            onChange={e => setStartDate(e.target.value)}
-          >
-            <option value="">Select Date</option>
-            <option value="2024-07-01">July 1, 2024</option>
-            <option value="2024-07-02">July 2, 2024</option>
-            <option value="2024-07-03">July 3, 2024</option>
-          </select>
+          <Select value={startDate} onValueChange={setStartDate}>
+            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+              <SelectValue placeholder="Select Date" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="2024-07-01">July 1, 2024</SelectItem>
+              <SelectItem value="2024-07-02">July 2, 2024</SelectItem>
+              <SelectItem value="2024-07-03">July 3, 2024</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <label className="block text-xs font-semibold mb-1">End Date</label>
-          <select
-            className="w-full border rounded-[12px] px-3 py-2 text-sm"
-            value={endDate}
-            onChange={e => setEndDate(e.target.value)}
-          >
-            <option value="">Select Date</option>
-            <option value="2024-07-01">July 1, 2024</option>
-            <option value="2024-07-02">July 2, 2024</option>
-            <option value="2024-07-03">July 3, 2024</option>
-          </select>
+          <Select value={endDate} onValueChange={setEndDate}>
+            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+              <SelectValue placeholder="Select Date" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="2024-07-01">July 1, 2024</SelectItem>
+              <SelectItem value="2024-07-02">July 2, 2024</SelectItem>
+              <SelectItem value="2024-07-03">July 3, 2024</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-xs font-semibold mb-1">Start Time</label>
-          <select
-            className="w-full border rounded-[12px] px-3 py-2 text-sm"
-            value={startTime}
-            onChange={e => setStartTime(e.target.value)}
-          >
-            <option value="">Select Time</option>
-            <option value="08:00">08:00 AM</option>
-            <option value="09:00">09:00 AM</option>
-            <option value="10:00">10:00 AM</option>
-            <option value="13:00">01:00 PM</option>
-            <option value="15:00">03:00 PM</option>
-          </select>
+          <Select value={startTime} onValueChange={setStartTime}>
+            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+              <SelectValue placeholder="Select Time" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="08:00">08:00 AM</SelectItem>
+              <SelectItem value="09:00">09:00 AM</SelectItem>
+              <SelectItem value="10:00">10:00 AM</SelectItem>
+              <SelectItem value="13:00">01:00 PM</SelectItem>
+              <SelectItem value="15:00">03:00 PM</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <label className="block text-xs font-semibold mb-1">End Time</label>
-          <select
-            className="w-full border rounded-[12px] px-3 py-2 text-sm"
-            value={endTime}
-            onChange={e => setEndTime(e.target.value)}
-          >
-            <option value="">Select Time</option>
-            <option value="09:00">09:00 AM</option>
-            <option value="10:00">10:00 AM</option>
-            <option value="11:00">11:00 AM</option>
-            <option value="14:00">02:00 PM</option>
-            <option value="16:00">04:00 PM</option>
-          </select>
+          <Select value={endTime} onValueChange={setEndTime}>
+            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+              <SelectValue placeholder="Select Time" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="09:00">09:00 AM</SelectItem>
+              <SelectItem value="10:00">10:00 AM</SelectItem>
+              <SelectItem value="11:00">11:00 AM</SelectItem>
+              <SelectItem value="14:00">02:00 PM</SelectItem>
+              <SelectItem value="16:00">04:00 PM</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-xs font-semibold mb-1">CAPACITY</label>
-          <select
-            className="w-full border rounded-[12px] px-3 py-2 text-sm"
-            value={capacity}
-            onChange={e => setCapacity(e.target.value)}
-          >
-            <option>Unlimited</option>
-            <option>10</option>
-            <option>20</option>
-            <option>50</option>
-            <option>100</option>
-          </select>
+          <Select value={capacity} onValueChange={setCapacity}>
+            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+              <SelectValue placeholder="Select capacity" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Unlimited">Unlimited</SelectItem>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="20">20</SelectItem>
+              <SelectItem value="50">50</SelectItem>
+              <SelectItem value="100">100</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <label className="block text-xs font-semibold mb-1">SLOT DURATION</label>
-          <select
-            className="w-full border rounded-[12px] px-3 py-2 text-sm"
-            value={slotDuration}
-            onChange={e => setSlotDuration(e.target.value)}
-          >
-            <option>60 Min</option>
-            <option>30 Min</option>
-            <option>90 Min</option>
-            <option>120 Min</option>
-          </select>
+          <Select value={slotDuration} onValueChange={setSlotDuration}>
+            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+              <SelectValue placeholder="Select duration" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="60 Min">60 Min</SelectItem>
+              <SelectItem value="30 Min">30 Min</SelectItem>
+              <SelectItem value="90 Min">90 Min</SelectItem>
+              <SelectItem value="120 Min">120 Min</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <div className="flex items-center gap-4 mt-6 justify-end">
@@ -571,6 +1028,8 @@ function Step6({
   );
 }
 
+// Add this new component after the Step functions and before the main component
+
 export default function VideoInterviewConfigPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [testName, setTestName] = useState('Interview Cycle 1');
@@ -579,6 +1038,7 @@ export default function VideoInterviewConfigPage() {
   const [thinkingTime, setThinkingTime] = useState('0:00 min');
   const [responseTime, setResponseTime] = useState('0:00 min');
   const [breakOption, setBreakOption] = useState(false);
+  const [breakDuration, setBreakDuration] = useState('');
   const [selectedCycle, setSelectedCycle] = useState(0);
   const [useDefaultIntro, setUseDefaultIntro] = useState<boolean>(true);
   const [customIntro, setCustomIntro] = useState<File | null>(null);
@@ -590,7 +1050,6 @@ export default function VideoInterviewConfigPage() {
   const [endTime, setEndTime] = useState('');
   const [capacity, setCapacity] = useState('Unlimited');
   const [slotDuration, setSlotDuration] = useState('60 Min');
-  const [previewTest, setPreviewTest] = useState(false);
   const [ratingsEnabled, setRatingsEnabled] = useState(false);
   const [overrideRule, setOverrideRule] = useState('full-edit');
   const [ratingOverrides, setRatingOverrides] = useState(false);
@@ -616,6 +1075,8 @@ export default function VideoInterviewConfigPage() {
         setResponseTime={setResponseTime}
         breakOption={breakOption}
         setBreakOption={setBreakOption}
+        breakDuration={breakDuration}
+        setBreakDuration={setBreakDuration}
       />
     );
   else if (currentStep === 1)
@@ -651,8 +1112,6 @@ export default function VideoInterviewConfigPage() {
         setCapacity={setCapacity}
         slotDuration={slotDuration}
         setSlotDuration={setSlotDuration}
-        previewTest={previewTest}
-        setPreviewTest={setPreviewTest}
       />
     );
   else if (currentStep === 5)
@@ -674,31 +1133,33 @@ export default function VideoInterviewConfigPage() {
     );
 
   return (
-    <div className="bg-[#fafbfc] min-h-screen">
-      <h2 className="text-[#364699] text-lg font-semibold pt-16 px-8 mb-8">VIDEO INETRVIEW</h2>
-      <div className="px-8">
-        <div className="flex gap-4 mb-8">
-          {cycles.map((cycle, idx) => (
+    <div className="flex min-h-screen bg-[#fafbfc]">
+      <div className="w-full">
+        <div className="px-8 pt-16">
+          <div className="flex gap-4 mb-8">
+            {cycles.map((cycle, idx) => (
+              <button
+                key={cycle.name}
+                type="button"
+                className={`px-6 py-3 rounded-lg border text-left ${selectedCycle === idx ? 'bg-[#364699] text-white border-[#364699] font-semibold' : 'bg-white text-[#333] border-[#e5e7eb]'} flex flex-col items-start min-w-[180px]`}
+                onClick={() => setSelectedCycle(idx)}
+              >
+                <span>{cycle.name}</span>
+                <span className="text-xs font-normal opacity-70">{cycle.status}</span>
+              </button>
+            ))}
             <button
-              key={cycle.name}
               type="button"
-              className={`px-6 py-3 rounded-lg border text-left ${selectedCycle === idx ? 'bg-[#364699] text-white border-[#364699] font-semibold' : 'bg-white text-[#333] border-[#e5e7eb]'} flex flex-col items-start min-w-[180px]`}
-              onClick={() => setSelectedCycle(idx)}
+              className="px-6 py-3 rounded-lg border-2 border-dashed border-[#e5e7eb] text-[#bdbdbd] flex items-center justify-center min-w-[60px]"
             >
-              <span>{cycle.name}</span>
-              <span className="text-xs font-normal opacity-70">{cycle.status}</span>
+              <span className="text-2xl font-bold">+</span>
             </button>
-          ))}
-          <button
-            type="button"
-            className="px-6 py-3 rounded-lg border-2 border-dashed border-[#e5e7eb] text-[#bdbdbd] flex items-center justify-center min-w-[60px]"
-          >
-            <span className="text-2xl font-bold">+</span>
-          </button>
+          </div>
         </div>
         <div className="flex items-start">
           {/* Left Stepper */}
-          <div className="w-[470px] border-r border-[#e5e7eb] pb-8 flex flex-col">
+          <div className="w-[450px] border-r border-[#e5e7eb] py-16 px-10">
+            <h2 className="text-[#364699] text-lg font-semibold mb-8">VIDEO INTERVIEW</h2>
             <ol className="space-y-0">
               {steps.map((step, idx) => (
                 <li key={idx} className="flex flex-row items-start mb-2">
@@ -737,13 +1198,99 @@ export default function VideoInterviewConfigPage() {
                       {step.title}
                     </div>
                     <div className="text-xs text-[#9ca3af]">{step.description}</div>
+                    {/* Step 1 Summary */}
+                    {idx === 0 && currentStep > 0 && (
+                      <div className="mt-2 bg-white border rounded-[12px] px-3 py-2 text-[#333333] text-xs font-semibold flex items-center gap-2">
+                        <div className="bg-[#70C0B8] border border-[#00A59B] rounded-full p-1">
+                          <Check className="h-4 w-4 text-white" />
+                        </div>
+                        <div>
+                          <div>{testName}</div>
+                          <div className="text-[#6b7280] font-normal">{numQuestions} Questions</div>
+                        </div>
+                      </div>
+                    )}
+                    {/* Step 2 Summary */}
+                    {idx === 1 && currentStep > 1 && (
+                      <div className="mt-2 bg-white border rounded-[12px] px-3 py-2 text-[#333333] text-xs font-semibold flex items-center gap-2">
+                        <div className="bg-[#70C0B8] border border-[#00A59B] rounded-full p-1">
+                          <Check className="h-4 w-4 text-white" />
+                        </div>
+                        <div>
+                          <div>
+                            {useDefaultIntro
+                              ? 'Default Intro Video'
+                              : customIntro
+                                ? 'Custom Intro'
+                                : 'No Intro'}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {/* Step 3 Summary */}
+                    {idx === 2 && currentStep > 2 && (
+                      <div className="mt-2 bg-white border rounded-[12px] px-3 py-2 text-[#333333] text-xs font-semibold flex items-center gap-2">
+                        <div className="bg-[#70C0B8] border border-[#00A59B] rounded-full p-1">
+                          <Check className="h-4 w-4 text-white" />
+                        </div>
+                        <div>
+                          <div>Questions Added</div>
+                          <div className="text-[#6b7280] font-normal">
+                            {questions.filter(q => q.trim()).length} of {questions.length}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {/* Step 4 Summary */}
+                    {idx === 3 && currentStep > 3 && (
+                      <div className="mt-2 bg-white border rounded-[12px] px-3 py-2 text-[#333333] text-xs font-semibold flex items-center gap-2">
+                        <div className="bg-[#70C0B8] border border-[#00A59B] rounded-full p-1">
+                          <Check className="h-4 w-4 text-white" />
+                        </div>
+                        <div>
+                          <div>
+                            {concludingMaterial
+                              ? 'Concluding Material Added'
+                              : 'No Concluding Material'}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {/* Step 5 Summary */}
+                    {idx === 4 && currentStep > 4 && (
+                      <div className="mt-2 bg-white border rounded-[12px] px-3 py-2 text-[#333333] text-xs font-semibold flex items-center gap-2">
+                        <div className="bg-[#70C0B8] border border-[#00A59B] rounded-full p-1">
+                          <Check className="h-4 w-4 text-white" />
+                        </div>
+                        <div>
+                          <div>Schedule Configured</div>
+                          <div className="text-[#6b7280] font-normal">
+                            {startDate} - {endDate}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {/* Step 6 Summary */}
+                    {idx === 5 && currentStep > 5 && (
+                      <div className="mt-2 bg-white border rounded-[12px] px-3 py-2 text-[#333333] text-xs font-semibold flex items-center gap-2">
+                        <div className="bg-[#70C0B8] border border-[#00A59B] rounded-full p-1">
+                          <Check className="h-4 w-4 text-white" />
+                        </div>
+                        <div>
+                          <div>Rating System</div>
+                          <div className="text-[#6b7280] font-normal">
+                            {ratingsEnabled ? 'Enabled' : 'Disabled'}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </li>
               ))}
             </ol>
           </div>
           {/* Right Form */}
-          <div className="px-20 flex flex-col items-start justify-center">
+          <div className="flex-1 flex flex-col items-start justify-center w-full px-20">
             {stepContent}
             {currentStep < steps.length - 1 && (
               <button
