@@ -1,6 +1,5 @@
 'use client';
 import Image from 'next/image';
-import { useState } from 'react';
 
 import { ArrowLeft } from 'lucide-react';
 import VideoInterviewRight from './VideoInterviewRight';
@@ -10,8 +9,6 @@ interface VideoInterviewProps {
 }
 
 export default function VideoInterview({ onBack }: VideoInterviewProps) {
-  const [state, setState] = useState('prepare');
-
   return (
     <div className="bg-white  text-gray-800 flex flex-col md:flex-row gap-10">
       {/* Back Button */}
@@ -91,13 +88,11 @@ export default function VideoInterview({ onBack }: VideoInterviewProps) {
       </div>
 
       {/* Right Section - Preparation Steps */}
-      {state === 'prepare' && (
-        <div className="w-full md:w-[550px] py-6 bg-white space-y-6 text-gray-800 shrink-0">
-          <div className="overflow-auto h-[calc(100vh-270px)]">
-            <VideoInterviewRight setState={setState} />
-          </div>
+      <div className="w-full md:w-[550px] py-6 bg-white space-y-6 text-gray-800 shrink-0">
+        <div className="overflow-auto h-[calc(100vh-270px)]">
+          <VideoInterviewRight />
         </div>
-      )}
+      </div>
     </div>
   );
 }

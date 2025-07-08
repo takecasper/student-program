@@ -25,6 +25,7 @@ import { CountrySummary } from './components/CountryStep';
 import { ProgramTypeSummary } from './components/ProgramTypeStep';
 import { SchoolSummary } from './components/SchoolStep';
 import { TestDateSummary } from './components/TestDateStep';
+import SnapshotInterview from '@/components/addmission/Prepare/Snapshot';
 
 // Helper function to format selected answers
 const formatSelectedAnswer = (stepId: number, formData: FormData): string => {
@@ -68,6 +69,11 @@ const formatSelectedAnswer = (stepId: number, formData: FormData): string => {
       if (formData.testDate.VIDEO_INTERVIEW) {
         testSelections.push(
           `Video Interview: ${formData.testDate.VIDEO_INTERVIEW.date} ${formData.testDate.VIDEO_INTERVIEW.time}`,
+        );
+      }
+      if (formData.testDate.SNAPSHOT) {
+        testSelections.push(
+          `Snapshot: ${formData.testDate.SNAPSHOT.date} ${formData.testDate.SNAPSHOT.time}`,
         );
       }
       return testSelections.join(', ');
@@ -337,6 +343,8 @@ export default function AdmissionContent() {
           setSelectedTestType('');
         }}
       />
+    ) : selectedTestType === 'SNAPSHOT' ? (
+      <SnapshotInterview />
     ) : (
       <CasperPrepare />
     )

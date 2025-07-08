@@ -18,12 +18,17 @@ type PermissionStatus =
 
 export default function SnapshotTestPage() {
   const [started, setStarted] = useState(false);
+  const [videoFinished, setVideoFinished] = useState(false);
   const [thinkingTime, setThinkingTime] = useState(80); // 1:20 in seconds
   const [answering, setAnswering] = useState(false);
   const [recording, setRecording] = useState(false);
   const [totalTimeLeft, setTotalTimeLeft] = useState(600); // 10:00 in seconds
+  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const totalTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const cameraVideoRef = useRef<HTMLVideoElement>(null);
 
   // Permission states: 'allowed' | 'denied'
   const [signalStatus, setSignalStatus] = useState<PermissionStatus>(PERMISSION_PENDING);
@@ -78,9 +83,9 @@ export default function SnapshotTestPage() {
     };
   }, [recording]);
 
-  // Start timer when started and not answering
+  // Start timer when video is finished and not answering
   useEffect(() => {
-    if (started && !answering && thinkingTime > 0) {
+    if (videoFinished && !answering && thinkingTime > 0) {
       timerRef.current = setInterval(() => {
         setThinkingTime(prev => {
           if (prev <= 0) {
@@ -102,7 +107,7 @@ export default function SnapshotTestPage() {
         timerRef.current = null;
       }
     };
-  }, [started, answering, thinkingTime]);
+  }, [videoFinished, answering, thinkingTime]);
 
   // Stop timer when time runs out
   useEffect(() => {
@@ -112,10 +117,72 @@ export default function SnapshotTestPage() {
     }
   }, [thinkingTime]);
 
-  // When answering starts, set recording to true
+  // Start camera and recording when answering starts
   useEffect(() => {
-    if (answering) setRecording(true);
+    if (answering) {
+      startCamera();
+    } else {
+      stopCamera();
+    }
   }, [answering]);
+
+  // Start camera recording - Simplified approach
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+
+      // Set the camera stream to the existing video ref
+      if (cameraVideoRef.current) {
+        cameraVideoRef.current.srcObject = stream;
+        cameraVideoRef.current.play().catch(e => console.error('Camera play error:', e));
+      }
+
+      // Start recording
+      const recorder = new MediaRecorder(stream);
+      const chunks: Blob[] = [];
+
+      recorder.ondataavailable = event => {
+        if (event.data.size > 0) {
+          chunks.push(event.data);
+        }
+      };
+
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'video/webm' });
+        console.log('Recording saved:', blob);
+      };
+
+      setMediaRecorder(recorder);
+      recorder.start();
+      setRecording(true);
+      setCameraStream(stream);
+    } catch (error) {
+      console.error('Error accessing camera:', error);
+      alert('Unable to access camera. Please check permissions.');
+    }
+  };
+
+  // Stop camera recording
+  const stopCamera = () => {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      mediaRecorder.stop();
+    }
+
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(track => track.stop());
+      setCameraStream(null);
+    }
+
+    // Restore original video by resetting state
+    setAnswering(false);
+    setRecording(false);
+
+    setRecording(false);
+    setMediaRecorder(null);
+  };
 
   // Format time as mm:ss
   function formatTime(sec: number) {
@@ -177,14 +244,44 @@ export default function SnapshotTestPage() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col items-center justify-center">
-        {/* Video Player */}
-        <div className="w-[480px] h-[270px] bg-gray-200 rounded-lg flex items-center justify-center relative overflow-hidden">
-          <Image
-            src="/video.jpg"
-            alt="Video Placeholder"
-            fill
-            style={{ objectFit: 'cover', opacity: 0.7 }}
-          />
+        {/* Video Player or Camera */}
+        <div
+          id="video-container"
+          className="w-[480px] h-[270px] bg-gray-200 rounded-lg flex items-center justify-center relative overflow-hidden"
+        >
+          {recording ? (
+            // Camera view when recording
+            <>
+              <video
+                ref={cameraVideoRef}
+                className="w-full h-full object-cover"
+                autoPlay
+                playsInline
+                muted
+                style={{ transform: 'scaleX(-1)' }} // Mirror the camera
+              />
+              {!cameraStream && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-800 text-white">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
+                    <p>Loading camera...</p>
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            // Original video when not recording
+            <video
+              ref={videoRef}
+              src="/video.mp4"
+              className="w-full h-full object-cover"
+              controls={true}
+              muted
+              loop={false}
+              autoPlay={false}
+              onEnded={() => setVideoFinished(true)}
+            />
+          )}
           {/* Recording badge */}
           {recording && (
             <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full flex items-center gap-2 shadow text-xs font-semibold">
@@ -192,10 +289,17 @@ export default function SnapshotTestPage() {
               <span className="text-red-500">Recording</span>
             </div>
           )}
-          {!started && (
+          {!started && !recording && (
             <button
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-4 shadow-lg"
-              onClick={() => setStarted(true)}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-4 shadow-lg z-10"
+              onClick={() => {
+                setStarted(true);
+                // Play the video when initial play button is clicked
+                const videoElement = videoRef.current;
+                if (videoElement) {
+                  videoElement.play().catch(console.error);
+                }
+              }}
             >
               <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
                 <circle cx="20" cy="20" r="20" fill="#fff" />
@@ -216,8 +320,8 @@ export default function SnapshotTestPage() {
                 </span>
               </div>
             </div>
-            {/* If recording, show waveform UI, else show thinking time */}
-            {!recording ? (
+            {/* Show thinking time only after video is finished, or recording UI */}
+            {videoFinished && !recording ? (
               <>
                 {/* Animated Thinking Time Progress Bar */}
                 <div className="mt-4 w-[480px]">
@@ -274,7 +378,7 @@ export default function SnapshotTestPage() {
                   Start Answer
                 </button>
               </>
-            ) : (
+            ) : videoFinished && recording ? (
               <>
                 {/* Waveform Bar */}
                 <div className="mt-4 w-[480px] flex items-center gap-2 bg-white border rounded-[14px] px-4 py-2">
@@ -301,13 +405,16 @@ export default function SnapshotTestPage() {
                   {/* Stop Recording Button */}
                   <button
                     className="mt-4 px-8 py-2 rounded-full bg-[#B71C1C] text-white font-semibold hover:bg-[#a31515] transition"
-                    onClick={() => setRecording(false)}
+                    onClick={() => {
+                      stopCamera();
+                      setAnswering(false);
+                    }}
                   >
                     Stop Recording
                   </button>
                 </div>
               </>
-            )}
+            ) : null}
           </>
         )}
       </div>

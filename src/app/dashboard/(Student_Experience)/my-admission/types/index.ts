@@ -19,6 +19,7 @@ export interface FormData {
   testDate?: {
     CASPER?: { date: string; time: string };
     VIDEO_INTERVIEW?: { date: string; time: string };
+    SNAPSHOT?: { date: string; time: string };
   };
   payment?: PaymentFormData;
 }

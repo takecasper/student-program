@@ -32,14 +32,6 @@ const steps = [
     description: 'Configure the concluding messages for your interview test.',
   },
   { title: 'Step 5: Scheduling', description: 'Configure rules and options for fee waivers' },
-  {
-    title: 'Step 6: Score Delivery Settings',
-    description: 'Configure rules and options for fee waivers',
-  },
-  {
-    title: 'Step 7: Fee Waiver Configuration',
-    description: 'Configure rules and options for fee waivers',
-  },
 ];
 
 function Step1({
@@ -158,38 +150,40 @@ function Step1({
           ></span>
         </button>
       </div>
-      <div className="flex gap-4 w-full">
-        <SelectGroup>
-          <Select value={breakDuration} onValueChange={setBreakDuration}>
-            <SelectLabel className="text-xs font-semibold mb-1 text-black">
-              BREAK DURATION
-            </SelectLabel>
-            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
-              <SelectValue placeholder="Select break duration" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1">Question 1</SelectItem>
-              <SelectItem value="2">Question 2</SelectItem>
-              <SelectItem value="3">Question 3</SelectItem>
-              <SelectItem value="4">Question 4</SelectItem>
-              <SelectItem value="5">Question 5</SelectItem>
-            </SelectContent>
-          </Select>
-        </SelectGroup>
-        <SelectGroup>
-          <Select>
-            <SelectLabel className="text-xs font-semibold mb-1 text-black">
-              BREAK OPTIONS
-            </SelectLabel>
-            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
-              <SelectValue placeholder="Select break options" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1">1</SelectItem>
-            </SelectContent>
-          </Select>
-        </SelectGroup>
-      </div>
+      {breakOption && (
+        <div className="flex gap-4 w-full mb-6">
+          <SelectGroup>
+            <Select value={breakDuration} onValueChange={setBreakDuration}>
+              <SelectLabel className="text-xs font-semibold mb-1 text-black">
+                BREAK DURATION
+              </SelectLabel>
+              <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+                <SelectValue placeholder="Select break duration" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">Question 1</SelectItem>
+                <SelectItem value="2">Question 2</SelectItem>
+                <SelectItem value="3">Question 3</SelectItem>
+                <SelectItem value="4">Question 4</SelectItem>
+                <SelectItem value="5">Question 5</SelectItem>
+              </SelectContent>
+            </Select>
+          </SelectGroup>
+          <SelectGroup>
+            <Select>
+              <SelectLabel className="text-xs font-semibold mb-1 text-black">
+                BREAK OPTIONS
+              </SelectLabel>
+              <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+                <SelectValue placeholder="Select break options" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">1</SelectItem>
+              </SelectContent>
+            </Select>
+          </SelectGroup>
+        </div>
+      )}
     </div>
   );
 }
@@ -983,136 +977,6 @@ function Step5({
   );
 }
 
-function Step6({
-  ratingsEnabled,
-  setRatingsEnabled,
-  overrideRule,
-  setOverrideRule,
-  ratingOverrides,
-  setRatingOverrides,
-  previewTest6,
-  setPreviewTest6,
-}: {
-  ratingsEnabled: boolean;
-  setRatingsEnabled: (v: boolean) => void;
-  overrideRule: string;
-  setOverrideRule: (v: string) => void;
-  ratingOverrides: boolean;
-  setRatingOverrides: (v: boolean) => void;
-  previewTest6: boolean;
-  setPreviewTest6: (v: boolean) => void;
-}) {
-  return (
-    <div className="w-full max-w-3xl">
-      <h3 className="text-xl font-bold mb-2">Rating System</h3>
-      <p className="text-gray-500 mb-6">Configure how applicant responses will be rated</p>
-      <div className="flex gap-8 mb-6">
-        {/* Question Order */}
-        <div className="flex-1">
-          <div className="font-semibold text-xs mb-2">QUESTION ORDER</div>
-          <div className="flex flex-col gap-3">
-            <button
-              type="button"
-              className={`border rounded-[12px] w-full px-5 py-3 flex items-center gap-2 text-base ${ratingsEnabled ? 'bg-[#f3f4f6] text-[#364699] border-[#364699] font-semibold' : 'text-[#6b7280] border-[#e5e7eb]'}`}
-              onClick={() => setRatingsEnabled(true)}
-            >
-              {ratingsEnabled ? (
-                <span className="bg-[#70C0B8] border border-[#00A59B] rounded-full p-1 flex items-center justify-center">
-                  <Check className="h-4 w-4 text-white" />
-                </span>
-              ) : (
-                <span className="w-5 h-5 border border-[#d1d5db] rounded-full inline-block" />
-              )}
-              <span className="font-medium">Enable Ratings</span>
-            </button>
-            <button
-              type="button"
-              className={`border rounded-[12px] w-full px-5 py-3 flex items-center gap-2 text-base ${!ratingsEnabled ? 'bg-[#f3f4f6] text-[#364699] border-[#364699] font-semibold' : 'text-[#6b7280] border-[#e5e7eb]'}`}
-              onClick={() => setRatingsEnabled(false)}
-            >
-              {!ratingsEnabled ? (
-                <span className="bg-[#70C0B8] border border-[#00A59B] rounded-full p-1 flex items-center justify-center">
-                  <Check className="h-4 w-4 text-white" />
-                </span>
-              ) : (
-                <span className="w-5 h-5 border border-[#d1d5db] rounded-full inline-block" />
-              )}
-              <span className="font-medium">Disable Ratings</span>
-            </button>
-          </div>
-          <label className="flex items-center gap-2 mt-4 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={ratingOverrides}
-              onChange={e => setRatingOverrides(e.target.checked)}
-              className="accent-[#364699] w-4 h-4"
-            />
-            <span className="text-sm">Enable Rating Overrides</span>
-          </label>
-        </div>
-        {/* Override Rules */}
-        <div className="flex-1">
-          <div className="font-semibold text-xs mb-2">OVERRIDE RULES</div>
-          <div className="flex flex-col gap-3">
-            <button
-              type="button"
-              className={`border rounded-[12px] w-full px-5 py-3 flex items-center gap-2 text-base ${overrideRule === 'full-edit' ? 'bg-[#f3f4f6] text-[#364699] border-[#364699] font-semibold' : 'text-[#6b7280] border-[#e5e7eb]'}`}
-              onClick={() => setOverrideRule('full-edit')}
-            >
-              {overrideRule === 'full-edit' ? (
-                <span className="bg-[#70C0B8] border border-[#00A59B] rounded-full p-1 flex items-center justify-center">
-                  <Check className="h-4 w-4 text-white" />
-                </span>
-              ) : (
-                <span className="w-5 h-5 border border-[#d1d5db] rounded-full inline-block" />
-              )}
-              <span className="font-medium">Full Edit Permission</span>
-            </button>
-            <button
-              type="button"
-              className={`border rounded-[12px] w-full px-5 py-3 flex items-center gap-2 text-base ${overrideRule === 'admin-approval' ? 'bg-[#f3f4f6] text-[#364699] border-[#364699] font-semibold' : 'text-[#6b7280] border-[#e5e7eb]'}`}
-              onClick={() => setOverrideRule('admin-approval')}
-            >
-              {overrideRule === 'admin-approval' ? (
-                <span className="bg-[#70C0B8] border border-[#00A59B] rounded-full p-1 flex items-center justify-center">
-                  <Check className="h-4 w-4 text-white" />
-                </span>
-              ) : (
-                <span className="w-5 h-5 border border-[#d1d5db] rounded-full inline-block" />
-              )}
-              <span className="font-medium">Require Admin Approval</span>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="flex items-center gap-4 mt-8 justify-end">
-        <div className="flex items-center gap-2 border rounded-full px-4 py-2">
-          <span className="text-sm">Preview Test</span>
-          <button
-            type="button"
-            onClick={() => setPreviewTest6(!previewTest6)}
-            className={`w-10 h-6 rounded-full border transition-colors duration-200 ${previewTest6 ? 'bg-[#364699] border-[#364699]' : 'bg-gray-200 border-gray-300'}`}
-          >
-            <span
-              className={`block w-4 h-4 rounded-full bg-white shadow transform transition-transform duration-200 ${previewTest6 ? 'translate-x-4' : 'translate-x-1'}`}
-            ></span>
-          </button>
-          <span>
-            <svg width={18} height={18} fill="none" viewBox="0 0 24 24">
-              <path
-                d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z"
-                stroke="#364699"
-                strokeWidth="2"
-              />
-              <circle cx="12" cy="12" r="3" stroke="#364699" strokeWidth="2" />
-            </svg>
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // Add this new component after the Step functions and before the main component
 
 export default function VideoInterviewConfigPage() {
@@ -1134,10 +998,7 @@ export default function VideoInterviewConfigPage() {
   const [endTime, setEndTime] = useState('');
   const [capacity, setCapacity] = useState('Unlimited');
   const [slotDuration, setSlotDuration] = useState('60 Min');
-  const [ratingsEnabled, setRatingsEnabled] = useState(false);
-  const [overrideRule, setOverrideRule] = useState('full-edit');
-  const [ratingOverrides, setRatingOverrides] = useState(false);
-  const [previewTest6, setPreviewTest6] = useState(false);
+
   const cycles = [
     { name: 'Interview Cycle 1', status: 'Incomplete' },
     { name: 'Interview Cycle 2', status: 'Incomplete' },
@@ -1194,19 +1055,6 @@ export default function VideoInterviewConfigPage() {
         setCapacity={setCapacity}
         slotDuration={slotDuration}
         setSlotDuration={setSlotDuration}
-      />
-    );
-  else if (currentStep === 5)
-    stepContent = (
-      <Step6
-        ratingsEnabled={ratingsEnabled}
-        setRatingsEnabled={setRatingsEnabled}
-        overrideRule={overrideRule}
-        setOverrideRule={setOverrideRule}
-        ratingOverrides={ratingOverrides}
-        setRatingOverrides={setRatingOverrides}
-        previewTest6={previewTest6}
-        setPreviewTest6={setPreviewTest6}
       />
     );
   else
@@ -1348,20 +1196,6 @@ export default function VideoInterviewConfigPage() {
                           <div>Schedule Configured</div>
                           <div className="text-[#6b7280] font-normal">
                             {startDate} - {endDate}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    {/* Step 6 Summary */}
-                    {idx === 5 && currentStep > 5 && (
-                      <div className="mt-2 bg-white border rounded-[12px] px-3 py-2 text-[#333333] text-xs font-semibold flex items-center gap-2">
-                        <div className="bg-[#70C0B8] border border-[#00A59B] rounded-full p-1">
-                          <Check className="h-4 w-4 text-white" />
-                        </div>
-                        <div>
-                          <div>Rating System</div>
-                          <div className="text-[#6b7280] font-normal">
-                            {ratingsEnabled ? 'Enabled' : 'Disabled'}
                           </div>
                         </div>
                       </div>

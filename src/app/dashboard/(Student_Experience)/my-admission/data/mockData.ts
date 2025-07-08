@@ -20,6 +20,15 @@ export const tests = [
     image: '/category1.png',
   },
   {
+    id: 2,
+    type: 'SNAPSHOT',
+    date: 'March 25, 2025',
+    startTime: '11:00 AM',
+    endTime: '12:00 PM',
+    status: 'NOT STARTED',
+    image: '/category1.png',
+  },
+  {
     id: 3,
     type: 'DUET',
     date: 'March 25, 2025',
