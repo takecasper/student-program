@@ -99,8 +99,8 @@ function Step1({
               <SelectValue placeholder="Select session mode" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">Continuous (One Sitting)</SelectItem>
-              <SelectItem value="2">Multiple Sessions</SelectItem>
+              <SelectItem value="1">Continuous (In One Sitting)</SelectItem>
+              <SelectItem value="2">Pausable within Window </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -153,6 +153,19 @@ function Step1({
       {breakOption && (
         <div className="flex gap-4 w-full mb-6">
           <SelectGroup>
+            <Select>
+              <SelectLabel className="text-xs font-semibold mb-1 text-black">
+                BREAK OPTIONS
+              </SelectLabel>
+              <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+                <SelectValue placeholder="Select break options" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">1</SelectItem>
+              </SelectContent>
+            </Select>
+          </SelectGroup>
+          <SelectGroup>
             <Select value={breakDuration} onValueChange={setBreakDuration}>
               <SelectLabel className="text-xs font-semibold mb-1 text-black">
                 BREAK DURATION
@@ -166,19 +179,6 @@ function Step1({
                 <SelectItem value="3">Question 3</SelectItem>
                 <SelectItem value="4">Question 4</SelectItem>
                 <SelectItem value="5">Question 5</SelectItem>
-              </SelectContent>
-            </Select>
-          </SelectGroup>
-          <SelectGroup>
-            <Select>
-              <SelectLabel className="text-xs font-semibold mb-1 text-black">
-                BREAK OPTIONS
-              </SelectLabel>
-              <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
-                <SelectValue placeholder="Select break options" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">1</SelectItem>
               </SelectContent>
             </Select>
           </SelectGroup>

@@ -76,58 +76,22 @@ export default function ProgramAdmissionPage() {
                   </AccordionTrigger>
                 </div>
                 <div className="absolute right-6 top-[18px]">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="default"
-                        className="rounded-[6px] text-[#333333DE] text-[12px] bg-white border-2 shadow-none hover:bg-[#3333331A] border-[#3333331A]"
-                      >
-                        <Image
-                          src="/svgs/test.svg"
-                          alt="settings"
-                          width={14}
-                          height={14}
-                          className="w-4 h-4"
-                        />
-                        Test Configure
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent side="left" className="w-[180px] p-0 mt-20 shadow-none">
-                      <div className="flex flex-col">
-                        <button
-                          className="flex items-center gap-2 px-4 py-2 hover:bg-[#F5F5F5] text-[#333333DE] text-[14px]"
-                          // onClick={() => {
-                          //   window.location.href = `/dashboard/admission/test-config`;
-                          // }}
-                          onClick={() => {
-                            window.location.href = `/dashboard/admission/program-type`;
-                          }}
-                        >
-                          <FileIcon className="w-5 h-5" />
-                          Test Configuration
-                        </button>
-                        <div className="border-t border-[#F5F5F5] my-1"></div>
-                        <button
-                          className="flex items-center gap-2 px-4 py-2 hover:bg-[#F5F5F5] text-[#333333DE] text-[14px]"
-                          onClick={() => {
-                            window.location.href = `/dashboard/admission/add-test-config`;
-                          }}
-                        >
-                          <AddIcon className="w-5 h-5" />
-                          Add Test
-                        </button>
-                        {/* <button
-                          className="flex items-center gap-2 px-4 py-2 hover:bg-[#F5F5F5] text-[#333333DE] text-[14px]"
-                          onClick={() => {
-                            window.location.href = `/dashboard/admission/video-interview`;
-                          }}
-                        >
-                          <AddIcon className="w-5 h-5" />
-                          VIDEO INTERVIEW
-                        </button> */}
-                      </div>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <Button
+                    onClick={() => {
+                      window.location.href = `/dashboard/admission/program-type`;
+                    }}
+                    variant="default"
+                    className="rounded-[6px] text-[#333333DE] text-[12px] bg-white border-2 shadow-none hover:bg-[#3333331A] border-[#3333331A]"
+                  >
+                    <Image
+                      src="/svgs/test.svg"
+                      alt="settings"
+                      width={14}
+                      height={14}
+                      className="w-4 h-4"
+                    />
+                    Test Configure
+                  </Button>
                 </div>
                 <AccordionContent className="overflow-x-auto">
                   <table className="w-full text-left text-sm">

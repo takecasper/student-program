@@ -8,19 +8,19 @@ const PROGRAMS = [
     key: 'casper',
     title: 'CASPER',
     description: 'Set up and configure test',
-    image: '/images/abstract.png',
+    image: '/1.png',
   },
   {
     key: 'video',
     title: 'VIDEO INTERVIEW',
     description: 'Set up and configure test',
-    image: '/images/abstract.png',
+    image: '/1.png',
   },
   {
     key: 'formative',
     title: 'FORMATIVE',
     description: 'Set up and configure test',
-    image: '/images/abstract.png',
+    image: '/1.png',
   },
 ];
 

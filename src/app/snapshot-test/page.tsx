@@ -1,5 +1,6 @@
 'use client';
-import { MessageSquareText } from 'lucide-react';
+
+import { MessageSquareText, Download } from 'lucide-react';
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 
@@ -11,26 +12,37 @@ function getRandomHeight(min = 6, max = 28) {
 const PERMISSION_PENDING = 'pending';
 const PERMISSION_ALLOWED = 'allowed';
 const PERMISSION_DENIED = 'denied';
+
 type PermissionStatus =
   | typeof PERMISSION_PENDING
   | typeof PERMISSION_ALLOWED
   | typeof PERMISSION_DENIED;
 
 export default function SnapshotTestPage() {
-  const [started, setStarted] = useState(false);
-  const [videoFinished, setVideoFinished] = useState(false);
+  // Simplified state management
+  const [currentStep, setCurrentStep] = useState<
+    'initial' | 'video' | 'thinking' | 'recording' | 'review'
+  >('initial');
   const [thinkingTime, setThinkingTime] = useState(80); // 1:20 in seconds
-  const [answering, setAnswering] = useState(false);
-  const [recording, setRecording] = useState(false);
   const [totalTimeLeft, setTotalTimeLeft] = useState(600); // 10:00 in seconds
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
+  const [recordedVideoUrl, setRecordedVideoUrl] = useState<string | null>(null);
+
+  // Add these new state variables after the existing ones
+  const [audioData, setAudioData] = useState<Uint8Array>(new Uint8Array(50).fill(12));
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const audioAnimRef = useRef<number | null>(null);
+
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const totalTimerRef = useRef<NodeJS.Timeout | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const cameraVideoRef = useRef<HTMLVideoElement>(null);
+  const reviewVideoRef = useRef<HTMLVideoElement>(null);
 
-  // Permission states: 'allowed' | 'denied'
+  // Permission states
   const [signalStatus, setSignalStatus] = useState<PermissionStatus>(PERMISSION_PENDING);
   const [cameraStatus, setCameraStatus] = useState<PermissionStatus>(PERMISSION_PENDING);
   const [micStatus, setMicStatus] = useState<PermissionStatus>(PERMISSION_PENDING);
@@ -56,6 +68,7 @@ export default function SnapshotTestPage() {
         });
       }, 1000);
     }
+
     return () => {
       if (totalTimerRef.current) {
         clearInterval(totalTimerRef.current);
@@ -66,7 +79,7 @@ export default function SnapshotTestPage() {
 
   // Animate waveform when recording
   useEffect(() => {
-    if (recording) {
+    if (currentStep === 'recording') {
       waveAnimRef.current = setInterval(() => {
         setWaveHeights(
           Array(30)
@@ -78,14 +91,15 @@ export default function SnapshotTestPage() {
       setWaveHeights(Array(30).fill(12));
       if (waveAnimRef.current) clearInterval(waveAnimRef.current);
     }
+
     return () => {
       if (waveAnimRef.current) clearInterval(waveAnimRef.current);
     };
-  }, [recording]);
+  }, [currentStep]);
 
-  // Start timer when video is finished and not answering
+  // Start thinking time countdown
   useEffect(() => {
-    if (videoFinished && !answering && thinkingTime > 0) {
+    if (currentStep === 'thinking' && thinkingTime > 0) {
       timerRef.current = setInterval(() => {
         setThinkingTime(prev => {
           if (prev <= 0) {
@@ -101,67 +115,130 @@ export default function SnapshotTestPage() {
         timerRef.current = null;
       }
     }
+
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
         timerRef.current = null;
       }
     };
-  }, [videoFinished, answering, thinkingTime]);
+  }, [currentStep, thinkingTime]);
 
-  // Stop timer when time runs out
+  // Start camera when recording step begins
   useEffect(() => {
-    if (thinkingTime === 0 && timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-  }, [thinkingTime]);
-
-  // Start camera and recording when answering starts
-  useEffect(() => {
-    if (answering) {
+    if (currentStep === 'recording') {
       startCamera();
-    } else {
+    } else if (currentStep !== 'review') {
       stopCamera();
     }
-  }, [answering]);
+  }, [currentStep]);
 
-  // Start camera recording - Simplified approach
+  // Debug when review step is reached
+  useEffect(() => {
+    if (currentStep === 'review') {
+      console.log('Review step reached');
+      console.log('Recorded video URL:', recordedVideoUrl);
+      console.log('Recorded blob:', recordedBlob);
+    }
+  }, [currentStep, recordedVideoUrl, recordedBlob]);
+
+  useEffect(() => {
+    return () => {
+      // Cleanup animation resources on unmount
+      if (audioAnimRef.current) {
+        cancelAnimationFrame(audioAnimRef.current);
+      }
+    };
+  }, []);
+
+  // Start camera recording
   const startCamera = async () => {
     try {
+      setCameraError(null);
+
+      // Request camera access
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
+        video: {
+          width: { ideal: 1280, min: 640 },
+          height: { ideal: 720, min: 480 },
+          facingMode: 'user',
+        },
         audio: true,
       });
 
-      // Set the camera stream to the existing video ref
-      if (cameraVideoRef.current) {
-        cameraVideoRef.current.srcObject = stream;
-        cameraVideoRef.current.play().catch(e => console.error('Camera play error:', e));
-      }
+      setCameraStream(stream);
+
+      // Wait a bit for the component to render
+      setTimeout(() => {
+        const videoElement = cameraVideoRef.current;
+        if (videoElement) {
+          // Set the stream
+          videoElement.srcObject = stream;
+          videoElement.load();
+
+          videoElement.onloadedmetadata = () => {
+            videoElement
+              .play()
+              .then(() => {
+                console.log('Camera video is now playing');
+              })
+              .catch(e => {
+                console.error('Failed to play camera video:', e);
+                setCameraError('Failed to play camera video');
+              });
+          };
+
+          videoElement.onerror = () => {
+            setCameraError('Video element error');
+          };
+
+          // Fallback: try to play immediately
+          videoElement.play().catch(() => {
+            // Will try again when metadata loads
+          });
+        } else {
+          setCameraError('Camera video element not found');
+        }
+      }, 100);
 
       // Start recording
-      const recorder = new MediaRecorder(stream);
-      const chunks: Blob[] = [];
+      try {
+        const recorder = new MediaRecorder(stream);
+        const chunks: Blob[] = [];
 
-      recorder.ondataavailable = event => {
-        if (event.data.size > 0) {
-          chunks.push(event.data);
-        }
-      };
+        recorder.ondataavailable = event => {
+          if (event.data.size > 0) {
+            chunks.push(event.data);
+          }
+        };
 
-      recorder.onstop = () => {
-        const blob = new Blob(chunks, { type: 'video/webm' });
-        console.log('Recording saved:', blob);
-      };
+        recorder.onstop = () => {
+          const blob = new Blob(chunks, { type: 'video/webm' });
+          console.log('Recording saved:', blob);
 
-      setMediaRecorder(recorder);
-      recorder.start();
-      setRecording(true);
-      setCameraStream(stream);
+          // Save the recorded video
+          setRecordedBlob(blob);
+          const videoUrl = URL.createObjectURL(blob);
+          setRecordedVideoUrl(videoUrl);
+
+          // Move to review step
+          setCurrentStep('review');
+        };
+
+        recorder.onerror = () => {
+          setCameraError('Recording error occurred');
+        };
+
+        setMediaRecorder(recorder);
+        recorder.start();
+      } catch (recordError) {
+        console.error('MediaRecorder creation failed:', recordError);
+      }
     } catch (error) {
       console.error('Error accessing camera:', error);
-      alert('Unable to access camera. Please check permissions.');
+      setCameraError(
+        `Unable to access camera: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
   };
 
@@ -172,16 +249,61 @@ export default function SnapshotTestPage() {
     }
 
     if (cameraStream) {
-      cameraStream.getTracks().forEach(track => track.stop());
+      cameraStream.getTracks().forEach(track => {
+        track.stop();
+      });
       setCameraStream(null);
     }
 
-    // Restore original video by resetting state
-    setAnswering(false);
-    setRecording(false);
+    if (cameraVideoRef.current) {
+      cameraVideoRef.current.srcObject = null;
+    }
 
-    setRecording(false);
     setMediaRecorder(null);
+    setCameraError(null);
+  };
+
+  // Simple animated waveform for video playback
+  const startWaveformAnimation = () => {
+    console.log('Starting waveform animation');
+    const updateWaveform = () => {
+      if (isVideoPlaying) {
+        const waveformData = new Uint8Array(50);
+        for (let i = 0; i < 50; i++) {
+          // Create more realistic waveform pattern
+          const baseHeight = 12;
+          const variation = Math.sin(Date.now() * 0.01 + i * 0.3) * 8;
+          const randomFactor = Math.random() * 4;
+          waveformData[i] = Math.max(8, Math.min(28, baseHeight + variation + randomFactor));
+        }
+        setAudioData(waveformData);
+        console.log('Waveform updated:', waveformData.slice(0, 5)); // Debug first 5 values
+        audioAnimRef.current = requestAnimationFrame(updateWaveform);
+      }
+    };
+    updateWaveform();
+  };
+
+  const stopWaveformAnimation = () => {
+    console.log('Stopping waveform animation');
+    if (audioAnimRef.current) {
+      cancelAnimationFrame(audioAnimRef.current);
+      audioAnimRef.current = null;
+    }
+  };
+
+  // Download recorded video
+  const downloadRecording = () => {
+    if (recordedBlob) {
+      const url = URL.createObjectURL(recordedBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `interview-recording-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.webm`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
   };
 
   // Format time as mm:ss
@@ -201,6 +323,7 @@ export default function SnapshotTestPage() {
     setModalType(type);
     setModalOpen(true);
   }
+
   function handleModalAllow() {
     if (modalType === 'signal') setSignalStatus(PERMISSION_ALLOWED);
     if (modalType === 'camera') setCameraStatus(PERMISSION_ALLOWED);
@@ -208,6 +331,7 @@ export default function SnapshotTestPage() {
     setModalOpen(false);
     setModalType(null);
   }
+
   function handleModalDeny() {
     if (modalType === 'signal') setSignalStatus(PERMISSION_DENIED);
     if (modalType === 'camera') setCameraStatus(PERMISSION_DENIED);
@@ -249,18 +373,37 @@ export default function SnapshotTestPage() {
           id="video-container"
           className="w-[480px] h-[270px] bg-gray-200 rounded-lg flex items-center justify-center relative overflow-hidden"
         >
-          {recording ? (
+          {currentStep === 'recording' ? (
             // Camera view when recording
-            <>
+            <div className="w-full h-full relative bg-black">
               <video
                 ref={cameraVideoRef}
                 className="w-full h-full object-cover"
                 autoPlay
                 playsInline
                 muted
-                style={{ transform: 'scaleX(-1)' }} // Mirror the camera
+                style={{
+                  transform: 'scaleX(-1)',
+                  backgroundColor: '#000',
+                }}
               />
-              {!cameraStream && (
+
+              {cameraError && (
+                <div className="absolute inset-0 flex items-center justify-center bg-red-100 text-red-800">
+                  <div className="text-center p-4">
+                    <p className="font-semibold">Camera Error</p>
+                    <p className="text-sm mt-1">{cameraError}</p>
+                    <button
+                      onClick={() => startCamera()}
+                      className="mt-2 px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
+                    >
+                      Retry Camera
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {!cameraStream && !cameraError && (
                 <div className="absolute inset-0 flex items-center justify-center bg-gray-800 text-white">
                   <div className="text-center">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
@@ -268,48 +411,112 @@ export default function SnapshotTestPage() {
                   </div>
                 </div>
               )}
+
+              {/* Recording badge */}
+              {cameraStream && (
+                <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full flex items-center gap-2 shadow text-xs font-semibold">
+                  <span className="w-2 h-2 bg-red-500 rounded-full inline-block animate-pulse" />
+                  <span className="text-red-500">Recording</span>
+                </div>
+              )}
+            </div>
+          ) : currentStep === 'review' ? (
+            // Review recorded video
+            <div className="w-full h-full relative bg-black">
+              {recordedVideoUrl && (
+                <video
+                  ref={reviewVideoRef}
+                  src={recordedVideoUrl}
+                  className="w-full h-full object-cover"
+                  controls
+                  style={{
+                    transform: 'scaleX(-1)', // Keep mirrored for consistency
+                    backgroundColor: '#000',
+                  }}
+                  onLoadedMetadata={() => {
+                    console.log('Video metadata loaded');
+                  }}
+                  onPlay={() => {
+                    console.log('Video started playing');
+                    setIsVideoPlaying(true);
+                    startWaveformAnimation();
+                  }}
+                  onPause={() => {
+                    console.log('Video paused');
+                    setIsVideoPlaying(false);
+                    stopWaveformAnimation();
+                  }}
+                  onEnded={() => {
+                    console.log('Video ended');
+                    setIsVideoPlaying(false);
+                    stopWaveformAnimation();
+                  }}
+                />
+              )}
+
+              {/* Recording badge for consistency */}
+              <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full flex items-center gap-2 shadow text-xs font-semibold">
+                <span className="w-2 h-2 bg-red-500 rounded-full inline-block" />
+                <span className="text-red-500">Recording</span>
+              </div>
+            </div>
+          ) : currentStep === 'video' ? (
+            // Video playing
+            <>
+              <video
+                ref={videoRef}
+                src="/video.mp4"
+                className="w-full h-full object-cover"
+                controls={true}
+                autoPlay
+                muted
+                onEnded={() => {
+                  setCurrentStep('thinking');
+                }}
+                onError={() => {
+                  console.log('Video failed to load, showing fallback after 2 seconds');
+                  setTimeout(() => {
+                    setCurrentStep('thinking');
+                  }, 2000);
+                }}
+              />
             </>
           ) : (
-            // Original video when not recording
-            <video
-              ref={videoRef}
-              src="/video.mp4"
-              className="w-full h-full object-cover"
-              controls={true}
-              muted
-              loop={false}
-              autoPlay={false}
-              onEnded={() => setVideoFinished(true)}
-            />
-          )}
-          {/* Recording badge */}
-          {recording && (
-            <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full flex items-center gap-2 shadow text-xs font-semibold">
-              <span className="w-2 h-2 bg-red-500 rounded-full inline-block animate-pulse" />
-              <span className="text-red-500">Recording</span>
+            // Initial state or thinking time - show mock video interface
+            <div className="w-full h-full bg-gradient-to-br from-blue-900 to-purple-900 flex items-center justify-center relative">
+              <div className="text-center text-white">
+                <div className="w-16 h-16 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <polygon points="9,6 21,12 9,18" fill="white" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Interview Question Video</h3>
+                <p className="text-sm text-white/80">
+                  {currentStep === 'initial'
+                    ? 'Click play to start the question'
+                    : 'Question completed'}
+                </p>
+              </div>
+
+              {currentStep === 'initial' && (
+                <button
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-4 shadow-lg z-10"
+                  onClick={() => {
+                    setCurrentStep('video');
+                  }}
+                >
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="20" fill="#fff" />
+                    <polygon points="16,13 28,20 16,27" fill="#3b4cca" />
+                  </svg>
+                </button>
+              )}
             </div>
           )}
-          {!started && !recording && (
-            <button
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-4 shadow-lg z-10"
-              onClick={() => {
-                setStarted(true);
-                // Play the video when initial play button is clicked
-                const videoElement = videoRef.current;
-                if (videoElement) {
-                  videoElement.play().catch(console.error);
-                }
-              }}
-            >
-              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                <circle cx="20" cy="20" r="20" fill="#fff" />
-                <polygon points="16,13 28,20 16,27" fill="#3b4cca" />
-              </svg>
-            </button>
-          )}
         </div>
-        {/* Transcript and Thinking Time or Recording UI */}
-        {started && (
+
+        {/* Transcript and UI based on current step */}
+        {currentStep !== 'initial' && (
           <>
             <div className="mt-6 w-[480px]">
               <div className="flex gap-2">
@@ -320,8 +527,9 @@ export default function SnapshotTestPage() {
                 </span>
               </div>
             </div>
-            {/* Show thinking time only after video is finished, or recording UI */}
-            {videoFinished && !recording ? (
+
+            {/* Show UI based on current step */}
+            {currentStep === 'thinking' ? (
               <>
                 {/* Animated Thinking Time Progress Bar */}
                 <div className="mt-4 w-[480px]">
@@ -369,16 +577,18 @@ export default function SnapshotTestPage() {
                     </div>
                   </div>
                 </div>
+
                 {/* Start Answer Button */}
                 <button
-                  className={`mt-6 px-8 py-2 rounded-full bg-[#364699] text-white font-semibold transition ${thinkingTime === 0 || answering ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#00897B]'}`}
-                  disabled={thinkingTime === 0 || answering}
-                  onClick={() => setAnswering(true)}
+                  className="mt-6 px-8 py-2 rounded-full bg-[#364699] text-white font-semibold transition hover:bg-[#2a3a7a]"
+                  onClick={() => {
+                    setCurrentStep('recording');
+                  }}
                 >
                   Start Answer
                 </button>
               </>
-            ) : videoFinished && recording ? (
+            ) : currentStep === 'recording' ? (
               <>
                 {/* Waveform Bar */}
                 <div className="mt-4 w-[480px] flex items-center gap-2 bg-white border rounded-[14px] px-4 py-2">
@@ -394,7 +604,6 @@ export default function SnapshotTestPage() {
                   </div>
                   <span className="font-medium text-gray-600 ml-2">01:20</span>
                 </div>
-
                 <div className="flex items-center justify-between w-[480px]">
                   {/* Response Time */}
                   <div className="mt-2 flex items-center gap-2 ">
@@ -407,12 +616,55 @@ export default function SnapshotTestPage() {
                     className="mt-4 px-8 py-2 rounded-full bg-[#B71C1C] text-white font-semibold hover:bg-[#a31515] transition"
                     onClick={() => {
                       stopCamera();
-                      setAnswering(false);
                     }}
                   >
                     Stop Recording
                   </button>
                 </div>
+              </>
+            ) : currentStep === 'review' ? (
+              <>
+                {/* Animated Waveform Bar */}
+                <div className="mt-6 w-[480px] flex items-center gap-2 bg-white border rounded-[14px] px-4 py-2">
+                  {/* Debug info */}
+
+                  {/* Animated waveform */}
+                  <div className="flex-1 flex items-end h-8 gap-[2px]">
+                    {Array.from(audioData).map((height, i) => (
+                      <div
+                        key={i}
+                        className={`w-[3px] rounded transition-all duration-75 ${
+                          isVideoPlaying ? 'bg-[#364699]' : 'bg-[#C7C7C7]'
+                        }`}
+                        style={{
+                          height: `${height}px`,
+                          opacity: isVideoPlaying ? 0.8 + (height / 28) * 0.2 : 0.6,
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <span className="font-medium text-gray-600 ml-2">
+                    {reviewVideoRef.current
+                      ? `${Math.floor(reviewVideoRef.current.currentTime / 60)
+                          .toString()
+                          .padStart(2, '0')}:${Math.floor(reviewVideoRef.current.currentTime % 60)
+                          .toString()
+                          .padStart(2, '0')}`
+                      : '01:20'}
+                  </span>
+                </div>
+
+                {/* Response Time and Action Buttons - Only show when not playing */}
+                {!isVideoPlaying && (
+                  <div className="flex items-center justify-between w-[480px] mt-4">
+                    {/* Response Time */}
+                    <div className="flex items-center gap-2">
+                      <MessageSquareText className="w-4 h-4" />
+                      <span className="text-gray-500 text-sm">Response Time:</span>
+                      <span className="text-gray-700 text-sm font-semibold">4:48</span>
+                    </div>
+                  </div>
+                )}
               </>
             ) : null}
           </>
@@ -422,9 +674,13 @@ export default function SnapshotTestPage() {
       {/* Progress Bar */}
       <div className="w-full flex justify-center items-center py-6 bg-white border-t">
         <div className="flex items-center gap-2">
-          <StepCircle label="INTRO" active={started} checked={started} />
+          <StepCircle
+            label="INTRO"
+            active={currentStep !== 'initial'}
+            checked={currentStep !== 'initial'}
+          />
           <StepLine />
-          <StepCircle label="1" active={started} />
+          <StepCircle label="1" active={currentStep !== 'initial'} />
           <StepLine />
           <StepCircle label="2" />
           <StepLine />
@@ -459,6 +715,7 @@ export default function SnapshotTestPage() {
           onClick={() => handleFABClick('mic')}
         />
       </div>
+
       {/* Modal for permission confirmation */}
       {modalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
@@ -501,6 +758,7 @@ function StepCircle({
   const isEdge = label === 'INTRO' || label === 'END';
   const isIntroChecked = label === 'INTRO' && checked;
   const showCornerCheck = checked && label === 'INTRO';
+
   return (
     <div
       className={
@@ -510,10 +768,10 @@ function StepCircle({
       }
     >
       {isIntroChecked ? (
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="mx-auto">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="#364699" className="mx-auto">
           <circle cx="10" cy="10" r="10" fill="#364699" />
           <path
-            d="M6 10.5L9 13.5L14 8.5"
+            d="M3 6.5L5.2 8.7L9 5"
             stroke="white"
             strokeWidth="2"
             strokeLinecap="round"
@@ -523,10 +781,10 @@ function StepCircle({
       ) : (
         <>
           {showCornerCheck && (
-            <span className="absolute left-1 top-1 w-4 h-4 bg-[#00A59B] rounded-full flex items-center justify-center">
+            <span className="absolute left-1 top-1 w-4 h-4 bg-[#00A59B] rounded-full flex items-center justify-center border-2 border-white">
               <svg
-                width="10"
-                height="10"
+                width="12"
+                height="12"
                 viewBox="0 0 12 12"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -569,8 +827,8 @@ function FABVerify({
       onClick={onClick}
       type="button"
     >
-      <Image src={src} alt={alt} width={16} height={16} />
-      {status === PERMISSION_ALLOWED ? (
+      <Image src={src || '/placeholder.svg'} alt={alt} width={16} height={16} />
+      {status === 'allowed' ? (
         <span className="absolute top-6 -right-1 w-4 h-4 bg-[#00A59B] rounded-full flex items-center justify-center border-2 border-white">
           <svg
             width="12"
@@ -588,7 +846,7 @@ function FABVerify({
             />
           </svg>
         </span>
-      ) : status === PERMISSION_DENIED ? (
+      ) : status === 'denied' ? (
         <span className="absolute top-6 -right-1 w-4 h-4 bg-[#B71C1C] rounded-full flex items-center justify-center border-2 border-white">
           <svg
             width="10"
@@ -605,3 +863,5 @@ function FABVerify({
     </button>
   );
 }
+
+// Add this useEffect after the existing ones
