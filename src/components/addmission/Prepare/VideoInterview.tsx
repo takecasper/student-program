@@ -62,7 +62,7 @@ export default function VideoInterview({ onBack }: VideoInterviewProps) {
 
               <button
                 onClick={() => {
-                  window.location.href = `/snapshot-test`;
+                  window.location.href = `/interview`;
                 }}
                 className="border border-[#364699] text-[12px] text-[#364699] py-3 px-8 rounded-full text-sm font-medium hover:bg-[#2538A8] transition cursor-pointer w-fit"
               >
@@ -86,7 +86,7 @@ export default function VideoInterview({ onBack }: VideoInterviewProps) {
               </p>
               <button
                 onClick={() => {
-                  window.location.href = `/snapshot-test`;
+                  window.location.href = `/interview`;
                 }}
                 className="border border-[#364699] text-[#364699] py-3 px-8 rounded-full text-[12px] font-medium hover:bg-[#2538A8] transition cursor-pointer w-fit"
               >

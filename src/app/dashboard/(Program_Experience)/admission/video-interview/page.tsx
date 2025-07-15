@@ -1,18 +1,22 @@
 /* VIDEO INTERVIEW CONFIGURATION PAGE */
 'use client';
-import { useState } from 'react';
-import { Check } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Check, ChevronDownIcon } from 'lucide-react';
 import {
   Select,
   SelectContent,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { SelectGroup } from '@radix-ui/react-select';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Label } from '@/components/ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import QuestionDrawer from '../components/QuestionDrawer';
+import Link from 'next/link';
 
 const steps = [
   {
@@ -47,6 +51,8 @@ function Step1({
   setBreakOption,
   breakDuration,
   setBreakDuration,
+  selectedBreakQuestions,
+  setSelectedBreakQuestions,
 }: {
   testName: string;
   setTestName: (v: string) => void;
@@ -60,7 +66,25 @@ function Step1({
   setBreakOption: (v: boolean) => void;
   breakDuration: string;
   setBreakDuration: (v: string) => void;
+  selectedBreakQuestions: string[];
+  setSelectedBreakQuestions: (v: string[]) => void;
 }) {
+  const [breakDropdownOpen, setBreakDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setBreakDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   const numOptions = ['3', '4', '5', '6', '7', '8', '9', '10'];
   const timeOptions = ['0:00 min', '0:30 min', '1:00 min', '2:00 min', '3:00 min'];
   return (
@@ -80,7 +104,7 @@ function Step1({
         <div className="flex-1">
           <label className="block text-xs font-semibold mb-1">NUMBER OF QUESTIONS</label>
           <Select value={numQuestions} onValueChange={setNumQuestions}>
-            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+            <SelectTrigger className="w-full border rounded-[10px] px-3 py-2 text-sm shadow-none">
               <SelectValue placeholder="Select number of questions" />
             </SelectTrigger>
             <SelectContent>
@@ -95,7 +119,7 @@ function Step1({
         <div className="flex-1">
           <label className="block text-xs font-semibold mb-1">SESSION MODE</label>
           <Select>
-            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+            <SelectTrigger className="w-full border rounded-[10px] px-3 py-2 text-sm shadow-none">
               <SelectValue placeholder="Select session mode" />
             </SelectTrigger>
             <SelectContent>
@@ -109,7 +133,7 @@ function Step1({
         <div className="flex-1">
           <label className="block text-xs font-semibold mb-1">THINKING TIME PER QUESTION</label>
           <Select value={thinkingTime} onValueChange={setThinkingTime}>
-            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+            <SelectTrigger className="w-full border rounded-[10px] px-3 py-2 text-sm shadow-none">
               <SelectValue placeholder="Select thinking time" />
             </SelectTrigger>
             <SelectContent>
@@ -124,7 +148,7 @@ function Step1({
         <div className="flex-1">
           <label className="block text-xs font-semibold mb-1">RESPONSE TIME PER QUESTION</label>
           <Select value={responseTime} onValueChange={setResponseTime}>
-            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+            <SelectTrigger className="w-full border rounded-[10px] px-3 py-2 text-sm shadow-none">
               <SelectValue placeholder="Select response time" />
             </SelectTrigger>
             <SelectContent>
@@ -152,36 +176,91 @@ function Step1({
       </div>
       {breakOption && (
         <div className="flex gap-4 w-full mb-6">
-          <SelectGroup>
-            <Select>
-              <SelectLabel className="text-xs font-semibold mb-1 text-black">
-                BREAK OPTIONS
-              </SelectLabel>
-              <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
-                <SelectValue placeholder="Select break options" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">1</SelectItem>
-              </SelectContent>
-            </Select>
-          </SelectGroup>
-          <SelectGroup>
+          <div className="flex-1">
+            <label className="block text-xs font-semibold mb-1 text-black">BREAK OPTIONS</label>
+            <div className="relative" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setBreakDropdownOpen(!breakDropdownOpen)}
+                className="w-full border rounded-[12px] px-3 py-2 text-sm bg-white text-left flex items-center justify-between"
+              >
+                <span
+                  className={selectedBreakQuestions.length > 0 ? 'text-black' : 'text-gray-500'}
+                >
+                  {selectedBreakQuestions.length > 0
+                    ? `${selectedBreakQuestions.length} selected`
+                    : 'Select'}
+                </span>
+                <svg
+                  className={`w-4 h-4 transition-transform ${breakDropdownOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+              {breakDropdownOpen && (
+                <div className="absolute z-10 w-full mt-1 bg-white border rounded-[12px] shadow-lg">
+                  <div className="p-2 space-y-1">
+                    {['Question 1', 'Question 2', 'Question 3'].map(question => (
+                      <div
+                        key={question}
+                        className="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded"
+                      >
+                        <Checkbox
+                          id={question}
+                          checked={selectedBreakQuestions.includes(question)}
+                          onCheckedChange={checked => {
+                            if (checked) {
+                              setSelectedBreakQuestions([...selectedBreakQuestions, question]);
+                            } else {
+                              setSelectedBreakQuestions(
+                                selectedBreakQuestions.filter(q => q !== question),
+                              );
+                            }
+                          }}
+                        />
+                        <label
+                          htmlFor={question}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer flex-1"
+                        >
+                          {question}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="flex items-center gap-2 pt-1">
+              <p className="bg-[#6A6EEC] text-white px-2 py-1 rounded-full text-xs">
+                Each Question.
+              </p>
+              <p className="bg-[#6A6EEC] text-white px-2 py-1 rounded-full text-xs">
+                After 2 Questions
+              </p>
+            </div>
+          </div>
+          <div className="flex-1">
+            <label className="block text-xs font-semibold mb-1 text-black">BREAK DURATION</label>
             <Select value={breakDuration} onValueChange={setBreakDuration}>
-              <SelectLabel className="text-xs font-semibold mb-1 text-black">
-                BREAK DURATION
-              </SelectLabel>
-              <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
-                <SelectValue placeholder="Select break duration" />
+              <SelectTrigger className="w-full border rounded-[10px] px-3 py-2 text-sm shadow-none">
+                <SelectValue placeholder="0:00" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1">Question 1</SelectItem>
-                <SelectItem value="2">Question 2</SelectItem>
-                <SelectItem value="3">Question 3</SelectItem>
-                <SelectItem value="4">Question 4</SelectItem>
-                <SelectItem value="5">Question 5</SelectItem>
+                <SelectItem value="5">5 minutes</SelectItem>
+                <SelectItem value="10">10 minutes</SelectItem>
+                <SelectItem value="15">15 minutes</SelectItem>
+                <SelectItem value="30">30 minutes</SelectItem>
               </SelectContent>
             </Select>
-          </SelectGroup>
+          </div>
         </div>
       )}
     </div>
@@ -208,6 +287,7 @@ function Step2({
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultrices leo in molestie malesuada. Maecenas vitae suscipit lectus. Aliquam tempor metus nec semper interdum.\n\nMauris pretium lacus vitae orci sollicitudin viverra. Quisque blandit tempus urna, mollis molestie odio fringilla et.',
   );
   const [editorTitle, setEditorTitle] = useState('Interview - Cycle 1');
+  const [sheetImagePreview, setSheetImagePreview] = useState<string | null>(null);
 
   const handleDragStart = (e: React.DragEvent) => {
     setIsDragging(true);
@@ -289,6 +369,21 @@ function Step2({
     return file && file.type.startsWith('video/');
   };
 
+  const handleSheetImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setSheetImageFile(file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        setSheetImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setSheetImagePreview(null);
+    }
+  };
+
   return (
     <div className="w-full max-w-2xl">
       <h3 className="text-xl font-bold mb-2">Introductory Material</h3>
@@ -297,7 +392,7 @@ function Step2({
       </p>
       <div className="flex gap-8">
         {/* Default Intro */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col cursor-pointer" onClick={() => setSheetOpen(true)}>
           <div className="font-semibold text-xs mb-1 flex items-center gap-2">
             <span>DEFAULT INTRO</span>
           </div>
@@ -463,69 +558,103 @@ function Step2({
                 {activeTab === 'image' && (
                   <div className="flex flex-col gap-6">
                     {/* Upload Area */}
-                    <div className="w-full h-40 bg-gray-100 rounded-xl flex flex-col items-center justify-center border border-dashed border-gray-300 cursor-pointer mb-2">
-                      <div className="flex flex-col items-center">
-                        <svg
-                          width="32"
-                          height="32"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          className="mb-2 text-gray-400"
-                        >
-                          <path
-                            d="M12 16V4m0 0l-4 4m4-4l4 4"
-                            stroke="#A0AEC0"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
+                    <div className="relative">
+                      {sheetImagePreview ? (
+                        <div className="w-full h-40 bg-gray-100 rounded-xl border border-gray-300 overflow-hidden">
+                          <img
+                            src={sheetImagePreview}
+                            alt="Uploaded Image"
+                            className="w-full h-full object-cover"
                           />
-                          <rect x="4" y="20" width="16" height="2" rx="1" fill="#A0AEC0" />
-                        </svg>
-                        <span className="text-gray-400 text-sm font-medium">
-                          Upload Question Video
-                        </span>
-                      </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSheetImageFile(null);
+                              setSheetImagePreview(null);
+                            }}
+                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                            title="Remove image"
+                          >
+                            ×
+                          </button>
+                          <div className="absolute bottom-2 left-2 bg-green-500 text-white rounded-[8px] px-2 py-1 text-xs font-semibold">
+                            Added
+                          </div>
+                        </div>
+                      ) : (
+                        <label className="w-full h-40 bg-gray-100 rounded-xl flex flex-col items-center justify-center border border-dashed border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors">
+                          <div className="flex flex-col items-center">
+                            <svg
+                              width="32"
+                              height="32"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              className="mb-2 text-gray-400"
+                            >
+                              <path
+                                d="M12 16V4m0 0l-4 4m4-4l4 4"
+                                stroke="#A0AEC0"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                              <rect x="4" y="20" width="16" height="2" rx="1" fill="#A0AEC0" />
+                            </svg>
+                            <span className="text-gray-400 text-sm font-medium">Upload Image</span>
+                            <span className="text-gray-400 text-xs mt-1">
+                              Click to browse or drag files here
+                            </span>
+                          </div>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={handleSheetImageChange}
+                          />
+                        </label>
+                      )}
                     </div>
-                    {/* Question Title */}
+                    {/* Image Title */}
                     <input
                       className="border rounded-xl px-4 py-2 text-sm w-full"
-                      placeholder="Question Title"
+                      placeholder="Image Title"
+                      value={editorTitle}
+                      onChange={e => setEditorTitle(e.target.value)}
                     />
-                    {/* Competency Focus */}
-                    <div>
-                      <label className="block text-xs font-semibold mb-1">Competency Focus</label>
-                      <div className="flex items-center gap-2 w-full">
-                        {/* Simple multi-select mockup */}
-                        <div className="flex flex-wrap gap-2">
-                          <span className="bg-gray-100 rounded-full px-3 py-1 text-xs flex items-center">
-                            Communication <span className="ml-1 cursor-pointer">×</span>
-                          </span>
-                          <span className="bg-gray-100 rounded-full px-3 py-1 text-xs flex items-center">
-                            Empathy <span className="ml-1 cursor-pointer">×</span>
-                          </span>
-                        </div>
-                        <button className="ml-auto border rounded-xl px-2 py-1 text-xs text-gray-500 flex items-center">
-                          <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
-                            <path
-                              d="M7 10l5 5 5-5"
-                              stroke="#A0AEC0"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
                   </div>
                 )}
               </div>
               {/* Bottom Buttons */}
               <div className="flex justify-between items-center py-4 px-2 border-t bg-white absolute bottom-0 left-0 w-full">
                 <SheetClose asChild>
-                  <button className="px-4 py-2 rounded-full border text-gray-600">Back</button>
+                  <button
+                    className="px-4 py-2 rounded-full border text-gray-600"
+                    onClick={() => {
+                      // Reset form when going back
+                      setEditorValue('');
+                      setEditorTitle('');
+                      setConcludingFile(null);
+                      setConcludingPreview(null);
+                    }}
+                  >
+                    Back
+                  </button>
                 </SheetClose>
-                <button className="px-4 py-2 rounded-full bg-[#364699] text-white">Next</button>
+                <button
+                  className="px-4 py-2 rounded-full bg-[#364699] text-white"
+                  onClick={() => {
+                    if (activeTab === 'text' && editorValue.trim()) {
+                      setConcludingMaterial(editorValue);
+                    } else if (activeTab === 'video' && concludingFile) {
+                      setConcludingMaterial(`Video: ${editorTitle || 'Concluding Video'}`);
+                    } else if (activeTab === 'image' && concludingFile) {
+                      setConcludingMaterial(`Image: ${editorTitle || 'Concluding Image'}`);
+                    }
+                    setSheetOpen(false);
+                  }}
+                >
+                  Next
+                </button>
               </div>
             </SheetContent>
           </Sheet>
@@ -536,7 +665,7 @@ function Step2({
           <div className="text-xs mb-2">Upload video or image intro</div>
           <div className="flex-grow flex items-center">
             <div
-              className={`block border-2 border-dashed rounded-lg w-full h-48 flex flex-col items-center justify-center cursor-pointer transition-colors overflow-hidden ${
+              className={`block border-2 border-dashed rounded-lg w-full h-48 flex flex-col items-center justify-center cursor-pointer transition-colors overflow-hidden hover:border-blue-400 hover:bg-blue-50 ${
                 isDragOver
                   ? 'border-blue-500 bg-blue-50'
                   : customIntro
@@ -547,7 +676,7 @@ function Step2({
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               onClick={() => {
-                setSheetOpen(true);
+                document.getElementById('custom-intro-upload')?.click();
               }}
             >
               {customIntroPreview ? (
@@ -614,7 +743,6 @@ function Step2({
               accept="video/*,image/*"
               className="hidden"
               onChange={handleFileChange}
-              disabled={useDefaultIntro}
             />
           </div>
         </div>
@@ -679,6 +807,7 @@ function Step3({ questions }: { questions: string[]; setQuestions: (q: string[])
 
 function Step4({
   concludingMaterial,
+  setConcludingMaterial,
 }: {
   concludingMaterial: string | null;
   setConcludingMaterial: (v: string | null) => void;
@@ -687,6 +816,34 @@ function Step4({
   const [activeTab, setActiveTab] = useState<'video' | 'text' | 'image'>('text');
   const [editorValue, setEditorValue] = useState('');
   const [editorTitle, setEditorTitle] = useState('');
+  const [concludingFile, setConcludingFile] = useState<File | null>(null);
+  const [concludingPreview, setConcludingPreview] = useState<string | null>(null);
+
+  const handleConcludingFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setConcludingFile(file);
+
+    if (file) {
+      // For videos, use URL.createObjectURL for better performance
+      if (file.type.startsWith('video/')) {
+        const videoUrl = URL.createObjectURL(file);
+        setConcludingPreview(videoUrl);
+      } else {
+        // For images, use FileReader
+        const reader = new FileReader();
+        reader.onload = e => {
+          setConcludingPreview(e.target?.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+    } else {
+      setConcludingPreview(null);
+    }
+  };
+
+  const isVideoFile = (file: File | null) => {
+    return file && file.type.startsWith('video/');
+  };
 
   return (
     <div className="w-full max-w-2xl">
@@ -694,11 +851,31 @@ function Step4({
       <p className="text-gray-500 mb-6">Configure the messages for your interview test.</p>
       <button
         type="button"
-        className="border-2 border-dashed border-gray-300 rounded-lg w-64 h-64 flex flex-col items-center justify-center bg-gray-50"
+        className="border-2 border-dashed border-gray-300 rounded-lg w-64 h-64 flex flex-col items-center justify-center bg-gray-50 overflow-hidden"
         onClick={() => setSheetOpen(true)}
       >
         {concludingMaterial ? (
-          <span className="text-base text-gray-700 text-center">{concludingMaterial}</span>
+          <div className="text-center">
+            <span className="text-base text-gray-700">{concludingMaterial}</span>
+            {concludingPreview && (
+              <div className="mt-2">
+                {isVideoFile(concludingFile) ? (
+                  <video
+                    src={concludingPreview}
+                    className="w-32 h-24 object-cover rounded"
+                    controls
+                    preload="metadata"
+                  />
+                ) : (
+                  <img
+                    src={concludingPreview}
+                    alt="Concluding Material"
+                    className="w-32 h-24 object-cover rounded"
+                  />
+                )}
+              </div>
+            )}
+          </div>
         ) : (
           <span className="text-5xl text-gray-300">+</span>
         )}
@@ -766,74 +943,155 @@ function Step4({
               </div>
             )}
             {activeTab === 'video' && (
-              <div className="flex flex-col items-center justify-center h-64 text-gray-400">
-                Video preview here
-              </div>
-            )}
-            {activeTab === 'image' && (
-              <div className="flex flex-col gap-6">
-                {/* Upload Area */}
-                <div className="w-full h-40 bg-gray-100 rounded-xl flex flex-col items-center justify-center border border-dashed border-gray-300 cursor-pointer mb-2">
-                  <div className="flex flex-col items-center">
-                    <svg
-                      width="32"
-                      height="32"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      className="mb-2 text-gray-400"
-                    >
-                      <path
-                        d="M12 16V4m0 0l-4 4m4-4l4 4"
-                        stroke="#A0AEC0"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <rect x="4" y="20" width="16" height="2" rx="1" fill="#A0AEC0" />
-                    </svg>
-                    <span className="text-gray-400 text-sm font-medium">Upload Question Video</span>
-                  </div>
-                </div>
-                {/* Question Title */}
-                <input
-                  className="border rounded-xl px-4 py-2 text-sm w-full"
-                  placeholder="Concluding Title"
-                />
-                {/* Competency Focus */}
-                <div>
-                  <label className="block text-xs font-semibold mb-1">Competency Focus</label>
-                  <div className="flex items-center gap-2 w-full">
-                    {/* Simple multi-select mockup */}
-                    <div className="flex flex-wrap gap-2">
-                      <span className="bg-gray-100 rounded-full px-3 py-1 text-xs flex items-center">
-                        Communication <span className="ml-1 cursor-pointer">×</span>
-                      </span>
-                      <span className="bg-gray-100 rounded-full px-3 py-1 text-xs flex items-center">
-                        Empathy <span className="ml-1 cursor-pointer">×</span>
-                      </span>
-                    </div>
-                    <button className="ml-auto border rounded-xl px-2 py-1 text-xs text-gray-500 flex items-center">
-                      <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+              <div className="flex flex-col gap-4">
+                {concludingFile && isVideoFile(concludingFile) ? (
+                  <video
+                    src={concludingPreview || ''}
+                    className="w-full h-64 object-cover rounded-lg border"
+                    controls
+                    preload="metadata"
+                  />
+                ) : (
+                  <label className="w-full h-64 bg-gray-100 rounded-xl flex flex-col items-center justify-center border border-dashed border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors">
+                    <div className="flex flex-col items-center">
+                      <svg
+                        width="32"
+                        height="32"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        className="mb-2 text-gray-400"
+                      >
                         <path
-                          d="M7 10l5 5 5-5"
+                          d="M12 16V4m0 0l-4 4m4-4l4 4"
                           stroke="#A0AEC0"
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         />
+                        <rect x="4" y="20" width="16" height="2" rx="1" fill="#A0AEC0" />
                       </svg>
-                    </button>
-                  </div>
+                      <span className="text-gray-400 text-sm font-medium">
+                        Upload Concluding Video
+                      </span>
+                    </div>
+                    <input
+                      type="file"
+                      accept="video/*"
+                      className="hidden"
+                      onChange={handleConcludingFileChange}
+                    />
+                  </label>
+                )}
+                <input
+                  className="border rounded px-3 py-2 text-sm mb-2"
+                  placeholder="Video Title"
+                  value={editorTitle}
+                  onChange={e => setEditorTitle(e.target.value)}
+                />
+              </div>
+            )}
+            {activeTab === 'image' && (
+              <div className="flex flex-col gap-6">
+                {/* Upload Area */}
+                <div className="relative">
+                  {concludingPreview && !isVideoFile(concludingFile) ? (
+                    <div className="w-full h-40 bg-gray-100 rounded-xl border border-gray-300 overflow-hidden">
+                      <img
+                        src={concludingPreview}
+                        alt="Uploaded Image"
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setConcludingFile(null);
+                          setConcludingPreview(null);
+                        }}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                        title="Remove image"
+                      >
+                        ×
+                      </button>
+                      <div className="absolute bottom-2 left-2 bg-green-500 text-white rounded-[8px] px-2 py-1 text-xs font-semibold">
+                        Added
+                      </div>
+                    </div>
+                  ) : (
+                    <label className="w-full h-40 bg-gray-100 rounded-xl flex flex-col items-center justify-center border border-dashed border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors">
+                      <div className="flex flex-col items-center">
+                        <svg
+                          width="32"
+                          height="32"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          className="mb-2 text-gray-400"
+                        >
+                          <path
+                            d="M12 16V4m0 0l-4 4m4-4l4 4"
+                            stroke="#A0AEC0"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <rect x="4" y="20" width="16" height="2" rx="1" fill="#A0AEC0" />
+                        </svg>
+                        <span className="text-gray-400 text-sm font-medium">
+                          Upload Concluding Image
+                        </span>
+                        <span className="text-gray-400 text-xs mt-1">
+                          Click to browse or drag files here
+                        </span>
+                      </div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleConcludingFileChange}
+                      />
+                    </label>
+                  )}
                 </div>
+                {/* Image Title */}
+                <input
+                  className="border rounded-xl px-4 py-2 text-sm w-full"
+                  placeholder="Concluding Title"
+                  value={editorTitle}
+                  onChange={e => setEditorTitle(e.target.value)}
+                />
               </div>
             )}
           </div>
           {/* Bottom Buttons */}
           <div className="flex justify-between items-center py-4 px-2 border-t bg-white absolute bottom-0 left-0 w-full">
             <SheetClose asChild>
-              <button className="px-4 py-2 rounded-full border text-gray-600">Back</button>
+              <button
+                className="px-4 py-2 rounded-full border text-gray-600"
+                onClick={() => {
+                  // Reset form when going back
+                  setEditorValue('');
+                  setEditorTitle('');
+                  setConcludingFile(null);
+                  setConcludingPreview(null);
+                }}
+              >
+                Back
+              </button>
             </SheetClose>
-            <button className="px-4 py-2 rounded-full bg-[#364699] text-white">Next</button>
+            <button
+              className="px-4 py-2 rounded-full bg-[#364699] text-white"
+              onClick={() => {
+                if (activeTab === 'text' && editorValue.trim()) {
+                  setConcludingMaterial(editorValue);
+                } else if (activeTab === 'video' && concludingFile) {
+                  setConcludingMaterial(`Video: ${editorTitle || 'Concluding Video'}`);
+                } else if (activeTab === 'image' && concludingFile) {
+                  setConcludingMaterial(`Image: ${editorTitle || 'Concluding Image'}`);
+                }
+                setSheetOpen(false);
+              }}
+            >
+              Next
+            </button>
           </div>
         </SheetContent>
       </Sheet>
@@ -868,37 +1126,74 @@ function Step5({
   slotDuration: string;
   setSlotDuration: (v: string) => void;
 }) {
+  const [startDateOpen, setStartDateOpen] = useState(false);
+  const [endDateOpen, setEndDateOpen] = useState(false);
   return (
     <div className="w-full max-w-2xl">
       <h3 className="text-xl font-bold mb-2">Schedule Test Dates & Slots</h3>
       <p className="text-gray-500 mb-6">Set and manage available test dates and time slots</p>
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className="block text-xs font-semibold mb-1">Start Date</label>
-          <input
-            type="date"
-            value={startDate}
-            onChange={e => setStartDate(e.target.value)}
-            className="w-full border rounded-[12px] px-3 py-2 text-sm"
-            min={new Date().toISOString().split('T')[0]}
-          />
+      <div className="flex items-center gap-4 mb-4 border border-gray-300 rounded-[10px] px-3 py-2 text-sm">
+        <div className="flex-1">
+          <Label className="block text-xs font-semibold mb-1">Start Date</Label>
+          <Popover open={startDateOpen} onOpenChange={setStartDateOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="w-full bg-none justify-between font-normal rounded-[12px] px-3 py-2 text-sm h-auto border-0 shadow-none"
+              >
+                {startDate ? new Date(startDate).toLocaleDateString() : 'Select Date'}
+                <ChevronDownIcon className="h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={startDate ? new Date(startDate) : undefined}
+                onSelect={date => {
+                  setStartDate(date ? date.toISOString().split('T')[0] : '');
+                  setStartDateOpen(false);
+                }}
+                disabled={date => date < new Date()}
+              />
+            </PopoverContent>
+          </Popover>
         </div>
-        <div>
-          <label className="block text-xs font-semibold mb-1">End Date</label>
-          <input
-            type="date"
-            value={endDate}
-            onChange={e => setEndDate(e.target.value)}
-            className="w-full border rounded-[12px] px-3 py-2 text-sm"
-            min={startDate || new Date().toISOString().split('T')[0]}
-          />
+        <div className="flex items-center justify-center">
+          <div className="w-px h-8 bg-gray-300"></div>
+        </div>
+        <div className="flex-1">
+          <Label className="block text-xs font-semibold mb-1">End Date</Label>
+          <Popover open={endDateOpen} onOpenChange={setEndDateOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="w-full justify-between font-normal rounded-[12px] px-3 py-2 text-sm h-auto border-0 shadow-none"
+              >
+                {endDate ? new Date(endDate).toLocaleDateString() : 'Select Date'}
+                <ChevronDownIcon className="h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={endDate ? new Date(endDate) : undefined}
+                onSelect={date => {
+                  setEndDate(date ? date.toISOString().split('T')[0] : '');
+                  setEndDateOpen(false);
+                }}
+                disabled={date =>
+                  date < new Date(startDate || new Date().toISOString().split('T')[0])
+                }
+              />
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-xs font-semibold mb-1">Start Time</label>
           <Select value={startTime} onValueChange={setStartTime}>
-            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+            <SelectTrigger className="w-full border rounded-[10px] px-3 py-2 text-sm shadow-none">
               <SelectValue placeholder="Select Time" />
             </SelectTrigger>
             <SelectContent>
@@ -913,7 +1208,7 @@ function Step5({
         <div>
           <label className="block text-xs font-semibold mb-1">End Time</label>
           <Select value={endTime} onValueChange={setEndTime}>
-            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+            <SelectTrigger className="w-full border rounded-[10px] px-3 py-2 text-sm shadow-none">
               <SelectValue placeholder="Select Time" />
             </SelectTrigger>
             <SelectContent>
@@ -930,7 +1225,7 @@ function Step5({
         <div>
           <label className="block text-xs font-semibold mb-1">CAPACITY</label>
           <Select value={capacity} onValueChange={setCapacity}>
-            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+            <SelectTrigger className="w-full border rounded-[10px] px-3 py-2 text-sm shadow-none">
               <SelectValue placeholder="Select capacity" />
             </SelectTrigger>
             <SelectContent>
@@ -945,7 +1240,7 @@ function Step5({
         <div>
           <label className="block text-xs font-semibold mb-1">SLOT DURATION</label>
           <Select value={slotDuration} onValueChange={setSlotDuration}>
-            <SelectTrigger className="w-full border rounded-[12px] px-3 py-2 text-sm">
+            <SelectTrigger className="w-full border rounded-[10px] px-3 py-2 text-sm shadow-none">
               <SelectValue placeholder="Select duration" />
             </SelectTrigger>
             <SelectContent>
@@ -959,7 +1254,9 @@ function Step5({
       </div>
       <div className="flex items-center gap-4 mt-6 justify-end">
         <div className="flex items-center gap-2 border rounded-full px-4 py-2">
-          <span className="text-sm">Preview Test</span>
+          <Link href="/preview" className="text-sm bg-white">
+            Preview Test
+          </Link>
 
           <span>
             <svg width={18} height={18} fill="none" viewBox="0 0 24 24">
@@ -987,6 +1284,7 @@ export default function VideoInterviewConfigPage() {
   const [responseTime, setResponseTime] = useState('0:00 min');
   const [breakOption, setBreakOption] = useState(false);
   const [breakDuration, setBreakDuration] = useState('');
+  const [selectedBreakQuestions, setSelectedBreakQuestions] = useState<string[]>([]);
   const [selectedCycle, setSelectedCycle] = useState(0);
   const [useDefaultIntro, setUseDefaultIntro] = useState<boolean>(true);
   const [customIntro, setCustomIntro] = useState<File | null>(null);
@@ -1020,6 +1318,8 @@ export default function VideoInterviewConfigPage() {
         setBreakOption={setBreakOption}
         breakDuration={breakDuration}
         setBreakDuration={setBreakDuration}
+        selectedBreakQuestions={selectedBreakQuestions}
+        setSelectedBreakQuestions={setSelectedBreakQuestions}
       />
     );
   else if (currentStep === 1)
@@ -1209,28 +1509,32 @@ export default function VideoInterviewConfigPage() {
           <div className="flex-1 flex flex-col items-start justify-center w-full px-20">
             {stepContent}
             {/* Navigation Buttons */}
-            <div className="flex items-center gap-4 mt-8 justify-end w-full">
-              {currentStep > 0 && (
-                <button
-                  className="px-6 py-2 rounded-full border border-gray-300 text-gray-600 font-semibold"
-                  onClick={() => setCurrentStep(currentStep - 1)}
-                >
-                  Back
-                </button>
-              )}
-              {currentStep < steps.length - 1 && (
-                <button
-                  className="bg-[#364699] text-white rounded-full py-2 font-semibold w-[100px]"
-                  onClick={() => setCurrentStep(currentStep + 1)}
-                >
-                  Next
-                </button>
-              )}
-              {currentStep === steps.length - 1 && (
-                <button className="bg-[#364699] text-white rounded-full py-2 font-semibold w-[100px]">
-                  Done
-                </button>
-              )}
+            <div className="flex items-center justify-between mt-8 w-full">
+              <div>
+                {currentStep > 0 && (
+                  <button
+                    className="px-6 py-2 rounded-full border border-gray-300 text-gray-600 font-semibold"
+                    onClick={() => setCurrentStep(currentStep - 1)}
+                  >
+                    Back
+                  </button>
+                )}
+              </div>
+              <div>
+                {currentStep < steps.length - 1 && (
+                  <button
+                    className="bg-[#364699] text-white rounded-full py-2 font-semibold w-[100px]"
+                    onClick={() => setCurrentStep(currentStep + 1)}
+                  >
+                    Next
+                  </button>
+                )}
+                {currentStep === steps.length - 1 && (
+                  <button className="bg-[#364699] text-white rounded-full py-2 font-semibold w-[100px]">
+                    Done
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>

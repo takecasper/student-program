@@ -73,7 +73,7 @@ export default function SnapshotInterview({ onBack }: SnapshotProps) {
               <div className="flex items-center justify-between gap-[5px]">
                 <p className="text-[12px] text-gray-600">2024/25 Cycle</p>
                 <button
-                  onClick={() => router.push('/snapshot-test')}
+                  onClick={() => router.push('/interview')}
                   className="border border-[#364699] text-[#364699] py-3 px-8 rounded-full text-[12px] font-medium hover:bg-[#2538A8] transition cursor-pointer w-fit"
                 >
                   Start Test
@@ -84,7 +84,7 @@ export default function SnapshotInterview({ onBack }: SnapshotProps) {
                   AUS Teachers Education (2024 - 2025 Cycle)
                 </p>
                 <button
-                  onClick={() => router.push('/snapshot-test')}
+                  onClick={() => router.push('/interview')}
                   className="border border-[#364699] text-[#364699] py-3 px-8 rounded-full text-[12px] font-medium hover:bg-[#2538A8] transition cursor-pointer w-fit"
                 >
                   Start Test

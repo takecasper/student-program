@@ -3,9 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Play } from 'lucide-react';
-import { Check } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, Eye } from 'lucide-react';
 
 const questions = [
   'Tell us about a time you faced a challenge...',
@@ -135,36 +133,19 @@ function FABVerify({
   );
 }
 
-export default function InterviewApp() {
-  const [currentScreen, setCurrentScreen] = useState<
-    | 'intro-video'
-    | 'intro-text'
-    | 'intro-image'
-    | 'video-plays'
-    | 'welcome'
-    | 'interview'
-    | 'recording'
-    | 'review'
-  >('intro-video');
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+export default function PreviewPage() {
+  const [currentQuestion] = useState(0);
   const [isThinking, setIsThinking] = useState(false);
-  // const [isRecording, setIsRecording] = useState(false);
   const [thinkingTime, setThinkingTime] = useState(5);
-  // const [recordingTime, setRecordingTime] = useState(0);
   const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
-  const [cameraError, setCameraError] = useState<string | null>(null);
-
-  const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
-  const [recordedVideoUrl, setRecordedVideoUrl] = useState<string | null>(null);
 
   // Header and footer state
-  const [stepIndex, setStepIndex] = useState(0);
+  const [stepIndex] = useState(5);
   const [signalStatus, setSignalStatus] = useState<PermissionStatus>('pending');
   const [cameraStatus, setCameraStatus] = useState<PermissionStatus>('pending');
   const [micStatus, setMicStatus] = useState<PermissionStatus>('pending');
 
   const thinkingTimerRef = useRef<NodeJS.Timeout | null>(null);
-  // const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const recordingVideoRef = useRef<HTMLVideoElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -177,27 +158,6 @@ export default function InterviewApp() {
   const [activePermission, setActivePermission] = useState<'signal' | 'camera' | 'mic' | null>(
     null,
   );
-
-  // Update step index based on current screen and question
-  useEffect(() => {
-    if (currentScreen === 'intro-video') {
-      setStepIndex(0);
-    } else if (currentScreen === 'intro-text') {
-      setStepIndex(1);
-    } else if (currentScreen === 'intro-image') {
-      setStepIndex(2);
-    } else if (currentScreen === 'video-plays') {
-      setStepIndex(3);
-    } else if (currentScreen === 'welcome') {
-      setStepIndex(4);
-    } else if (currentScreen === 'interview') {
-      setStepIndex(5 + currentQuestion);
-    } else if (currentScreen === 'recording') {
-      setStepIndex(5 + currentQuestion);
-    } else if (currentScreen === 'review') {
-      setStepIndex(5 + currentQuestion);
-    }
-  }, [currentScreen, currentQuestion]);
 
   useEffect(() => {
     if (isThinking && thinkingTime > 0) {
@@ -223,26 +183,6 @@ export default function InterviewApp() {
       }
     };
   }, [isThinking]);
-
-  // Temporarily disable recording timer to test if it's causing the flash
-  // useEffect(() => {
-  //   if (isRecording) {
-  //     recordingTimerRef.current = setInterval(() => {
-  //       setRecordingTime(prev => prev + 1);
-  //     }, 1000);
-  //   } else {
-  //     if (recordingTimerRef.current) {
-  //       clearInterval(recordingTimerRef.current);
-  //       recordingTimerRef.current = null;
-  //     }
-  //   }
-  //   return () => {
-  //     if (recordingTimerRef.current) {
-  //       clearInterval(recordingTimerRef.current);
-  //       recordingTimerRef.current = null;
-  //     }
-  //   };
-  // }, [isRecording]);
 
   // Cleanup effect for media stream
   useEffect(() => {
@@ -274,26 +214,8 @@ export default function InterviewApp() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const goToIntroText = () => {
-    setCurrentScreen('intro-text');
-  };
-
-  const goToIntroImage = () => {
-    setCurrentScreen('intro-image');
-  };
-
-  const goToInterview = () => {
-    setCurrentScreen('interview');
-    setIsThinking(false);
-    setThinkingTime(5);
-  };
-
   const startAnswer = async () => {
     setIsThinking(false);
-    setCurrentScreen('recording');
-    // setIsRecording(true);
-    // setRecordingTime(0);
-    setCameraError(null);
 
     try {
       console.log('Requesting camera access...');
@@ -326,20 +248,17 @@ export default function InterviewApp() {
               })
               .catch(e => {
                 console.error('Failed to play camera video:', e);
-                setCameraError('Failed to play camera video');
               });
           };
 
           videoElement.onerror = () => {
-            setCameraError('Video element error');
+            console.error('Video element error');
           };
 
           // Fallback: try to play immediately
           videoElement.play().catch(() => {
             // Will try again when metadata loads
           });
-        } else {
-          setCameraError('Camera video element not found');
         }
       }, 100);
 
@@ -357,42 +276,16 @@ export default function InterviewApp() {
       mediaRecorder.onstop = () => {
         const blob = new Blob(chunks, { type: 'video/webm' });
         console.log('Recording completed, blob size:', blob.size);
-
-        // Save the recorded video
-        setRecordedBlob(blob);
-        const videoUrl = URL.createObjectURL(blob);
-        setRecordedVideoUrl(videoUrl);
       };
 
       mediaRecorder.start();
     } catch (error) {
       console.error('Error accessing camera/microphone:', error);
       setCameraStatus('denied');
-      setCameraError('Unable to access camera/microphone. Please check permissions.');
 
       // Try to continue without camera for testing
       console.log('Continuing without camera access...');
     }
-  };
-
-  const stopRecording = () => {
-    // setIsRecording(false);
-
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-      mediaRecorderRef.current.stop();
-    }
-
-    if (mediaStream) {
-      mediaStream.getTracks().forEach(track => track.stop());
-      setMediaStream(null);
-    }
-
-    if (recordingVideoRef.current) {
-      recordingVideoRef.current.srcObject = null;
-    }
-
-    // Go to review screen to show the recorded video
-    setCurrentScreen('review');
   };
 
   // Permission handling functions
@@ -483,114 +376,55 @@ export default function InterviewApp() {
     </div>
   );
 
-  const IntroVideo = () => (
-    <div className="flex flex-col items-center justify-center h-full bg-white p-8">
-      <div className="w-full max-w-2xl text-center space-y-6">
-        <div className="relative">
-          <div className="relative w-full max-w-md mx-auto">
-            <img src="/videoposter.png" className="w-full rounded-lg" alt="Video poster" />
-            <button
-              onClick={() => {}}
-              className="absolute inset-0 flex items-center justify-center"
-            >
-              <div className="w-16 h-16 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-lg hover:bg-opacity-100 transition-all">
-                <Play className="w-6 h-6 text-gray-700 ml-1" />
-              </div>
-            </button>
-          </div>
-        </div>
-        <Button
-          onClick={goToIntroText}
-          className="bg-[#364699] hover:bg-[#364699] text-white px-8 py-3 rounded-full"
-        >
-          Start Interview
-        </Button>
-      </div>
-    </div>
-  );
-
-  const IntroText = () => (
-    <div className="flex flex-col items-center justify-center bg-white p-8">
-      <div className="w-full max-w-2xl text-center space-y-6">
-        <div className="space-y-4">
-          <h1 className="text-[50px] font-bold text-[#333333]">WELCOME!</h1>
-          <p className="text-gray-600 max-w-lg mx-auto">
-            Mauris pretium lacus vitae orci sollicitudin viverra. Quisque blandit tempus urna,
-            mollis molestie odio fringilla et.
-          </p>
-          <div className="space-y-3 text-sm text-gray-500 max-w-md mx-auto text-justify pt-10">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultrices leo in molestie
-              malesuada. Maecenas vitae suscipit lectus. Aliquam tempor metus nec semper interdum.
-              Maecenas vitae suscipit lectus. Aliquam tempor metus nec semper interdum.
-            </p>
-            <p>
-              Mauris pretium lacus vitae orci sollicitudin viverra. Quisque blandit tempus urna,
-              mollis molestie odio fringilla et.
-            </p>
-          </div>
-        </div>
-        <Button
-          onClick={goToIntroImage}
-          className="bg-[#364699] hover:bg-[#364699] text-white px-8 py-3 rounded-full"
-        >
-          Next
-        </Button>
-      </div>
-    </div>
-  );
-
-  const IntroImage = () => (
-    <div className="flex flex-col items-center justify-center bg-white p-8">
-      <div className="w-full max-w-2xl text-center space-y-6">
-        <img src="/introimage.png" alt="Intro Image" className="w-full max-w-md mx-auto rounded" />
-      </div>
-      <div className="flex justify-center pt-10">
-        <Button
-          onClick={goToInterview}
-          className="bg-[#364699] hover:bg-[#364699] text-white px-8 py-3 rounded-full"
-        >
-          Next
-        </Button>
-      </div>
-    </div>
-  );
-
   const InterviewScreen = () => {
     const initialThinkingTime = 5;
     const progressPercentage = ((initialThinkingTime - thinkingTime) / initialThinkingTime) * 100;
 
     return (
-      <div className="flex flex-col items-center justify-center h-full bg-white p-8">
+      <div className="flex flex-col items-center justify-center h-full bg-white p-8 relative">
+        {/* Left Navigation */}
+        <div className="absolute left-8 top-1/2 transform -translate-y-1/2 flex flex-col items-center space-y-2">
+          <button className="flex flex-col items-center space-y-2 text-gray-500 hover:text-gray-700 transition-colors">
+            <ChevronLeft className="w-12 h-12 text-[#364699]" />
+            <span className="text-sm font-medium">Previous Question</span>
+          </button>
+        </div>
+
+        {/* Right Navigation */}
+        <div className="absolute right-8 top-1/2 transform -translate-y-1/2 flex flex-col items-center space-y-2">
+          <button className="flex flex-col items-center space-y-2 text-gray-500 hover:text-gray-700 transition-colors">
+            <ChevronRight className="w-12 h-12 text-[#364699]" />
+            <span className="text-sm font-medium">Next Question</span>
+          </button>
+        </div>
+
         <div className="w-full max-w-2xl space-y-6">
-          <div className="relative">
-            <div className="relative w-full max-w-md mx-auto">
-              <video
-                ref={videoRef}
-                width="640"
-                height="360"
-                controls
-                onEnded={() => {
-                  if (videoRef.current) {
-                    videoRef.current.pause();
-                    videoRef.current.currentTime = 0;
-                  }
-                  setIsThinking(true);
-                  setThinkingTime(5);
-                }}
-              >
-                <source src="/video.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
+          <div className="relative w-full max-w-md mx-auto">
+            <video
+              ref={videoRef}
+              width="640"
+              height="360"
+              controls
+              onEnded={() => {
+                if (videoRef.current) {
+                  videoRef.current.pause();
+                  videoRef.current.currentTime = 0;
+                }
+                setIsThinking(true);
+                setThinkingTime(5);
+              }}
+            >
+              <source src="/video.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
-          <div className="p-4 bg-white border-l-2 border-gray-200">
+          <div className="w-full max-w-md mx-auto p-4 bg-white border-l-2 border-gray-200">
             <div className="flex items-start space-x-3">
               <span className="text-sm font-medium text-indigo-600">Transcript:</span>
               <span className="text-sm text-gray-700">{questions[currentQuestion]}</span>
             </div>
           </div>
-          <div className="relative border rounded-[22px] p-4 overflow-hidden">
+          <div className="w-full max-w-md mx-auto relative border rounded-[22px] p-4 overflow-hidden">
             <div
               className="absolute inset-0 bg-[#00A59B] transition-all duration-1000 ease-out"
               style={{ width: `${progressPercentage}%` }}
@@ -619,146 +453,6 @@ export default function InterviewApp() {
     );
   };
 
-  // Separate component for recording time display to prevent re-renders
-  const RecordingTimeDisplay = () => {
-    // Temporarily use static time to test if it's causing the flash
-    const formattedTime = '00:00'; // Static for testing
-
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-center">
-          <div className="flex w-full max-w-md h-12 border rounded-xl items-center px-4">
-            <div className="flex space-x-1 items-center w-full">
-              {/* Static bars for now to test */}
-              {Array.from({ length: 50 }).map((_, i) => (
-                <div key={i} className="w-1 bg-[#364699] rounded-full h-4" />
-              ))}
-              <span className="text-lg font-mono text-gray-600 pl-4">{formattedTime}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const RecordingScreen = () => {
-    return (
-      <div className="flex flex-col items-center justify-center h-full bg-white p-8">
-        <div className="w-full max-w-2xl space-y-6">
-          <div className="relative w-full max-w-md mx-auto">
-            <div className="w-full aspect-video bg-gray-900 rounded-lg overflow-hidden relative">
-              {mediaStream ? (
-                <>
-                  <video
-                    ref={recordingVideoRef}
-                    className="w-full h-full object-cover"
-                    autoPlay
-                    playsInline
-                    muted
-                    style={{
-                      transform: 'scaleX(-1)', // Mirror the video
-                      backgroundColor: '#000',
-                    }}
-                  />
-                  <Badge className="absolute top-4 right-4 bg-red-500 text-white animate-pulse">
-                    ● Recording
-                  </Badge>
-                </>
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-900 rounded-lg">
-                  <div className="text-white text-center">
-                    {cameraError ? (
-                      <>
-                        <div className="text-lg font-semibold mb-2">Camera Error</div>
-                        <div className="text-sm mb-2">{cameraError}</div>
-                        <button
-                          onClick={() => startAnswer()}
-                          className="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
-                        >
-                          Retry Camera
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
-                        <div className="text-lg font-semibold mb-2">Starting Camera...</div>
-                        <div className="text-sm">Please wait while we access your camera</div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="p-4 flex items-center justify-center bg-white ">
-            <div className="flex border-l border-gray-200  space-x-3">
-              <span className="text-sm font-medium text-indigo-600 pl-2">Transcript:</span>
-              <span className="text-sm text-gray-700">{questions[currentQuestion]}</span>
-            </div>
-          </div>
-
-          <RecordingTimeDisplay />
-
-          <div className="text-center space-y-2">
-            <Button
-              onClick={stopRecording}
-              className="bg-[#B22234] hover:bg-red-700 text-white px-8 py-3 rounded-xl"
-            >
-              Stop Recording
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const ReviewScreen = () => {
-    const reviewVideoRef = useRef<HTMLVideoElement>(null);
-
-    return (
-      <div className="flex flex-col items-center justify-center h-full bg-white p-8">
-        <div className="w-full max-w-2xl space-y-6">
-          <div className="relative w-full max-w-md mx-auto">
-            <div className="w-full aspect-video bg-gray-900 rounded-lg overflow-hidden relative">
-              {recordedVideoUrl ? (
-                <>
-                  <video
-                    ref={reviewVideoRef}
-                    src={recordedVideoUrl}
-                    className="w-full h-full object-cover"
-                    controls
-                    style={{
-                      transform: 'scaleX(-1)', // Keep mirrored for consistency
-                      backgroundColor: '#000',
-                    }}
-                  />
-                  <Badge className="absolute top-4 right-4 bg-red-500 text-white">
-                    ● Recording
-                  </Badge>
-                </>
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-900 rounded-lg">
-                  <div className="text-white text-center">
-                    <div className="text-lg font-semibold mb-2">No Recording Available</div>
-                    <div className="text-sm">Please try recording again</div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="p-4 flex items-center justify-center bg-white ">
-            <div className="flex border-l border-gray-200  space-x-3">
-              <span className="text-sm font-medium text-indigo-600 pl-2">Transcript:</span>
-              <span className="text-sm text-gray-700">{questions[currentQuestion]}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   // Footer Component
   const Footer = () => (
     <div className="fixed bottom-0 left-0 right-0 z-40 w-full flex justify-center items-center py-6 bg-white border-t">
@@ -777,6 +471,14 @@ export default function InterviewApp() {
         <StepLine />
         <StepCircle label="END" active={false} checked={false} />
       </div>
+    </div>
+  );
+
+  const Preview = () => (
+    <div className="bg-[#FCEDCA] rounded-full p-2 w-full flex items-center justify-center">
+      <p className="flex items-center gap-2 text-sm font-medium text-[#364699]">
+        Test Preview <Eye className="w-4 h-4" />
+      </p>
     </div>
   );
 
@@ -886,14 +588,13 @@ export default function InterviewApp() {
     <div className="relative min-h-screen">
       <Header />
       <div className="pt-20 pb-32">
-        {currentScreen === 'intro-video' && <IntroVideo />}
-        {currentScreen === 'intro-text' && <IntroText />}
-        {currentScreen === 'intro-image' && <IntroImage />}
-        {currentScreen === 'interview' && <InterviewScreen />}
-        {currentScreen === 'recording' && <RecordingScreen />}
-        {currentScreen === 'review' && <ReviewScreen />}
+        <InterviewScreen />
       </div>
+
       <Footer />
+      <div className="fixed bottom-6 left-6 z-50">
+        <Preview />
+      </div>
       <FloatingActionButtons />
     </div>
   );
