@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CalendarDays, Pencil, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AddCalendarEventModal from '@/components/AddEvent';
 import { format, startOfWeek, endOfWeek, parseISO, addMonths, subMonths } from 'date-fns';
@@ -13,6 +13,7 @@ import { START_TIME_OF_DAY, END_TIME_OF_DAY, EVENT_COLORS } from '@/lib/const';
 import { CalendarEventType } from '@/types/calendar';
 import { FloatButton } from '@/components/dashboard/calendar/FloatButton';
 import { Sidebar } from '@/components/dashboard/calendar/sidebar/Sidebar';
+import CourseDetailDrawer from './CourseDetailDrawer';
 
 interface EventData {
   startDate: string | Date;
@@ -36,6 +37,7 @@ export default function Calendar({ initialData, initialWeekData }: CalendarProps
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [events, setEvents] = useState<CalendarEventType[]>(initialData);
   const [weekEvents, setWeekEvents] = useState<CalendarEventType[]>(initialWeekData);
+  const [showCourseDrawer, setShowCourseDrawer] = useState(false);
 
   const handlePreviousMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));
@@ -75,6 +77,15 @@ export default function Calendar({ initialData, initialWeekData }: CalendarProps
 
   return (
     <div className="p-6 relative">
+      {/* Button to open the course detail drawer */}
+      <button
+        className="mb-4 px-4 py-2 bg-[#6366F1] text-white rounded hover:bg-[#4f46e5] transition-colors"
+        onClick={() => setShowCourseDrawer(true)}
+      >
+        <Maximize2 className="w-5 h-5" />
+      </button>
+      {/* Course Detail Drawer */}
+      <CourseDetailDrawer isOpen={showCourseDrawer} onClose={() => setShowCourseDrawer(false)} />
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-4">
           <Button variant="ghost" className="p-2 hover:bg-gray-100" onClick={handlePreviousMonth}>
@@ -88,13 +99,10 @@ export default function Calendar({ initialData, initialWeekData }: CalendarProps
             <ChevronRight className="w-5 h-5" />
           </Button>
           <Button
-            className="bg-white border rounded-md p-2 hover:bg-gray-50"
+            className="bg-[#364699] text-white border rounded-full py-1 px-6 hover:bg-gray-50"
             onClick={() => setIsAddModalOpen(true)}
           >
-            <div className="relative w-5 h-5">
-              <CalendarDays className="w-5 h-5 text-[#666]" />
-              <Pencil className="w-3 h-3 absolute bottom-0 right-0 text-[#666]" />
-            </div>
+            + Add
           </Button>
         </div>
 

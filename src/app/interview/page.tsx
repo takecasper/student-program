@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Play } from 'lucide-react';
+import { Play, Check } from 'lucide-react';
 import { Header } from './components/header';
 import { ThinkingTimer } from './components/ThinkingTimer';
 import WaveSurferPlayer from '@wavesurfer/react';
@@ -377,13 +378,30 @@ export default function InterviewApp() {
   };
 
   // Permission handling functions
-  const handleFABClick = (type: 'signal' | 'camera' | 'mic') => {
-    setModalType(type);
-    setModalOpen(true);
+
+  // const handleModalAllow = () => {
+  //   switch (modalType) {
+  //     case 'signal':
+  //       setSignalStatus('allowed');
+  //       break;
+  //     case 'camera':
+  //       setCameraStatus('allowed');
+  //       break;
+  //     case 'mic':
+  //       setMicStatus('allowed');
+  //       break;
+  //   }
+  //   setDropdownOpen(false);
+  //   setActivePermission(null);
+  // };
+
+  const handlePermissionClick = (type: 'signal' | 'camera' | 'mic') => {
+    setActivePermission(type);
+    setDropdownOpen(true);
   };
 
-  const handleModalAllow = () => {
-    switch (modalType) {
+  const handlePermissionAllow = (type: 'signal' | 'camera' | 'mic') => {
+    switch (type) {
       case 'signal':
         setSignalStatus('allowed');
         break;
@@ -410,7 +428,8 @@ export default function InterviewApp() {
         setMicStatus('denied');
         break;
     }
-    setModalOpen(false);
+    setDropdownOpen(false);
+    setActivePermission(null);
   };
 
   const IntroVideo = () => (

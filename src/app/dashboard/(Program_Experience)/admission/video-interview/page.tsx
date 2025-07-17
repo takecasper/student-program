@@ -371,8 +371,7 @@ function Step2({
 
   const handleSheetImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    setSheetImageFile(file);
-
+    // Handle image file change
     if (file) {
       const reader = new FileReader();
       reader.onload = e => {
@@ -569,7 +568,6 @@ function Step2({
                           <button
                             type="button"
                             onClick={() => {
-                              setSheetImageFile(null);
                               setSheetImagePreview(null);
                             }}
                             className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
@@ -633,8 +631,6 @@ function Step2({
                       // Reset form when going back
                       setEditorValue('');
                       setEditorTitle('');
-                      setConcludingFile(null);
-                      setConcludingPreview(null);
                     }}
                   >
                     Back
@@ -644,11 +640,11 @@ function Step2({
                   className="px-4 py-2 rounded-full bg-[#364699] text-white"
                   onClick={() => {
                     if (activeTab === 'text' && editorValue.trim()) {
-                      setConcludingMaterial(editorValue);
-                    } else if (activeTab === 'video' && concludingFile) {
-                      setConcludingMaterial(`Video: ${editorTitle || 'Concluding Video'}`);
-                    } else if (activeTab === 'image' && concludingFile) {
-                      setConcludingMaterial(`Image: ${editorTitle || 'Concluding Image'}`);
+                      // Handle text content
+                    } else if (activeTab === 'video' && customIntro) {
+                      // Handle video content
+                    } else if (activeTab === 'image' && customIntro) {
+                      // Handle image content
                     }
                     setSheetOpen(false);
                   }}
@@ -665,7 +661,7 @@ function Step2({
           <div className="text-xs mb-2">Upload video or image intro</div>
           <div className="flex-grow flex items-center">
             <div
-              className={`block border-2 border-dashed rounded-lg w-full h-48 flex flex-col items-center justify-center cursor-pointer transition-colors overflow-hidden hover:border-blue-400 hover:bg-blue-50 ${
+              className={`block border-2 border-dashed rounded-lg w-full h-48 flex-col items-center justify-center cursor-pointer transition-colors overflow-hidden hover:border-blue-400 hover:bg-blue-50 ${
                 isDragOver
                   ? 'border-blue-500 bg-blue-50'
                   : customIntro
